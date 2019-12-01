@@ -6,6 +6,7 @@ namespace marpa_impl
 {
     class Grammar
     {
+        private Symbol startSymbol;
         private readonly List<Symbol> ExtSymList;
         private readonly List<Symbol> IntSymList;
 
@@ -18,6 +19,25 @@ namespace marpa_impl
             IntSymList = new List<Symbol>();
             ExtRuleList = new List<Rule>();
             IntRuleList = new List<Rule>();
+        }
+
+        // START SYMBOL
+        public void SetStartSym(int startSymId)
+        {
+            if (!IsExtSymIdValid(startSymId))
+            {
+                throw new Exception(
+                    ErrorHandler.getErrorMessageByCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR)
+                    );
+            }
+            else
+            {
+                startSymbol = GetExtSymById(startSymId);
+            }
+        }
+        public Symbol GetStartSym()
+        {
+            return startSymbol;
         }
 
         // SYMBOLS
