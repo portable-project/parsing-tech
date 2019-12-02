@@ -6,38 +6,64 @@ namespace marpa_impl
 {
     class Grammar
     {
-        private Symbol startSymbol;
+        private ErrorCode GlobalErrorCode;
+        private bool GrammarPrecomputed;
+        private Symbol StartSymbol;
         private readonly List<Symbol> ExtSymList;
         private readonly List<Symbol> IntSymList;
 
         private readonly List<Rule> ExtRuleList;
         private readonly List<Rule> IntRuleList;
+        private void SetGlobalErrorCode(ErrorCode error)
+        {
+            GlobalErrorCode = error;
+        }
 
         public Grammar()
         {
+            GrammarPrecomputed = false;
+            GlobalErrorCode = ErrorCode.NO_ERROR;
             ExtSymList = new List<Symbol>();
             IntSymList = new List<Symbol>();
             ExtRuleList = new List<Rule>();
             IntRuleList = new List<Rule>();
         }
 
+        public void ClearGlobalErrorCode()
+        {
+            GlobalErrorCode = ErrorCode.NO_ERROR;
+        }
+        public ErrorCode GetGlobalErrorCode()
+        {
+            return GlobalErrorCode;
+        }
+        public bool IsGrammarPrecomputed()
+        {
+            return GrammarPrecomputed;
+        }
+
         // START SYMBOL
         public void SetStartSym(int startSymId)
         {
             if (!IsExtSymIdValid(startSymId))
-            {
+            { 
+                SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
                 throw new Exception(
                     ErrorHandler.getErrorMessageByCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR)
                     );
             }
             else
             {
-                startSymbol = GetExtSymById(startSymId);
+                StartSymbol = GetExtSymById(startSymId);
             }
         }
         public Symbol GetStartSym()
         {
-            return startSymbol;
+            return StartSymbol;
+        }
+        public bool CheckIsSymbolAStartSymbol(int symbolId)
+        {
+            return StartSymbol.GetSymbolId() == symbolId;
         }
 
         // SYMBOLS

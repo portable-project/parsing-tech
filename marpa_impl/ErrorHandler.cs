@@ -6,6 +6,7 @@ namespace marpa_impl
 {
     public enum ErrorCode
     {
+        NO_ERROR,
         NO_SUCH_SYMBOL_IN_GRAMMAR,
 
     }
