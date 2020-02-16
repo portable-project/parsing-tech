@@ -4,7 +4,7 @@ using System.Text;
 
 namespace marpa_impl
 {
-    class Earleme
+    internal class Earleme
     {
         private Rule Rule;
         private int RulePosition;

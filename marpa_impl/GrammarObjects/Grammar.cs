@@ -6,7 +6,6 @@ namespace marpa_impl
     public class Grammar
     {
         private ErrorCode GlobalErrorCode;
-        private bool GrammarPrecomputed;
         private Symbol StartSymbol;
         private readonly List<Symbol> ExtSymList;
         private readonly List<Rule> ExtRuleList;
@@ -40,14 +39,12 @@ namespace marpa_impl
 
         public Grammar()
         {
-            GrammarPrecomputed = false;
             GlobalErrorCode = ErrorCode.NO_ERROR;
-            ExtSymList = new List<Symbol>();
             ExtRuleList = new List<Rule>();
         }
-        public bool IsGrammarPrecomputed()
+        public bool IsGrammarValid()
         {
-            return GrammarPrecomputed;
+            return ExtSymList.Count > 0 && GetStartSymbol() != null && ExtRuleList.Count > 0;
         }
 
         internal void ClearGlobalErrorCode()
@@ -71,7 +68,7 @@ namespace marpa_impl
                 StartSymbol = StartSym;
             }
         }
-        public Symbol GetStartSym()
+        public Symbol GetStartSymbol()
         {
             return StartSymbol;
         }
