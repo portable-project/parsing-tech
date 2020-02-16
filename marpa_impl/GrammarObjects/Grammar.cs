@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace marpa_impl
 {
@@ -46,82 +45,87 @@ namespace marpa_impl
             ExtSymList = new List<Symbol>();
             ExtRuleList = new List<Rule>();
         }
-
-        public void ClearGlobalErrorCode()
-        {
-            GlobalErrorCode = ErrorCode.NO_ERROR;
-        }
-        public ErrorCode GetGlobalErrorCode()
-        {
-            return GlobalErrorCode;
-        }
         public bool IsGrammarPrecomputed()
         {
             return GrammarPrecomputed;
         }
 
-        // START SYMBOL
-        public void SetStartSym(int startSymId)
+        internal void ClearGlobalErrorCode()
         {
-            if (!IsExtSymIdValid(startSymId))
+            GlobalErrorCode = ErrorCode.NO_ERROR;
+        }
+        internal ErrorCode GetGlobalErrorCode()
+        {
+            return GlobalErrorCode;
+        }
+
+        // START SYMBOL
+        public void SetStartSym(Symbol StartSym)
+        {
+            if (!DoesBelongToGrammarSymbolsList(StartSym))
             { 
                 SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
             }
             else
             {
-                StartSymbol = GetExtSymById(startSymId);
+                StartSymbol = StartSym;
             }
         }
         public Symbol GetStartSym()
         {
             return StartSymbol;
         }
-        public bool CheckIsSymbolAStartSymbol(int symbolId)
+        internal bool CheckIsSymbolAStartSymbol(Symbol Symbol)
         {
-            return StartSymbol.GetSymbolId() == symbolId;
+            return StartSymbol.GetSymbolId() == Symbol.GetSymbolId();
         }
 
         // SYMBOLS
-        public int GetExtSymListSize()
+        public int GetSymbolsListSize()
         {
             return ExtSymList.Count;
         }
-        public Symbol GetExtSymById(int ExtSymId)
+        public void AddSymbol(Symbol Symbol)
         {
-            return ExtSymList[ExtSymId];
+            Symbol.SetSymbolId(GetSymbolsListSize());
+            ExtSymList.Add(Symbol);
         }
-        public void AddExtSym(Symbol ExtSym)
+        public void AddSymbol(List<Symbol> Symbols)
         {
-            ExtSymList.Add(ExtSym);
+            Symbols.ForEach(AddSymbol);
         }
-        public void AddExtSym(List<Symbol> ExtSym)
-        {
-            ExtSymList.AddRange(ExtSym);
-        }
-        public bool IsExtSymIdValid(int ExtSymId)
+        internal bool IsExtSymIdValid(int ExtSymId)
         {
             return ExtSymId >= 0 && ExtSymId < ExtSymList.Count;
         }
 
 
         // RULES
-        public void AddRule(Rule ExtRule)
+        public int GetRulesListSize()
         {
-            ExtRuleList.Add(ExtRule);
+            return ExtRuleList.Count;
+        }
+        public void AddRule(Rule Rule)
+        {
+            CheckRuleSymbols(Rule);
+            Rule.SetRuleId(GetRulesListSize());
+            ExtRuleList.Add(Rule);
         }
         public void AddRule(Symbol lhs, List<Symbol> rhs)
         {
-            ExtRuleList.Add(new Rule(lhs, rhs));
+            Rule newRule = new Rule(lhs, rhs, GetRulesListSize());
+            CheckRuleSymbols(newRule);
+            ExtRuleList.Add(newRule);
         }
 
-        public Rule GetExtRuleById(int ExtRuleId)
+        internal Rule GetExtRuleById(int ExtRuleId)
         {
             if (IsExtRuleIdValid(ExtRuleId))
                 return ExtRuleList[ExtRuleId];
             else return null;
         }
       
-        public bool IsExtRuleIdValid(int ExtRuleId)
+        internal bool IsExtRuleIdValid(int ExtRuleId)
         {
             return ExtRuleId >= 0 && ExtRuleId < ExtRuleList.Count;
         }

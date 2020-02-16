@@ -21,6 +21,12 @@ namespace marpa_impl
             LHS = lhs;
             RHS = rhs;
         }
+        internal Rule(Symbol lhs, List<Symbol> rhs, int ruleId)
+        {
+            LHS = lhs;
+            RHS = rhs;
+            RuleId = ruleId;
+        }
 
         public Symbol GetLeftHandSideOfRule()
         {
