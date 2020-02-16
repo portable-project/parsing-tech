@@ -4,19 +4,39 @@ using System.Text;
 
 namespace marpa_impl
 {
-    class Grammar
+    public class Grammar
     {
         private ErrorCode GlobalErrorCode;
         private bool GrammarPrecomputed;
         private Symbol StartSymbol;
         private readonly List<Symbol> ExtSymList;
-        private readonly List<Symbol> IntSymList;
-
         private readonly List<Rule> ExtRuleList;
-        private readonly List<Rule> IntRuleList;
+
         private void SetGlobalErrorCode(ErrorCode error)
         {
             GlobalErrorCode = error;
+            throw new Exception( ErrorHandler.getErrorMessageByCode(error) );
+        }
+        private Boolean DoesBelongToGrammarSymbolsList(Symbol Symbol)
+        {
+            return ExtSymList.Contains(Symbol);
+        }
+        private void CheckRuleSymbols(Rule Rule)
+        {
+            Symbol lhs = Rule.GetLeftHandSideOfRule();
+            if (!DoesBelongToGrammarSymbolsList(lhs))
+            {
+                SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
+            }
+
+            List<Symbol> rhs = Rule.GetRightHandSideOfRule();
+            for(int i=0;i<rhs.Count; i++)
+            {
+                if (!DoesBelongToGrammarSymbolsList(rhs[i]))
+                {
+                    SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
+                }
+            }
         }
 
         public Grammar()
@@ -24,9 +44,7 @@ namespace marpa_impl
             GrammarPrecomputed = false;
             GlobalErrorCode = ErrorCode.NO_ERROR;
             ExtSymList = new List<Symbol>();
-            IntSymList = new List<Symbol>();
             ExtRuleList = new List<Rule>();
-            IntRuleList = new List<Rule>();
         }
 
         public void ClearGlobalErrorCode()
@@ -48,9 +66,6 @@ namespace marpa_impl
             if (!IsExtSymIdValid(startSymId))
             { 
                 SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
-                throw new Exception(
-                    ErrorHandler.getErrorMessageByCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR)
-                    );
             }
             else
             {
@@ -79,54 +94,37 @@ namespace marpa_impl
         {
             ExtSymList.Add(ExtSym);
         }
+        public void AddExtSym(List<Symbol> ExtSym)
+        {
+            ExtSymList.AddRange(ExtSym);
+        }
         public bool IsExtSymIdValid(int ExtSymId)
         {
             return ExtSymId >= 0 && ExtSymId < ExtSymList.Count;
         }
 
-        public int GetIntSymListSize()
-        {
-            return IntSymList.Count;
-        }
-        public Symbol GetIntSymById(int IntSymId)
-        {
-            return IntSymList[IntSymId];
-        }
-        public void AddIntSym(Symbol IntSym)
-        {
-            IntSymList.Add(IntSym);
-        }
-        public bool IsIntSymIdValid(int IntSymId)
-        {
-            return IntSymId >= 0 && IntSymId < IntSymList.Count;
-        }
-
 
         // RULES
-        public Rule GetExtRuleById(int ExtRuleId)
-        {
-            return ExtRuleList[ExtRuleId];
-        }
-        public void AddExtRule(Rule ExtRule)
+        public void AddRule(Rule ExtRule)
         {
             ExtRuleList.Add(ExtRule);
         }
+        public void AddRule(Symbol lhs, List<Symbol> rhs)
+        {
+            ExtRuleList.Add(new Rule(lhs, rhs));
+        }
+
+        public Rule GetExtRuleById(int ExtRuleId)
+        {
+            if (IsExtRuleIdValid(ExtRuleId))
+                return ExtRuleList[ExtRuleId];
+            else return null;
+        }
+      
         public bool IsExtRuleIdValid(int ExtRuleId)
         {
             return ExtRuleId >= 0 && ExtRuleId < ExtRuleList.Count;
         }
 
-        public Rule GetIntRuleById(int IntRuleId)
-        {
-            return IntRuleList[IntRuleId];
-        }
-        public void AddIntRule(Rule IntRule)
-        {
-            IntRuleList.Add(IntRule);
-        }
-        public bool IsIntRuleIdValid(int IntRuleId)
-        {
-            return IntRuleId >= 0 && IntRuleId < IntRuleList.Count;
-        }
     }
 }

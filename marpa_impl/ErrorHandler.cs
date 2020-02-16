@@ -8,7 +8,7 @@ namespace marpa_impl
     {
         NO_ERROR,
         NO_SUCH_SYMBOL_IN_GRAMMAR,
-
+        INCORRECT_RULE
     }
 
     public static class ErrorHandler

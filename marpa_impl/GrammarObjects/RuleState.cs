@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace marpa_impl.MarpaObj
+namespace marpa_impl
 {
-    enum RuleState
+    internal enum RuleState
     {
         PREDICTED,
         CONFIRMED,
