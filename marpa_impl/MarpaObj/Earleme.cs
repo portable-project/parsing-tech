@@ -11,7 +11,7 @@ namespace marpa_impl
         private int ParentPosition;
         private RuleState state;
 
-        public Earleme(int origin, Rule rule)
+        internal Earleme(int origin, Rule rule)
         {
             Rule = rule;
             ParentPosition = origin;
@@ -19,12 +19,17 @@ namespace marpa_impl
             state = RuleState.PREDICTED;
         }
 
-        public Earleme(int origin, Rule rule, RuleState ruleState)
+        internal Earleme(int origin, Rule rule, RuleState ruleState)
         {
             Rule = rule;
             ParentPosition = origin;
             RulePosition = 0;
             state = ruleState;
+        }
+
+        internal Symbol GetCurrentNextSymbol()
+        {
+            return Rule.GetRightHandSideOfRule(RulePosition);
         }
     }
 }

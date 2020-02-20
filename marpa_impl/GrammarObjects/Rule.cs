@@ -37,6 +37,10 @@ namespace marpa_impl
         {
             return RHS;
         }
+        public Symbol GetRightHandSideOfRule(int position)
+        {
+            return RHS[position];
+        }
 
         public void AddToRightHandSideOfRule(Symbol symbol)
         {

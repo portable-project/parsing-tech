@@ -115,6 +115,14 @@ namespace marpa_impl
             ExtRuleList.Add(newRule);
         }
 
+        internal List<Rule> GetRulesWithSpecificStartSymbol(Symbol symbol)
+        {
+            return ExtRuleList.FindAll((Rule r) =>
+            {
+                return r.GetLeftHandSideOfRule().GetSymbolName() == symbol.GetSymbolName();
+            });
+        }
+
         internal Rule GetExtRuleById(int ExtRuleId)
         {
             if (IsExtRuleIdValid(ExtRuleId))
