@@ -1,0 +1,14 @@
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.exe
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.deps.json
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.runtimeconfig.json
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.runtimeconfig.dev.json
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.dll
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\MarpaTestingProject.pdb
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\marpa_impl.dll
+E:\parsing-tech\MarpaTestingProject\bin\Debug\netcoreapp3.1\marpa_impl.pdb
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.csprojAssemblyReference.cache
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.AssemblyInfoInputs.cache
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.AssemblyInfo.cs
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.csproj.CopyComplete
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.dll
+E:\parsing-tech\MarpaTestingProject\obj\Debug\netcoreapp3.1\MarpaTestingProject.pdb

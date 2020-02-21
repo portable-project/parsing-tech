@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "MarpaTestingProject/1.0.0": {
+        "dependencies": {
+          "marpa_impl": "1.0.0"
+        },
+        "runtime": {
+          "MarpaTestingProject.dll": {}
+        }
+      },
+      "marpa_impl/1.0.0": {
+        "runtime": {
+          "marpa_impl.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MarpaTestingProject/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "marpa_impl/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

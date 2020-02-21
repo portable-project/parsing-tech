@@ -41,6 +41,7 @@ namespace marpa_impl
         {
             GlobalErrorCode = ErrorCode.NO_ERROR;
             ExtRuleList = new List<Rule>();
+            ExtSymList = new List<Symbol>();
         }
         public bool IsGrammarValid()
         {
