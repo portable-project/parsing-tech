@@ -23,5 +23,14 @@ namespace marpa_impl
         {
             return State;
         }
+
+        internal int GetEarlemeSetSize()
+        {
+            return Earlemes.Count;
+        }
+        internal Earleme GetEarleme(int index)
+        {
+            return Earlemes[index];
+        }
     }
 }

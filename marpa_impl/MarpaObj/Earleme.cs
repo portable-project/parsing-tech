@@ -10,26 +10,42 @@ namespace marpa_impl
         private int RulePosition;
         private int ParentPosition;
         private RuleState state;
+        private bool completed;
 
-        internal Earleme(int origin, Rule rule)
+        internal Earleme(int parentPosition, Rule rule)
         {
             Rule = rule;
-            ParentPosition = origin;
+            ParentPosition = parentPosition;
             RulePosition = 0;
             state = RuleState.PREDICTED;
+            completed = false;
         }
 
-        internal Earleme(int origin, Rule rule, RuleState ruleState)
-        {
-            Rule = rule;
-            ParentPosition = origin;
-            RulePosition = 0;
-            state = ruleState;
-        }
 
         internal Symbol GetCurrentNextSymbol()
         {
             return Rule.GetRightHandSideOfRule(RulePosition);
+        }
+        internal int GetRulePosition()
+        {
+            return RulePosition;
+        }
+        internal int GetParentPosition()
+        {
+            return ParentPosition;
+        }
+        internal RuleState GetEarlemePosition()
+        {
+            return state;
+        }
+
+        internal bool IsCompleted()
+        {
+            return completed;
+        }
+        internal void Complete()
+        {
+            completed = true;
         }
     }
 }

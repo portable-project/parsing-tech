@@ -26,17 +26,35 @@ namespace marpa_impl
             for(int i=0; i<input.Length; i++)
             {
                 Sets.Add(new EarlemeSet());
+                Sets[0].AddEarleme(
+                    new Earleme(0, 
+                        new Rule(
+                            new Symbol("empty"), 
+                            new List<Symbol>() { Grammar.GetStartSymbol()})
+                        )
+                    );
             }
 
+            for (int i = 0; i < input.Length; i++)
+            {
+                EarlemeSet earlemeSet = Sets[i];
+                for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
+                {
+                    Earleme current = earlemeSet.GetEarleme(j);
+                    if (!current.IsCompleted()) {
+                        Predictor(current, j);
+                    }
+                }
+            }
         }
 
-        private void Predictor(Earleme current, int parentPosition)
+        private void Predictor(Earleme current, int setNumber)
         {
             Symbol sym = current.GetCurrentNextSymbol();
             List<Rule> filteredRules = Grammar.GetRulesWithSpecificStartSymbol(sym);
             filteredRules.ForEach((Rule r) =>
             {
-                AddToSet(new Earleme(parentPosition, r), parentPosition);
+                AddToSet(new Earleme(setNumber, r), setNumber);
             });
 
         }
