@@ -23,27 +23,40 @@ namespace marpa_impl
 
         public void Parse(String input)
         {
+            /* Sets init */
             for(int i=0; i<input.Length; i++)
             {
                 Sets.Add(new EarlemeSet());
-                Sets[0].AddEarleme(
-                    new Earleme(0, 
+            }
+            Sets[0].AddEarleme(
+                    new Earleme(0,
                         new Rule(
-                            new Symbol("empty"), 
-                            new List<Symbol>() { Grammar.GetStartSymbol()})
+                            new Symbol("empty"),
+                            new List<Symbol>() { Grammar.GetStartSymbol() })
                         )
                     );
-            }
+            /* -------- */
 
             for (int i = 0; i < input.Length; i++)
             {
                 EarlemeSet earlemeSet = Sets[i];
-                for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
+                Console.WriteLine(i + " : " + earlemeSet.GetEarlemeSetSize());
+                int j = 0;
+                
+                while (j < earlemeSet.GetEarlemeSetSize())
                 {
                     Earleme current = earlemeSet.GetEarleme(j);
+                    
                     if (!current.IsCompleted()) {
-                        Predictor(current, j);
+                        Predictor(current, i);
                     }
+
+                    j++;
+                }
+
+                for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
+                {
+                    Console.WriteLine(earlemeSet.GetEarleme(k).ToString());
                 }
             }
         }

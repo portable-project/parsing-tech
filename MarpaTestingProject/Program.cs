@@ -20,15 +20,17 @@ namespace MarpaTestingProject
             Symbol o2 = new Symbol("*");
 
             grammar.AddSymbol(new List<Symbol>() { s, m, t, d1, d2, d3, d4, o1, o2 });
-            grammar.AddRule(s, new List<Symbol>() { s, o1, m });
+            grammar.AddRule(s, new List<Symbol>() { m, o1, s });
             grammar.AddRule(s, new List<Symbol>() { m });
             grammar.AddRule(m, new List<Symbol>() { m, o2, t });
-            grammar.AddRule(m, new List<Symbol>() { t });
             grammar.AddRule(t, new List<Symbol>() { d1 });
             grammar.AddRule(t, new List<Symbol>() { d2 });
-            grammar.AddRule(t, new List<Symbol>() { d3 });
-            grammar.AddRule(t, new List<Symbol>() { d4 });
+            grammar.AddRule(m, new List<Symbol>() { d3 });
+            grammar.AddRule(m, new List<Symbol>() { d4 });
             grammar.SetStartSym(s);
+
+            Recogniser recogniser = new Recogniser(grammar);
+            recogniser.Parse("1+2");
 
         }
     }

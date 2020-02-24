@@ -47,5 +47,14 @@ namespace marpa_impl
         {
             completed = true;
         }
+        internal Rule GetRule()
+        {
+           return Rule;
+        }
+
+        public override String ToString()
+        {
+            return Rule.ToString() + ' ' + RulePosition;
+        }
     }
 }

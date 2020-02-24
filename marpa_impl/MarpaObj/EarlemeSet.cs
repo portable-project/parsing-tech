@@ -9,9 +9,17 @@ namespace marpa_impl
         private List<Earleme> Earlemes;
         private String State;
 
+        public EarlemeSet()
+        {
+            Earlemes = new List<Earleme>();
+        }
         internal void AddEarleme(Earleme earleme)
         {
-            Earlemes.Add(earleme);
+            if(Earlemes.Find(erl => erl.GetRule().Equals(earleme.GetRule())) == null)
+            {
+                Earlemes.Add(earleme);
+            }
+            
         }
 
         internal void CompleteSet()
