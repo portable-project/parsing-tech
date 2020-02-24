@@ -40,7 +40,7 @@ namespace marpa_impl
             for (int i = 0; i < input.Length; i++)
             {
                 EarlemeSet earlemeSet = Sets[i];
-                Console.WriteLine(i + " : " + earlemeSet.GetEarlemeSetSize());
+                Console.WriteLine(i + " : ");
                 int j = 0;
                 
                 while (j < earlemeSet.GetEarlemeSetSize())
@@ -48,7 +48,15 @@ namespace marpa_impl
                     Earleme current = earlemeSet.GetEarleme(j);
                     
                     if (!current.IsCompleted()) {
-                        Predictor(current, i);
+                        bool condition = Grammar.DoesBelongToTerminals(current.GetCurrentNextSymbol());
+                        if (!condition)
+                        {
+                            Predictor(current, i);
+                        }
+                        else
+                        {
+                            Scanner(current, i, input[i]);
+                        }
                     }
 
                     j++;
@@ -59,6 +67,20 @@ namespace marpa_impl
                     Console.WriteLine(earlemeSet.GetEarleme(k).ToString());
                 }
             }
+        }
+
+        private void Scanner(Earleme current, int setNumber, Char inputSymbol)
+        {
+            if (current.GetCurrentNextSymbol().GetSymbolName().Equals(inputSymbol.ToString()))
+            {
+                AddToSet(
+                    new Earleme(
+                        current.GetRulePosition() + 1, 
+                        current.GetRule()
+                        ), 
+                    setNumber + 1);
+            }
+            
         }
 
         private void Predictor(Earleme current, int setNumber)

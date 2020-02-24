@@ -21,7 +21,6 @@ namespace marpa_impl
             completed = false;
         }
 
-
         internal Symbol GetCurrentNextSymbol()
         {
             return Rule.GetRightHandSideOfRule(RulePosition);
@@ -38,7 +37,6 @@ namespace marpa_impl
         {
             return state;
         }
-
         internal bool IsCompleted()
         {
             return completed;
@@ -51,10 +49,9 @@ namespace marpa_impl
         {
            return Rule;
         }
-
         public override String ToString()
         {
-            return Rule.ToString() + ' ' + RulePosition;
+            return Rule.ToString() + " - at " + RulePosition;
         }
     }
 }

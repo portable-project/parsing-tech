@@ -15,7 +15,7 @@ namespace marpa_impl
             GlobalErrorCode = error;
             throw new Exception( ErrorHandler.getErrorMessageByCode(error) );
         }
-        private Boolean DoesBelongToGrammarSymbolsList(Symbol Symbol)
+        private bool DoesBelongToGrammarSymbolsList(Symbol Symbol)
         {
             return ExtSymList.Contains(Symbol);
         }
@@ -48,6 +48,12 @@ namespace marpa_impl
             return ExtSymList.Count > 0 && GetStartSymbol() != null && ExtRuleList.Count > 0;
         }
 
+        internal bool DoesBelongToTerminals(Symbol Symbol)
+        {
+            List<Symbol> symbols = new List<Symbol>();
+            ExtRuleList.ForEach(rule => symbols.Add(rule.GetLeftHandSideOfRule()));
+            return !symbols.Contains(Symbol);
+        }
         internal void ClearGlobalErrorCode()
         {
             GlobalErrorCode = ErrorCode.NO_ERROR;
@@ -95,6 +101,10 @@ namespace marpa_impl
         internal bool IsExtSymIdValid(int ExtSymId)
         {
             return ExtSymId >= 0 && ExtSymId < ExtSymList.Count;
+        }
+        internal Symbol GetSymbolByName(Char symName)
+        {
+            return ExtSymList.Find(sym => sym.GetSymbolName() == symName.ToString());
         }
 
 
