@@ -10,7 +10,6 @@ namespace marpa_impl
         private int RulePosition;
         private int ParentPosition;
         private RuleState state;
-        private bool completed;
 
         internal Earleme(int parentPosition, Rule rule)
         {
@@ -18,7 +17,6 @@ namespace marpa_impl
             ParentPosition = parentPosition;
             RulePosition = 0;
             state = RuleState.PREDICTED;
-            completed = false;
         }
 
         internal Symbol GetCurrentNextSymbol()
@@ -39,11 +37,7 @@ namespace marpa_impl
         }
         internal bool IsCompleted()
         {
-            return completed;
-        }
-        internal void Complete()
-        {
-            completed = true;
+            return GetRulePosition() == Rule.GetRightHandSideOfRule().Count;
         }
         internal Rule GetRule()
         {

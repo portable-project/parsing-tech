@@ -58,6 +58,10 @@ namespace marpa_impl
                             Scanner(current, i, input[i]);
                         }
                     }
+                    else
+                    {
+                        Completer(current, i);
+                    }
 
                     j++;
                 }
@@ -66,6 +70,31 @@ namespace marpa_impl
                 {
                     Console.WriteLine(earlemeSet.GetEarleme(k).ToString());
                 }
+            }
+        }
+
+        private void Completer(Earleme current, int setNumber)
+        {
+            Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
+            int position = current.GetRulePosition();
+            EarlemeSet earlemeSet = Sets[position];
+
+            int j = 0;
+            while (j < earlemeSet.GetEarlemeSetSize())
+            {
+                Earleme currentEarleme = earlemeSet.GetEarleme(j);
+                Symbol next = currentEarleme.GetRule().GetLeftHandSideOfRule();
+                if (next.Equals(lhs))
+                {
+                    AddToSet(
+                        new Earleme(
+                            currentEarleme.GetRulePosition() + 1, 
+                            currentEarleme.GetRule()
+                            ), 
+                        setNumber
+                        );
+                }
+                j++;
             }
         }
 
