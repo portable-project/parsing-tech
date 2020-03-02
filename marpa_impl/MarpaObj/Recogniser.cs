@@ -39,31 +39,29 @@ namespace marpa_impl
 
             for (int i = 0; i < input.Length; i++)
             {
+                Console.WriteLine("\nSYM " + input[i] + " : ");
+
                 EarlemeSet earlemeSet = Sets[i];
-                Console.WriteLine(i + " : ");
-                int j = 0;
-                
-                while (j < earlemeSet.GetEarlemeSetSize())
+                for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
                 {
                     Earleme current = earlemeSet.GetEarleme(j);
                     
                     if (!current.IsCompleted()) {
-                        bool condition = Grammar.DoesBelongToTerminals(current.GetCurrentNextSymbol());
-                        if (!condition)
-                        {
+                        // bool condition = Grammar.DoesBelongToTerminals(current.GetCurrentNextSymbol());
+                        // if (!condition)
+                        // {
                             Predictor(current, i);
-                        }
-                        else
-                        {
+                        // }
+                        // else
+                        // {
                             Scanner(current, i, input[i]);
-                        }
+                        //}
                     }
                     else
                     {
                         Completer(current, i);
                     }
 
-                    j++;
                 }
 
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
