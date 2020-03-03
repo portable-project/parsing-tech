@@ -9,14 +9,19 @@ namespace marpa_impl
         private Rule Rule;
         private int RulePosition;
         private int ParentPosition;
-        private RuleState state;
 
-        internal Earleme(int parentPosition, Rule rule)
+        internal Earleme(Rule rule, int parentPosition)
         {
             Rule = rule;
             ParentPosition = parentPosition;
             RulePosition = 0;
-            state = RuleState.PREDICTED;
+        }
+
+        internal Earleme(Rule rule, int parentPosition, int rulePosition)
+        {
+            Rule = rule;
+            ParentPosition = parentPosition;
+            RulePosition = rulePosition;
         }
 
         internal Symbol GetCurrentNextSymbol()
@@ -30,10 +35,6 @@ namespace marpa_impl
         internal int GetParentPosition()
         {
             return ParentPosition;
-        }
-        internal RuleState GetEarlemePosition()
-        {
-            return state;
         }
         internal bool IsCompleted()
         {
