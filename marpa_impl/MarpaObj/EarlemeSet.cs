@@ -9,7 +9,7 @@ namespace marpa_impl
         private List<Earleme> Earlemes;
         private String State;
 
-        public EarlemeSet()
+        internal EarlemeSet()
         {
             Earlemes = new List<Earleme>();
         }

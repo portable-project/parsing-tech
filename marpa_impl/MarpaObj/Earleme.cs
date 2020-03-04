@@ -10,19 +10,27 @@ namespace marpa_impl
         private int RulePosition;
         private int ParentPosition;
         private int Id;
+        private (int, int) PreviousEarleme;
 
-        internal Earleme(Rule rule, int parentPosition)
+        internal Earleme(Rule rule, int parentPosition, (int, int) prevoiusEarleme)
         {
             Rule = rule;
             ParentPosition = parentPosition;
             RulePosition = 0;
+            PreviousEarleme = prevoiusEarleme;
         }
 
-        internal Earleme(Rule rule, int parentPosition, int rulePosition)
+        internal Earleme(Rule rule, int parentPosition, (int, int) prevoiusEarleme, int rulePosition)
         {
             Rule = rule;
             ParentPosition = parentPosition;
             RulePosition = rulePosition;
+            PreviousEarleme = prevoiusEarleme;
+        }
+
+        internal (int, int) GetPreviousEarleme()
+        {
+            return PreviousEarleme;
         }
         internal void SetId(int id)
         {
@@ -54,7 +62,8 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return Rule.ToString() + " - at " + RulePosition + (IsCompleted() ? " COMPL " : "");
+            return "ID "+ GetId()  + " FROM (" + GetPreviousEarleme().Item1 + " , " +  GetPreviousEarleme().Item2 + ")  " 
+                + Rule.ToString() + " - at " + RulePosition + (IsCompleted() ? " COMPL " : "");
         }
     }
 }
