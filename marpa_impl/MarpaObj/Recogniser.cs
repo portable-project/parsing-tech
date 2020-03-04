@@ -45,10 +45,15 @@ namespace marpa_impl
                     {
                         Completer(current, i);
                     }
-
                 }
+
+                PrintSets();
             }
 
+        }
+
+        private void PrintSets()
+        {
             for (int i = 0; i < Sets.Count; i++)
             {
                 Console.WriteLine("\nSet size " + i);

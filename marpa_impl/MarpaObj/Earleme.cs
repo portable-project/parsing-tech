@@ -9,6 +9,7 @@ namespace marpa_impl
         private Rule Rule;
         private int RulePosition;
         private int ParentPosition;
+        private int Id;
 
         internal Earleme(Rule rule, int parentPosition)
         {
@@ -23,7 +24,14 @@ namespace marpa_impl
             ParentPosition = parentPosition;
             RulePosition = rulePosition;
         }
-
+        internal void SetId(int id)
+        {
+            Id = id;
+        }
+        internal int GetId()
+        {
+            return Id;
+        }
         internal Symbol GetCurrentNextSymbol()
         {
             return Rule.GetRightHandSideOfRule(RulePosition);
