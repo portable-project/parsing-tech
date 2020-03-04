@@ -46,7 +46,7 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return Rule.ToString() + " - at " + RulePosition;
+            return Rule.ToString() + " - at " + RulePosition + (IsCompleted() ? " COMPL " : "");
         }
     }
 }

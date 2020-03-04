@@ -31,7 +31,7 @@ namespace MarpaTestingProject
             grammar.SetStartSym(s);
 
             Recogniser recogniser = new Recogniser(grammar);
-            recogniser.Parse("2+3*4");
+            recogniser.Parse("1*3+4*2");
 
         }
     }

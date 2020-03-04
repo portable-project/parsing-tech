@@ -23,10 +23,8 @@ namespace marpa_impl
         {
             InitBeforeParse(input);
 
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i <= input.Length; i++)
             {
-                Console.WriteLine("\nSYM " + input[i] + " : ");
-
                 EarlemeSet earlemeSet = Sets[i];
                 for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
                 {
@@ -38,7 +36,7 @@ namespace marpa_impl
                         {
                             Predictor(current, i);
                         }
-                        else
+                        else if(input.Length > i)
                         {
                             Scanner(current, i, input[i]);
                         }
@@ -49,7 +47,12 @@ namespace marpa_impl
                     }
 
                 }
+            }
 
+            for (int i = 0; i < Sets.Count; i++)
+            {
+                Console.WriteLine("\nSet size " + i);
+                EarlemeSet earlemeSet = Sets[i];
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
                     Console.WriteLine(earlemeSet.GetEarleme(k).ToString());
