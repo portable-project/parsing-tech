@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace marpa_impl
 {
@@ -8,9 +6,8 @@ namespace marpa_impl
     {
         NO_ERROR,
         NO_SUCH_SYMBOL_IN_GRAMMAR,
-        INCORRECT_RULE,
+        INCORRECT_RULE_SYMBOLS,
         INCOMPLETE_GRAMMAR,
-
     }
 
     public static class ErrorHandler
@@ -18,6 +15,18 @@ namespace marpa_impl
         public static String getErrorMessageByCode(ErrorCode errorCode)
         {
             return errorCode.ToString();
+        }
+        public static void PrintErrorCode(ErrorCode error)
+        {
+            Console.WriteLine("ATTENTION: " + getErrorMessageByCode(error));
+        }
+        public static void PrintErrorCode(ErrorCode error, Symbol symbol)
+        {
+            Console.WriteLine("ATTENTION: " + getErrorMessageByCode(error) + " : " + symbol.GetSymbolName());
+        }
+        public static void PrintErrorCode(ErrorCode error, Rule rule)
+        {
+            Console.WriteLine("ATTENTION: " + getErrorMessageByCode(error) + " : " + rule.ToString());
         }
     }
 }

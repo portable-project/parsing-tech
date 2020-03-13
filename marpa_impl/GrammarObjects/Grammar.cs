@@ -5,26 +5,20 @@ namespace marpa_impl
 {
     public class Grammar
     {
-        private ErrorCode GlobalErrorCode;
         private Symbol StartSymbol;
         private readonly List<Symbol> ExtSymList;
         private readonly List<Rule> ExtRuleList;
 
-        private void SetGlobalErrorCode(ErrorCode error)
-        {
-            GlobalErrorCode = error;
-            throw new Exception( ErrorHandler.getErrorMessageByCode(error) );
-        }
         private bool DoesBelongToGrammarSymbolsList(Symbol Symbol)
         {
             return ExtSymList.Contains(Symbol);
         }
-        private void CheckRuleSymbols(Rule Rule)
+        private bool IsRuleCorrect(Rule Rule)
         {
             Symbol lhs = Rule.GetLeftHandSideOfRule();
             if (!DoesBelongToGrammarSymbolsList(lhs))
             {
-                SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
+                return false;
             }
 
             List<Symbol> rhs = Rule.GetRightHandSideOfRule();
@@ -32,20 +26,39 @@ namespace marpa_impl
             {
                 if (!DoesBelongToGrammarSymbolsList(rhs[i]))
                 {
-                    SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
+                    return false;
                 }
             }
+
+            return true;
         }
 
         public Grammar()
         {
-            GlobalErrorCode = ErrorCode.NO_ERROR;
             ExtRuleList = new List<Rule>();
             ExtSymList = new List<Symbol>();
         }
         public bool IsGrammarValid()
         {
-            return ExtSymList.Count > 0 && GetStartSymbol() != null && ExtRuleList.Count > 0;
+            bool result = true;
+            result &= DoesBelongToGrammarSymbolsList(StartSymbol);
+            if (!result)
+            {
+                ErrorHandler.PrintErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR, StartSymbol);
+            }
+
+            ExtRuleList.ForEach(r =>
+            {
+                result &= IsRuleCorrect(r);
+                if (!result)
+                {
+                    ErrorHandler.PrintErrorCode(ErrorCode.INCORRECT_RULE_SYMBOLS, r);
+                }
+            });
+
+            result &= ExtSymList.Count > 0 && GetStartSymbol() != null && ExtRuleList.Count > 0;
+
+            return result;
         }
 
         internal bool DoesBelongToTerminals(Symbol Symbol)
@@ -54,26 +67,11 @@ namespace marpa_impl
             ExtRuleList.ForEach(rule => symbols.Add(rule.GetLeftHandSideOfRule()));
             return !symbols.Contains(Symbol);
         }
-        internal void ClearGlobalErrorCode()
-        {
-            GlobalErrorCode = ErrorCode.NO_ERROR;
-        }
-        internal ErrorCode GetGlobalErrorCode()
-        {
-            return GlobalErrorCode;
-        }
 
         // START SYMBOL
         public void SetStartSym(Symbol StartSym)
         {
-            if (!DoesBelongToGrammarSymbolsList(StartSym))
-            { 
-                SetGlobalErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR);
-            }
-            else
-            {
-                StartSymbol = StartSym;
-            }
+            StartSymbol = StartSym;
         }
         public Symbol GetStartSymbol()
         {
@@ -115,14 +113,12 @@ namespace marpa_impl
         }
         public void AddRule(Rule Rule)
         {
-            CheckRuleSymbols(Rule);
             Rule.SetRuleId(GetRulesListSize());
             ExtRuleList.Add(Rule);
         }
         public void AddRule(Symbol lhs, List<Symbol> rhs)
         {
             Rule newRule = new Rule(lhs, rhs, GetRulesListSize());
-            CheckRuleSymbols(newRule);
             ExtRuleList.Add(newRule);
         }
 

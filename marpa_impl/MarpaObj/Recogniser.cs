@@ -14,7 +14,8 @@ namespace marpa_impl
         {
             if (!grammar.IsGrammarValid())
             {
-                throw new Exception(ErrorHandler.getErrorMessageByCode(ErrorCode.INCOMPLETE_GRAMMAR));
+                ErrorHandler.PrintErrorCode(ErrorCode.INCOMPLETE_GRAMMAR);
+                return;
             }
             Grammar = grammar;
             Sets = new List<EarlemeSet>();
@@ -22,6 +23,7 @@ namespace marpa_impl
 
         public void Parse(String input)
         {
+            if (Grammar == null) return;
             InitBeforeParse(input);
             RunMarpa(input);
             PrintSets();

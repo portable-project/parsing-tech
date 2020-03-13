@@ -45,12 +45,10 @@ namespace marpa_impl
         public void AddToRightHandSideOfRule(Symbol symbol)
         {
             if(RHS != null) RHS.Add(symbol);
-            else throw new Exception(ErrorHandler.getErrorMessageByCode(ErrorCode.INCORRECT_RULE));
         }
         public void AddToRightHandSideOfRule(List<Symbol> symbols)
         {
             if (RHS != null) RHS.AddRange(symbols);
-            else throw new Exception(ErrorHandler.getErrorMessageByCode(ErrorCode.INCORRECT_RULE));
         }
 
         internal void SetRuleId(int Id)
