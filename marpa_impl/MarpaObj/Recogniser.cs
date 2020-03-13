@@ -23,17 +23,11 @@ namespace marpa_impl
         public void Parse(String input)
         {
             InitBeforeParse(input);
-            Marpa(input);
+            RunMarpa(input);
             PrintSets();
-            MakeParseTree();
         }
 
-        private void MakeParseTree()
-        {
-
-        }
-
-        private void Marpa(String input)
+        private void RunMarpa(String input)
         {
             for (int i = 0; i <= input.Length; i++)
             {
@@ -85,8 +79,7 @@ namespace marpa_impl
                         new Rule(
                             EmptySymbol,
                             new List<Symbol>() { Grammar.GetStartSymbol() }),
-                        0,
-                        (0,0)
+                        0
                         )
                     );
         }
@@ -108,10 +101,10 @@ namespace marpa_impl
                         new Earleme(
                         currentEarleme.GetRule(),
                         currentEarleme.GetParentPosition(),
-                        (setNumber, current.GetId()), 
                         currentEarleme.GetRulePosition() + 1
                             ), 
                         setNumber );
+  
                 }
                 j++;
             }
@@ -125,7 +118,6 @@ namespace marpa_impl
                     new Earleme(
                         current.GetRule(), 
                         current.GetParentPosition(), 
-                        (setNumber, current.GetId()), 
                         current.GetRulePosition() + 1
                         ),
                     setNumber + 1);
@@ -139,14 +131,13 @@ namespace marpa_impl
             List<Rule> filteredRules = Grammar.GetRulesWithSpecificStartSymbol(sym);
             filteredRules.ForEach((Rule r) =>
             {
-                AddToSet(new Earleme(r, setNumber, ( setNumber, current.GetId())), setNumber);
+                AddToSet(new Earleme(r, setNumber), setNumber);
             });
 
         }
 
         private void AddToSet(Earleme earleme, int setIndex)
         {
-            earleme.SetId(Sets[setIndex].GetEarlemeSetSize());
             Sets[setIndex].AddEarleme(earleme);
         }
     }
