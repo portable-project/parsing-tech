@@ -27,8 +27,57 @@ namespace marpa_impl
             InitBeforeParse(input);
             RunMarpa(input);
             PrintSets();
+            Console.WriteLine();
+            Console.WriteLine("____________________");
+            Console.WriteLine();
+            // ConstructParseTree(input.Length);
         }
 
+        private void ConstructParseTree(int inputLength)
+        {
+            Earleme completedStartSymbolEarleme = GetCompletedEarlemeWithSecialLHS(inputLength, Grammar.GetStartSymbol());
+            if (completedStartSymbolEarleme == null)
+            {
+                Console.WriteLine("This input string is not recognised by the grammar");
+                return;
+            }
+
+            FindAllDerivedRules(completedStartSymbolEarleme);
+            
+        }
+
+        private void FindAllDerivedRules(Earleme earleme)
+        {
+            List<Symbol> rhs = earleme.GetRule().GetRightHandSideOfRule();
+            Console.WriteLine("RULE: " + earleme.GetRule().ToString());
+            for (int i = rhs.Count-1; i >=0 ; i--)
+            {
+                Symbol s = rhs[i];
+                if (!Grammar.DoesBelongToTerminals(s))
+                {
+                    Console.WriteLine(s.GetSymbolName());
+                    Earleme e = GetCompletedEarlemeWithSecialLHS(earleme.GetParentPosition(), s);
+                    if(e != null) Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+        private Earleme GetCompletedEarlemeWithSecialLHS(int setNumber, Symbol lhs)
+        {
+            EarlemeSet lastSet = Sets[setNumber];
+            Earleme completedEarleme = null;
+            for (int i = 0; i < lastSet.GetEarlemeSetSize(); i++)
+            {
+                Earleme e = lastSet.GetEarleme(i);
+                if (e.IsCompleted()
+                    && e.GetRule().GetLeftHandSideOfRule().Equals(lhs))
+                {
+                    completedEarleme = e;
+                    break;
+                }
+            }
+            return completedEarleme;
+        }
         private void RunMarpa(String input)
         {
             for (int i = 0; i <= input.Length; i++)
@@ -66,7 +115,10 @@ namespace marpa_impl
                 EarlemeSet earlemeSet = Sets[i];
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
-                    Console.WriteLine(earlemeSet.GetEarleme(k).ToString());
+                    Earleme e = earlemeSet.GetEarleme(k);
+                    if (e.IsCompleted()) {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
             }
         }
@@ -76,14 +128,11 @@ namespace marpa_impl
             {
                 Sets.Add(new EarlemeSet());
             }
-            Sets[0].AddEarleme(
-                    new Earleme(
-                        new Rule(
-                            EmptySymbol,
-                            new List<Symbol>() { Grammar.GetStartSymbol() }),
-                        0
-                        )
-                    );
+
+            Grammar.GetRulesWithSpecificStartSymbol(Grammar.GetStartSymbol()).ForEach(r =>
+            {
+                Sets[0].AddEarleme(new Earleme(r,0));
+            });
         }
 
         private void Completer(Earleme current, int setNumber)
