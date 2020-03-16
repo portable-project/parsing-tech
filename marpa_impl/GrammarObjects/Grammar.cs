@@ -6,12 +6,13 @@ namespace marpa_impl
     public class Grammar
     {
         private Symbol StartSymbol;
-        private readonly List<Symbol> ExtSymList;
-        private readonly List<Rule> ExtRuleList;
+        private Symbol NullingSymbol;
+        private readonly List<Symbol> SymbolList;
+        private readonly List<Rule> RuleList;
 
         private bool DoesBelongToGrammarSymbolsList(Symbol Symbol)
         {
-            return ExtSymList.Contains(Symbol);
+            return SymbolList.Contains(Symbol);
         }
         private bool IsRuleCorrect(Rule Rule)
         {
@@ -35,19 +36,25 @@ namespace marpa_impl
 
         public Grammar()
         {
-            ExtRuleList = new List<Rule>();
-            ExtSymList = new List<Symbol>();
+            RuleList = new List<Rule>();
+            SymbolList = new List<Symbol>();
         }
         public bool IsGrammarValid()
         {
             bool result = true;
+            if(NullingSymbol != null) result &= !DoesBelongToGrammarSymbolsList(NullingSymbol);
+            if (!result)
+            {
+                ErrorHandler.PrintErrorCode(ErrorCode.NULLING_SYMBOL_BELONGS_TO_GRAMMAR, NullingSymbol);
+            }
+
             result &= DoesBelongToGrammarSymbolsList(StartSymbol);
             if (!result)
             {
                 ErrorHandler.PrintErrorCode(ErrorCode.NO_SUCH_SYMBOL_IN_GRAMMAR, StartSymbol);
             }
 
-            ExtRuleList.ForEach(r =>
+            RuleList.ForEach(r =>
             {
                 result &= IsRuleCorrect(r);
                 if (!result)
@@ -56,7 +63,7 @@ namespace marpa_impl
                 }
             });
 
-            result &= ExtSymList.Count > 0 && GetStartSymbol() != null && ExtRuleList.Count > 0;
+            result &= SymbolList.Count > 0 && GetStartSymbol() != null && RuleList.Count > 0;
 
             return result;
         }
@@ -64,8 +71,18 @@ namespace marpa_impl
         internal bool DoesBelongToTerminals(Symbol Symbol)
         {
             List<Symbol> symbols = new List<Symbol>();
-            ExtRuleList.ForEach(rule => symbols.Add(rule.GetLeftHandSideOfRule()));
+            RuleList.ForEach(rule => symbols.Add(rule.GetLeftHandSideOfRule()));
             return !symbols.Contains(Symbol);
+        }
+
+        // NULLING SYMBOL
+        public void SetNullingSymbol(Symbol NullingSym)
+        {
+            NullingSymbol = NullingSym;
+        }
+        public Symbol GetNullingSymbol()
+        {
+            return NullingSymbol;
         }
 
         // START SYMBOL
@@ -85,12 +102,12 @@ namespace marpa_impl
         // SYMBOLS
         public int GetSymbolsListSize()
         {
-            return ExtSymList.Count;
+            return SymbolList.Count;
         }
         public void AddSymbol(Symbol Symbol)
         {
             Symbol.SetSymbolId(GetSymbolsListSize());
-            ExtSymList.Add(Symbol);
+            SymbolList.Add(Symbol);
         }
         public void AddSymbol(List<Symbol> Symbols)
         {
@@ -98,33 +115,33 @@ namespace marpa_impl
         }
         internal bool IsExtSymIdValid(int ExtSymId)
         {
-            return ExtSymId >= 0 && ExtSymId < ExtSymList.Count;
+            return ExtSymId >= 0 && ExtSymId < SymbolList.Count;
         }
         internal Symbol GetSymbolByName(Char symName)
         {
-            return ExtSymList.Find(sym => sym.GetSymbolName() == symName.ToString());
+            return SymbolList.Find(sym => sym.GetSymbolName() == symName.ToString());
         }
 
 
         // RULES
         public int GetRulesListSize()
         {
-            return ExtRuleList.Count;
+            return RuleList.Count;
         }
         public void AddRule(Rule Rule)
         {
             Rule.SetRuleId(GetRulesListSize());
-            ExtRuleList.Add(Rule);
+            RuleList.Add(Rule);
         }
         public void AddRule(Symbol lhs, List<Symbol> rhs)
         {
             Rule newRule = new Rule(lhs, rhs, GetRulesListSize());
-            ExtRuleList.Add(newRule);
+            RuleList.Add(newRule);
         }
 
         internal List<Rule> GetRulesWithSpecificStartSymbol(Symbol symbol)
         {
-            return ExtRuleList.FindAll((Rule r) =>
+            return RuleList.FindAll((Rule r) =>
             {
                 return r.GetLeftHandSideOfRule().GetSymbolName() == symbol.GetSymbolName();
             });
@@ -133,13 +150,13 @@ namespace marpa_impl
         internal Rule GetExtRuleById(int ExtRuleId)
         {
             if (IsExtRuleIdValid(ExtRuleId))
-                return ExtRuleList[ExtRuleId];
+                return RuleList[ExtRuleId];
             else return null;
         }
       
         internal bool IsExtRuleIdValid(int ExtRuleId)
         {
-            return ExtRuleId >= 0 && ExtRuleId < ExtRuleList.Count;
+            return ExtRuleId >= 0 && ExtRuleId < RuleList.Count;
         }
 
     }

@@ -8,6 +8,7 @@ namespace marpa_impl
         NO_SUCH_SYMBOL_IN_GRAMMAR,
         INCORRECT_RULE_SYMBOLS,
         INCOMPLETE_GRAMMAR,
+        NULLING_SYMBOL_BELONGS_TO_GRAMMAR
     }
 
     public static class ErrorHandler
