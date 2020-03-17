@@ -26,7 +26,7 @@ namespace marpa_impl
 
         internal Symbol GetCurrentNextSymbol()
         {
-            return Rule.GetRightHandSideOfRule(RulePosition);
+            return IsCompleted() ? null : Rule.GetRightHandSideOfRule(RulePosition);
         }
         internal int GetRulePosition()
         {

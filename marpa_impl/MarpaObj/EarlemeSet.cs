@@ -15,7 +15,12 @@ namespace marpa_impl
         }
         internal void AddEarleme(Earleme earleme)
         {
-            if(Earlemes.Find(erl => erl.GetRule().Equals(earleme.GetRule())) == null)
+            if(
+                Earlemes.Find(erl => 
+                    erl.GetRule().Equals(earleme.GetRule()) 
+                    && erl.GetRulePosition() == earleme.GetRulePosition() 
+                    ) == null
+                )
             {
                 Earlemes.Add(earleme);
             }

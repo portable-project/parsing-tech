@@ -23,6 +23,11 @@ namespace marpa_impl
             }
 
             List<Symbol> rhs = Rule.GetRightHandSideOfRule();
+            if(rhs.Count == 1 && CheckIsSymbolANullingSymbol(rhs[0]))
+            {
+                return true;
+            }
+
             for(int i=0;i<rhs.Count; i++)
             {
                 if (!DoesBelongToGrammarSymbolsList(rhs[i]))
@@ -84,6 +89,10 @@ namespace marpa_impl
         {
             return NullingSymbol;
         }
+        internal bool CheckIsSymbolANullingSymbol(Symbol Symbol)
+        {
+            return NullingSymbol != null && NullingSymbol.GetSymbolName() == Symbol.GetSymbolName();
+        }
 
         // START SYMBOL
         public void SetStartSym(Symbol StartSym)
@@ -141,10 +150,10 @@ namespace marpa_impl
 
         internal List<Rule> GetRulesWithSpecificStartSymbol(Symbol symbol)
         {
-            return RuleList.FindAll((Rule r) =>
+            return symbol != null ? RuleList.FindAll((Rule r) =>
             {
                 return r.GetLeftHandSideOfRule().GetSymbolName() == symbol.GetSymbolName();
-            });
+            }) : new List<Rule>();
         }
 
         internal Rule GetExtRuleById(int ExtRuleId)

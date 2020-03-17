@@ -91,13 +91,12 @@ namespace marpa_impl
             Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             int position = current.GetParentPosition();
             EarlemeSet earlemeSet = Sets[position];
-
-            int j = 0;
-            while (j < earlemeSet.GetEarlemeSetSize())
+            
+            for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
             {
                 Earleme currentEarleme = earlemeSet.GetEarleme(j);
                 Symbol next = currentEarleme.GetCurrentNextSymbol();
-                if (next.Equals(lhs))
+                if (next != null && next.Equals(lhs))
                 {
                     AddToSet(
                         new Earleme(
@@ -108,13 +107,13 @@ namespace marpa_impl
                         setNumber );
   
                 }
-                j++;
             }
         }
 
         private void Scanner(Earleme current, int setNumber, Char inputSymbol)
         {
-            if (current.GetCurrentNextSymbol().GetSymbolName().Equals(inputSymbol.ToString()))
+            Symbol nextSymbol = current.GetCurrentNextSymbol();
+            if (nextSymbol != null && nextSymbol.GetSymbolName().Equals(inputSymbol.ToString()))
             {
                 AddToSet(
                     new Earleme(
@@ -133,7 +132,11 @@ namespace marpa_impl
             List<Rule> filteredRules = Grammar.GetRulesWithSpecificStartSymbol(sym);
             filteredRules.ForEach((Rule r) =>
             {
-                AddToSet(new Earleme(r, setNumber), setNumber);
+                List<Symbol> symList = r.GetRightHandSideOfRule();
+                if (symList.Count == 1 && Grammar.CheckIsSymbolANullingSymbol(symList[0]))
+                {
+                    AddToSet(new Earleme(current.GetRule(), current.GetParentPosition(), current.GetRulePosition()+1), setNumber);
+                } else AddToSet(new Earleme(r, setNumber), setNumber);
             });
 
         }
