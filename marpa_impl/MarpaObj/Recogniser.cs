@@ -9,6 +9,7 @@ namespace marpa_impl
         private Symbol EmptySymbol = new Symbol("empty");
         private readonly Grammar Grammar;
         private List<EarlemeSet> Sets;
+       
 
         public Recogniser(Grammar grammar)
         {
@@ -67,8 +68,12 @@ namespace marpa_impl
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
                     Earleme e = earlemeSet.GetEarleme(k);
-                    if (e.IsCompleted()) {
-                        Console.WriteLine(e.ToString());
+                    if (e.IsCompleted())
+                    {
+                        Console.WriteLine("\t" + e.ToString());
+                    } else
+                    {
+                        Console.WriteLine( e.ToString());
                     }
                 }
             }
@@ -82,7 +87,7 @@ namespace marpa_impl
 
             Grammar.GetRulesWithSpecificStartSymbol(Grammar.GetStartSymbol()).ForEach(r =>
             {
-                Sets[0].AddEarleme(new Earleme(r,0));
+                Sets[0].AddEarleme(new Earleme(r, 0));
             });
         }
 
@@ -91,7 +96,7 @@ namespace marpa_impl
             Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             int position = current.GetParentPosition();
             EarlemeSet earlemeSet = Sets[position];
-            
+
             for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
             {
                 Earleme currentEarleme = earlemeSet.GetEarleme(j);
@@ -103,9 +108,9 @@ namespace marpa_impl
                         currentEarleme.GetRule(),
                         currentEarleme.GetParentPosition(),
                         currentEarleme.GetRulePosition() + 1
-                            ), 
-                        setNumber );
-  
+                            ),
+                        setNumber);
+
                 }
             }
         }
@@ -117,13 +122,13 @@ namespace marpa_impl
             {
                 AddToSet(
                     new Earleme(
-                        current.GetRule(), 
-                        current.GetParentPosition(), 
+                        current.GetRule(),
+                        current.GetParentPosition(),
                         current.GetRulePosition() + 1
                         ),
                     setNumber + 1);
             }
-            
+
         }
 
         private void Predictor(Earleme current, int setNumber)
@@ -135,8 +140,9 @@ namespace marpa_impl
                 List<Symbol> symList = r.GetRightHandSideOfRule();
                 if (symList.Count == 1 && Grammar.CheckIsSymbolANullingSymbol(symList[0]))
                 {
-                    AddToSet(new Earleme(current.GetRule(), current.GetParentPosition(), current.GetRulePosition()+1), setNumber);
-                } else AddToSet(new Earleme(r, setNumber), setNumber);
+                    AddToSet(new Earleme(current.GetRule(), current.GetParentPosition(), current.GetRulePosition() + 1), setNumber);
+                }
+                else AddToSet(new Earleme(r, setNumber), setNumber);
             });
 
         }

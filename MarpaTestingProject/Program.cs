@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using marpa_impl;
 
 namespace MarpaTestingProject
@@ -34,7 +35,7 @@ namespace MarpaTestingProject
             grammar.SetNullingSymbol(nulling);
 
             Recogniser recogniser = new Recogniser(grammar);
-            recogniser.Parse("1+");
+            recogniser.Parse("1+4*3+3");
 
         }
     }

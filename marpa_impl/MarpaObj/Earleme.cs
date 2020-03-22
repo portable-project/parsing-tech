@@ -7,8 +7,8 @@ namespace marpa_impl
     internal class Earleme
     {
         private Rule Rule;
-        private int RulePosition;
-        private int ParentPosition;
+        private int RulePosition; 
+        private int ParentPosition; // save link to Earleme
 
         internal Earleme(Rule rule, int parentPosition)
         {
