@@ -12,9 +12,9 @@ namespace MarpaTestingProject
         {
             GDL_Processor gDL_Processor = new GDL_Processor();
             gDL_Processor.TryProcessGrammarDefenition(
-                "[dsssd]" +
-                "[dsssd]" +
-                "{ dc rule: {fv}cdd }");
+                "[dsssd]\n" +
+                "[dsssd]\n" +
+                "name{ dc rule: {fv}cdd }");
 
             /*
             Grammar grammar = new Grammar();

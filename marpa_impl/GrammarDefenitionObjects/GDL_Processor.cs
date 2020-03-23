@@ -9,9 +9,25 @@ namespace marpa_impl.GrammarDefenitionObjects
     {
         public void TryProcessGrammarDefenition(string input)
         {
-            GroupCollection x = GetTokenValue(input, GrammarDefenitionLanguage.GetRuleSet().GetRegex());
-            Console.WriteLine(x["ruleset_head"].Value);
-            Console.WriteLine(x["ruleset_body"].Value);
+            GetOuterDefenitionStructure(input, GDL_Type.RULE_SET);
+        }
+
+        private void GetOuterDefenitionStructure(string input, GDL_Type type)
+        {
+            GDL_Item languageItem = GrammarDefenitionLanguage.GetLanguageItemByType(type);
+            if(languageItem.GetRegex() != null)
+            {
+                GroupCollection x = GetTokenValue(input, languageItem.GetRegex());
+                languageItem.GetTokenList().ForEach(token =>
+                {
+                    string tokenRep = token.ToString();
+                    string inputPart = x[tokenRep].Value;
+                    Console.WriteLine(tokenRep);
+                    Console.WriteLine(inputPart);
+                    Console.WriteLine("---------------------\n");
+                    GetOuterDefenitionStructure(inputPart, token);
+                });
+            }
         }
 
         private GroupCollection GetTokenValue(string str, string pattern)
