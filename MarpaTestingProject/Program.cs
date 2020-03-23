@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using marpa_impl;
+using marpa_impl.GrammarDefenitionObjects;
 
 namespace MarpaTestingProject
 {
@@ -9,6 +10,13 @@ namespace MarpaTestingProject
     {
         static void Main(string[] args)
         {
+            GDL_Processor gDL_Processor = new GDL_Processor();
+            gDL_Processor.TryProcessGrammarDefenition(
+                "[dsssd]" +
+                "[dsssd]" +
+                "{ dc rule: {fv}cdd }");
+
+            /*
             Grammar grammar = new Grammar();
             Symbol s = new Symbol("S");
             Symbol m = new Symbol("M");
@@ -36,7 +44,7 @@ namespace MarpaTestingProject
 
             Recogniser recogniser = new Recogniser(grammar);
             recogniser.Parse("1+4*3+3");
-
+            */
         }
     }
 }

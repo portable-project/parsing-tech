@@ -4,25 +4,38 @@ using System.Text;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    public struct GDL_Item
+    internal struct GDL_Item
     {
         private GDL_Type _type;
         private string _regexp;
+        private List<GDL_Type> _tokenList;
 
-        public GDL_Item(GDL_Type type, string regex)
+        internal GDL_Item(GDL_Type type, string regex)
         {
             _type = type;
             _regexp = regex;
+            _tokenList = null;
+        }
+        internal GDL_Item(GDL_Type type, string regex, List<GDL_Type> tokens)
+        {
+            _type = type;
+            _regexp = regex;
+            _tokenList = tokens;
         }
 
-        public string getRegex()
+        internal string GetRegex()
         {
             return _regexp;
         }
 
-        public GDL_Type getType()
+        internal GDL_Type GetItemType()
         {
             return _type;
+        }
+
+        internal List<GDL_Type> GetTokenList()
+        {
+            return _tokenList;
         }
     }
 }

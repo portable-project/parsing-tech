@@ -6,8 +6,10 @@ namespace marpa_impl.GrammarDefenitionObjects
 {
     public enum GDL_Type
     {
-        NAMESPACE,
+        DEFENITION,
         RULE_SET,
+        RULE_SET_HEAD,
+        RULE_SET_BODY,
         IMPORT,
         RULE,
 
@@ -17,6 +19,16 @@ namespace marpa_impl.GrammarDefenitionObjects
         NAME,
         NUMBER,
         HEX,
-        COMPLEX_NAME
+        COMPLEX_NAME,
+
+        SIMPLE,
+        STRING,
+        CHARS,
+        ANY_CHAR,
+        CHAR_CODE,
+        GROUP,
+        CHECK,
+        CHECK_NOT,
+        
     }
 }
