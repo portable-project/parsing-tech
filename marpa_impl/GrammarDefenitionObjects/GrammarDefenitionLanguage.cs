@@ -13,7 +13,8 @@ namespace marpa_impl.GrammarDefenitionObjects
             new GDL_Item(GDL_Type.ANY_CHAR, "'.'"), 
             new GDL_Item(GDL_Type.CHAR_CODE, "<hex>", new List<GDL_Type>() { GDL_Type.HEX }),
             new GDL_Item(GDL_Type.GROUP, "'('<expr>')'", new List<GDL_Type>() { GDL_Type.EXPRESSION }),
-            new GDL_Item(GDL_Type.RULE_SET_HEAD, "'('<expr>')'", new List<GDL_Type>() { GDL_Type.EXPRESSION }),
+            new GDL_Item(GDL_Type.NAME, "[a-zA-Z_][a-zA-Z_0-9]*", null),
+            new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<"+GDL_Type.NAME+@">(\w)+)(?<"+GDL_Type.COMPLEX_NAME+@">(.|(\w))*)", new List<GDL_Type>() { GDL_Type.NAME, GDL_Type.COMPLEX_NAME }),
             new GDL_Item(
                         GDL_Type.RULE_SET,
                         @"(?<"+GDL_Type.ATTRIBUTES+@">^\[[^{]*(\]))" + @"(?<"+GDL_Type.COMPLEX_NAME+@">[^{]+){(?<"+GDL_Type.RULE_SET_BODY +@">(\w|\W)+)}$",

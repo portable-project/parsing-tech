@@ -14,7 +14,7 @@ namespace MarpaTestingProject
             gDL_Processor.TryProcessGrammarDefenition(
                 "[dsssd]\n" +
                 "[dsssd]\n" +
-                "name{ dc rule: {fv}cdd }");
+                "name.namespace.fill{ dc rule: {fv}cdd }");
 
             /*
             Grammar grammar = new Grammar();

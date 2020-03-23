@@ -18,14 +18,22 @@ namespace marpa_impl.GrammarDefenitionObjects
             if(languageItem.GetRegex() != null)
             {
                 GroupCollection x = GetTokenValue(input, languageItem.GetRegex());
+                if(languageItem.GetTokenList() == null)
+                {
+                    // TODO: construct some tree of lexems
+                    return;
+                }
                 languageItem.GetTokenList().ForEach(token =>
                 {
                     string tokenRep = token.ToString();
                     string inputPart = x[tokenRep].Value;
-                    Console.WriteLine(tokenRep);
-                    Console.WriteLine(inputPart);
-                    Console.WriteLine("---------------------\n");
-                    GetOuterDefenitionStructure(inputPart, token);
+                    if (inputPart.Length > 0)
+                    {
+                        Console.WriteLine(tokenRep);
+                        Console.WriteLine(inputPart);
+                        Console.WriteLine("---------------------\n");
+                        GetOuterDefenitionStructure(inputPart, token);
+                    }
                 });
             }
         }
