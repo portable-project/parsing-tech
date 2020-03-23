@@ -15,10 +15,11 @@ namespace marpa_impl.GrammarDefenitionObjects
             new GDL_Item(GDL_Type.GROUP, "'('<expr>')'", new List<GDL_Type>() { GDL_Type.EXPRESSION }),
             new GDL_Item(GDL_Type.NAME, "[a-zA-Z_][a-zA-Z_0-9]*", null),
             new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<"+GDL_Type.NAME+@">(\w)+)(?<"+GDL_Type.COMPLEX_NAME+@">(.|(\w))*)", new List<GDL_Type>() { GDL_Type.NAME, GDL_Type.COMPLEX_NAME }),
+            new GDL_Item(GDL_Type.ATTRIBUTES, 
+                @"\[(?<"+GDL_Type.ATTRIBUTE+@">[^(\[|\])]*)\](?<ATTRIBUTES>[\w|\W]*)", new List<GDL_Type>() { GDL_Type.ATTRIBUTE, GDL_Type.ATTRIBUTES }),
             new GDL_Item(
                         GDL_Type.RULE_SET,
                         @"(?<"+GDL_Type.ATTRIBUTES+@">^\[[^{]*(\]))" + @"(?<"+GDL_Type.COMPLEX_NAME+@">[^{]+){(?<"+GDL_Type.RULE_SET_BODY +@">(\w|\W)+)}$",
-                        // @"(?<"+GDL_Type.RULE_SET_HEAD+@">[^{]*){(?<"+GDL_Type.RULE_SET_BODY +@">(\w|\W)+)}$",
                         new List<GDL_Type>() { GDL_Type.ATTRIBUTES, GDL_Type.COMPLEX_NAME, GDL_Type.RULE_SET_BODY }
                         )
         };

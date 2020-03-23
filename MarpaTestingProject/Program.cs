@@ -12,8 +12,8 @@ namespace MarpaTestingProject
         {
             GDL_Processor gDL_Processor = new GDL_Processor();
             gDL_Processor.TryProcessGrammarDefenition(
-                "[dsssd]\n" +
-                "[dsssd]\n" +
+                "[attr1]\n" +
+                "[attr2]\n" +
                 "name.namespace.fill{ dc rule: {fv}cdd }");
 
             /*

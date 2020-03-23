@@ -12,6 +12,7 @@ namespace marpa_impl.GrammarDefenitionObjects
         IMPORT,
         RULE,
 
+        ATTRIBUTE,
         ATTRIBUTES,
         EXPRESSION,
 
