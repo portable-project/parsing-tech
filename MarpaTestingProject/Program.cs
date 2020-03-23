@@ -14,7 +14,7 @@ namespace MarpaTestingProject
             gDL_Processor.TryProcessGrammarDefenition(
                 "[attr1]\n" +
                 "[attr2]\n" +
-                "name.namespace.fill{ dc rule: {fv}cdd }");
+                "name.namespace.fill{ hey=very.complex.import; attr rule: {fv2}cdd; rule2: {fv}cdd; }");
 
             /*
             Grammar grammar = new Grammar();

@@ -8,9 +8,11 @@ namespace marpa_impl.GrammarDefenitionObjects
     {
         DEFENITION,
         RULE_SET,
-        RULE_SET_BODY,
         IMPORT,
+        RULE_SET_IMPORT,
+        RULES,
         RULE,
+        ALIAS,
 
         ATTRIBUTE,
         ATTRIBUTES,
