@@ -8,7 +8,7 @@ namespace marpa_impl.GrammarDefenitionObjects
     {
         DEFENITION,
         RULE_SET,
-        IMPORT,
+        IMPORTS,
         RULE_SET_IMPORT,
         RULES,
         RULE,
@@ -17,6 +17,7 @@ namespace marpa_impl.GrammarDefenitionObjects
         ATTRIBUTE,
         ATTRIBUTES,
         EXPRESSION,
+        EXPRESSIONS,
 
         NAME,
         NUMBER,

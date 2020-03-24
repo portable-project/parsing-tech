@@ -12,9 +12,13 @@ namespace MarpaTestingProject
         {
             GDL_Processor gDL_Processor = new GDL_Processor();
             gDL_Processor.TryProcessGrammarDefenition(
-                "[attr1]\n" +
+                "[root(definition, hey), root.second(more)]\n" +
                 "[attr2]\n" +
-                "name.namespace.fill{ hey=very.complex.import; attr rule: {fv2}cdd; rule2: {fv}cdd; }");
+                "name.namespace.fill { " +
+                "[attr(moo,ree)] hey = very.complex.import; " +
+                "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
+                "justimport; " +
+                "attr rule: {fv2}cdd; rule2: {fv}cdd; }");
 
             /*
             Grammar grammar = new Grammar();
