@@ -10,15 +10,15 @@ namespace MarpaTestingProject
     {
         static void Main(string[] args)
         {
-            GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(
-                "[root(definition, hey), root.second(more)]\n" +
+            string file1 = "[root(definition, hey), root.second(more)]\n" +
                 "[attr2]\n" +
                 "name.namespace.fill { " +
                 "[attr(moo,ree)] hey = very.complex.import; " +
                 "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
                 "justimport; " +
-                "attr rule: {fv2}cdd; rule2: {fv}cdd; }");
+                "attr rule: {fv2}cdd; rule2: {fv}cdd; }";
+            GDL_Processor gDL_Processor = new GDL_Processor();
+            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
 
             /*
             Grammar grammar = new Grammar();

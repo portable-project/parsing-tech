@@ -7,9 +7,16 @@ namespace marpa_impl.GrammarDefenitionObjects
 {
     public class GDL_Processor
     {
-        public void TryProcessGrammarDefenition(string input)
+        public void TryProcessGrammarDefenition(List<string> files)
         {
-            GetOuterDefenitionStructure(input, GDL_Type.RULE_SET);
+            int mainFileIndex = GetMainGrammarDefenitionDocument(files);
+            GetOuterDefenitionStructure(files[mainFileIndex], GDL_Type.RULE_SET);
+        }
+
+        private int GetMainGrammarDefenitionDocument(List<string> files)
+        {
+            // TODO: implement
+            return 0;
         }
 
         private void GetOuterDefenitionStructure(string input, GDL_Type type)
