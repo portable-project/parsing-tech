@@ -17,8 +17,9 @@ namespace MarpaTestingProject
                 "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
                 "justimport; " +
                 "attr rule: {fv2}cdd; rule2: {fv}cdd; }";
+            string file2 = "name.namespace.fill {}";
             GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
+            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file2 });
 
             /*
             Grammar grammar = new Grammar();

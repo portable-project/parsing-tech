@@ -41,7 +41,7 @@ namespace marpa_impl.GrammarDefenitionObjects
 
             new GDL_Item(
                         GDL_Type.RULE_SET,
-                        @"(?<ATTRIBUTES>^\[[^{]*(\]))"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{]+)"+@"{(\s)*"+@"(?<IMPORTS>[^:]+;)"+@"(\s)*"+@"(?<RULES>(\w|\W)+)}$",
+                        @"(?<ATTRIBUTES>^\[[^{]*(\]))?"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{]+)"+@"{(\s)*"+@"(?<IMPORTS>[^:]+;)?"+@"(\s)*"+@"(?<RULES>(\w|\W)+)?}$",
                         new List<GDL_Type>() { GDL_Type.ATTRIBUTES, GDL_Type.COMPLEX_NAME, GDL_Type.IMPORTS, GDL_Type.RULES }
                         )
         };
