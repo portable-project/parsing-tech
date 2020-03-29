@@ -19,8 +19,25 @@ namespace MarpaTestingProject
                 "attr rule: {fv2}cdd; rule2: {fv}cdd; }";
             string file2 = "[root(definition)]" +
                 "[skip(commentsAndSpaces)]" +
-                "pdsl { definition: ruleSet.body; " +
-                "ruleSet: attrs complexName '{' imports body '}' {        body: item *;       item: rule | ruleSet;         };     }";
+                "pdsl { definition {ruleSet:body;}" +
+                "ruleSet: attrs complexName '{' imports body '}' {" +
+                " body: item *;" +
+                "item: rule | ruleSet; }; " +
+                "        imports: ruleSetImport *;" +
+                "        ruleSetImport: attrs alias complexName ';' { " +
+                "            alias: (name '=')?; }; " +
+                "        rule: attrs complexName args ':' body ';' {" +
+                "            args: ('<'(name(',' name) *) ? '>') ?; " +
+                "            body:                 { " +
+                "            | simple: expr('{' imports rule * '}') ?; " +
+                "            | cases: '{' imports literal*entry * rule * '}' {" +
+                "                    literal: '|' name;" +
+                "                    entry: priority ? '|' rule;" +
+                "                    priority: num | name;" +
+                "                    };" +
+                "                };            };" +
+                "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
+
             GDL_Processor gDL_Processor = new GDL_Processor();
             gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file2 });
 

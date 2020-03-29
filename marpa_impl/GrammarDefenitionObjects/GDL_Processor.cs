@@ -26,6 +26,10 @@ namespace marpa_impl.GrammarDefenitionObjects
             {
                 case GDL_Type.RULES: {
                         List<string> allRules = GetRules(input);
+                        allRules.ForEach(rule =>
+                        {
+                            children.Add(GetRuleOrRulesetStructure(rule));
+                        });
                         break; 
                     }
                 case GDL_Type.ATTRIBUTE: { 
@@ -40,26 +44,32 @@ namespace marpa_impl.GrammarDefenitionObjects
             return new GDL_Node(type, input, children);
         }
 
+        private GDL_Node GetRuleOrRulesetStructure(string input)
+        {
+            string[] parts = input.Split(':');
+            return null;
+        }
         private List<string> GetRules(string input)
         {
             int bracesCount = 0;
             char[] inputAsArray = input.Trim(' ').ToCharArray();
             List<int> splitIndexes = new List<int>();
+            
             splitIndexes.Add(0);
             for (int i = 0; i< inputAsArray.Length; i++)
             {
+                char prev = i>0 ? inputAsArray[i-1] : ' ';
                 char el = inputAsArray[i];
-                if (i > 0 && !inputAsArray[i-1].Equals('\'')) {
+                if (!prev.Equals('\'')) {
                     if (el.Equals('{')) bracesCount++;
                     if (el.Equals('}'))
                     {
                         bracesCount--;
+                        if (bracesCount == 0) // && !prev.Equals('\'') && el.Equals(';'))
+                        {
+                            splitIndexes.Add(i + 1);
+                        }
                     }
-                }
-
-                if (bracesCount == 0 && el.Equals(';'))
-                {
-                    splitIndexes.Add(i+1);
                 }
             }
             splitIndexes.Add(inputAsArray.Length);
