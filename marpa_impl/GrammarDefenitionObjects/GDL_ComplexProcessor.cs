@@ -6,6 +6,11 @@ namespace marpa_impl.GrammarDefenitionObjects
 {
     class GDL_ComplexProcessor
     {
+        internal static List<GDL_Node> GetUsageArgsListItems(string input)
+        {
+            return null;
+        }
+
         internal static List<GDL_Node> GetAttributeItems(string input)
         {
             List<GDL_Node> children = new List<GDL_Node>();

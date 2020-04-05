@@ -11,7 +11,7 @@ namespace MarpaTestingProject
         static void Main(string[] args)
         {
             string file1 = "[root(definition, hey), root.second(more)]\n" +
-                "[attr2, root(definition, hey)]\n" +
+                "[attr2]\n" +
                 "name.namespace.fill { " +
                 "[attr(moo,ree)] hey = very.complex.import; " +
                 "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
