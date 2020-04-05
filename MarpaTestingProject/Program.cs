@@ -39,7 +39,7 @@ namespace MarpaTestingProject
                 "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
             string simple = "name.Wery.897.one {rule: {fv2}cdd; }";
             GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ simple });
+            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
 
             /*
             Grammar grammar = new Grammar();

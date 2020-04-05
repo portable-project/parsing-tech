@@ -13,7 +13,17 @@ namespace marpa_impl.GrammarDefenitionObjects
 
         private static List<GDL_Item> _gdlTokenListOfRepearedTokens = new List<GDL_Item>()
         {
-            new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<NAME>[^.]+)", new List<GDL_Type>() { GDL_Type.NAME, GDL_Type.COMPLEX_NAME }),
+            new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<NAME>[^.]+)", new List<GDL_Type>() { GDL_Type.NAME }),
+            new GDL_Item(
+                GDL_Type.ATTRIBUTES,
+                @"\[(?<ATTRIBUTE>[^\[|^\]]*)\]",
+                new List<GDL_Type>() { GDL_Type.ATTRIBUTE }
+            ),
+            new GDL_Item(
+                GDL_Type.IMPORTS,
+                @"(\s)*"+@"(?<RULE_SET_IMPORT>([^\;])+)"+@";",
+                new List<GDL_Type>() { GDL_Type.RULE_SET_IMPORT }
+            ),
         };
 
         private static List<GDL_Item> _languageTokenList = new List<GDL_Item>()
@@ -31,18 +41,6 @@ namespace marpa_impl.GrammarDefenitionObjects
                 @"(?<ATTRIBUTES>^\[[^{]*(\]))?"+@"(\s)*"+@"(?<ALIAS>(\w)*(\s)*=)?"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{]+)", 
                 new List<GDL_Type>() { GDL_Type.ATTRIBUTES, GDL_Type.ALIAS, GDL_Type.COMPLEX_NAME }
             ),
-            new GDL_Item(
-                GDL_Type.IMPORTS,
-                @"(\s)*"+@"(?<RULE_SET_IMPORT>([^\;])+)"+@";"+@"(?<IMPORTS>(\w|\W)*)", 
-                new List<GDL_Type>() { GDL_Type.RULE_SET_IMPORT, GDL_Type.IMPORTS }
-            ),
-
-            new GDL_Item(
-                GDL_Type.ATTRIBUTES, 
-                @"\[(?<ATTRIBUTE>[^\[|^\]]*)\]"+@"(?<ATTRIBUTES>[\w|\W]*)", 
-                new List<GDL_Type>() { GDL_Type.ATTRIBUTE, GDL_Type.ATTRIBUTES }
-            ),
-
             new GDL_Item(
                         GDL_Type.RULE_SET,
                         @"(?<ATTRIBUTES>^\[[^{]*(\]))?"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{|^\s]+)"+@"(\s)*"+@"{(\s)*"+@"(?<IMPORTS>[^:]+;)?"+@"(\s)*"+@"(?<RULES>(\w|\W)+)?}$",

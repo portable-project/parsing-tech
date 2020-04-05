@@ -87,10 +87,6 @@ namespace marpa_impl.GrammarDefenitionObjects
 
         private List<GDL_Node> GetInnerItems(string input, GDL_Type type)
         {
-            Console.WriteLine(type);
-            Console.WriteLine(input);
-            Console.WriteLine("---------------------\n");
-
             List<GDL_Node> children = new List<GDL_Node>();
 
             GDL_Item languageItem = GrammarDefenitionLanguage.GetLanguageItemByType(type);
