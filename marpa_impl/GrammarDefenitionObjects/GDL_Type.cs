@@ -6,6 +6,7 @@ namespace marpa_impl.GrammarDefenitionObjects
 {
     public enum GDL_Type
     {
+        DEFAULT,
         DEFENITION,
         RULE_SET,
         IMPORTS,

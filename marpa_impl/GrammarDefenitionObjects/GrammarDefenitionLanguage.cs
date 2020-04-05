@@ -11,6 +11,11 @@ namespace marpa_impl.GrammarDefenitionObjects
 
         // ATTRIBUTE, RULES - нельзя регуляркой разобрать
 
+        private static List<GDL_Item> _gdlTokenListOfRepearedTokens = new List<GDL_Item>()
+        {
+            new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<NAME>[^.]+)", new List<GDL_Type>() { GDL_Type.NAME, GDL_Type.COMPLEX_NAME }),
+        };
+
         private static List<GDL_Item> _languageTokenList = new List<GDL_Item>()
         {
             new GDL_Item(GDL_Type.STRING, "\"[^\"\\]*(?:\\.[^\"\\]*)*\""),
@@ -20,7 +25,6 @@ namespace marpa_impl.GrammarDefenitionObjects
             new GDL_Item(GDL_Type.GROUP, "'('<expr>')'", new List<GDL_Type>() { GDL_Type.EXPRESSION }),
             new GDL_Item(GDL_Type.NAME, "[a-zA-Z_][a-zA-Z_0-9]*", null),
             new GDL_Item(GDL_Type.ALIAS, @"(?<NAME>(\w)*)(\s)*=",  new List<GDL_Type>() { GDL_Type.NAME }),
-            new GDL_Item(GDL_Type.COMPLEX_NAME, @"(?<NAME>(\w)+)"+@"(?<COMPLEX_NAME>(.|(\w))*)"+@"(\s)*", new List<GDL_Type>() { GDL_Type.NAME, GDL_Type.COMPLEX_NAME }),
    
             new GDL_Item(
                 GDL_Type.RULE_SET_IMPORT,
@@ -41,7 +45,7 @@ namespace marpa_impl.GrammarDefenitionObjects
 
             new GDL_Item(
                         GDL_Type.RULE_SET,
-                        @"(?<ATTRIBUTES>^\[[^{]*(\]))?"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{]+)"+@"{(\s)*"+@"(?<IMPORTS>[^:]+;)?"+@"(\s)*"+@"(?<RULES>(\w|\W)+)?}$",
+                        @"(?<ATTRIBUTES>^\[[^{]*(\]))?"+@"(\s)*"+@"(?<COMPLEX_NAME>[^{|^\s]+)"+@"(\s)*"+@"{(\s)*"+@"(?<IMPORTS>[^:]+;)?"+@"(\s)*"+@"(?<RULES>(\w|\W)+)?}$",
                         new List<GDL_Type>() { GDL_Type.ATTRIBUTES, GDL_Type.COMPLEX_NAME, GDL_Type.IMPORTS, GDL_Type.RULES }
                         )
         };
@@ -50,6 +54,11 @@ namespace marpa_impl.GrammarDefenitionObjects
         internal static GDL_Item GetLanguageItemByType(GDL_Type type)
         {
             return _languageTokenList.Find(item => item.GetItemType() == type);
+        }
+
+        internal static GDL_Item GetRepeatedLanguageItemByType(GDL_Type type)
+        {
+            return _gdlTokenListOfRepearedTokens.Find(item => item.GetItemType() == type);
         }
     }
 }

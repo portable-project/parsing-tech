@@ -87,10 +87,26 @@ namespace marpa_impl.GrammarDefenitionObjects
 
         private List<GDL_Node> GetInnerItems(string input, GDL_Type type)
         {
+            Console.WriteLine(type);
+            Console.WriteLine(input);
+            Console.WriteLine("---------------------\n");
+
             List<GDL_Node> children = new List<GDL_Node>();
 
             GDL_Item languageItem = GrammarDefenitionLanguage.GetLanguageItemByType(type);
-            if (languageItem.GetRegex() != null)
+            
+            if(languageItem.GetItemType() == GDL_Type.DEFAULT)
+            {
+                languageItem = GrammarDefenitionLanguage.GetRepeatedLanguageItemByType(type);
+                GDL_Type tokenType = languageItem.GetTokenList()[0];
+                MatchCollection matches = GetMultipleTokens(input, languageItem.GetRegex());
+                if (matches.Count > 0)
+                {
+                    foreach (Match match in matches)
+                        children.Add(GetOuterDefenitionStructure(match.Value, tokenType));
+
+                }
+            } else if (languageItem.GetRegex() != null)
             {
                 GroupCollection x = GetTokenValue(input, languageItem.GetRegex());
                 if (languageItem.GetTokenList() != null)
@@ -101,9 +117,6 @@ namespace marpa_impl.GrammarDefenitionObjects
                         string inputPart = x[tokenRep].Value;
                         if (inputPart.Length > 0)
                         {
-                            // Console.WriteLine(tokenRep);
-                            // Console.WriteLine(inputPart);
-                            // Console.WriteLine("---------------------\n");
                             children.Add(GetOuterDefenitionStructure(inputPart, token));
                         }
                     });
@@ -118,6 +131,12 @@ namespace marpa_impl.GrammarDefenitionObjects
             Regex rgx = new Regex(pattern);
             Match match = rgx.Match(str);
             return match.Groups;
+        }
+
+        private MatchCollection GetMultipleTokens(string str, string pattern)
+        {
+            Regex regex = new Regex(pattern);
+            return regex.Matches(str);
         }
     }
 }

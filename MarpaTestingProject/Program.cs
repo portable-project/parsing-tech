@@ -37,9 +37,9 @@ namespace MarpaTestingProject
                 "                    };" +
                 "                };            };" +
                 "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
-
+            string simple = "name.Wery.897.one {rule: {fv2}cdd; }";
             GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file2 });
+            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ simple });
 
             /*
             Grammar grammar = new Grammar();
