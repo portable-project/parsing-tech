@@ -26,6 +26,7 @@ namespace marpa_impl.GrammarDefenitionObjects
                 else
                 {
                     Console.WriteLine("No regexp for this type: " + type);
+                    children.Add(new GDL_Node(type, input, null));
                 }
             }
 

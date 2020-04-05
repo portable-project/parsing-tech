@@ -6,9 +6,37 @@ namespace marpa_impl.GrammarDefenitionObjects
 {
     class GDL_ComplexProcessor
     {
-        internal static List<string> GetAttributeItems(string input)
+        internal static List<GDL_Node> GetAttributeItems(string input)
         {
-            return null;
+            List<GDL_Node> children = new List<GDL_Node>();
+
+            int lastSplitPosition = 0;
+            int bracesCount = 0;
+            char[] inputAsArray = input.Trim(' ').ToCharArray();
+            for (int i = 0; i < inputAsArray.Length; i++)
+            {
+                char prev = i > 0 ? inputAsArray[i - 1] : ' ';
+                char el = inputAsArray[i];
+                if (!prev.Equals('\''))
+                {
+                    if (el.Equals('(')) bracesCount++;
+                    if (el.Equals(')'))
+                    {
+                        bracesCount--;
+                        
+                    }
+                    
+                    if(bracesCount == 0 && (i + 1 == inputAsArray.Length || i + 1 < inputAsArray.Length && inputAsArray[i + 1] == ',') )
+                    {
+                        string part = input.Substring(lastSplitPosition + 1, i - lastSplitPosition);
+                        children.Add(GDL_Processor.GetOuterDefenitionStructure(part, GDL_Type.USAGE));
+
+                        if (i + 1 < inputAsArray.Length && inputAsArray[i + 1] == ',') lastSplitPosition = i + 2;
+                    }
+                }
+            }
+
+            return children;
         }
 
         internal static GDL_Node GetRuleOrRulesetStructure(string input)

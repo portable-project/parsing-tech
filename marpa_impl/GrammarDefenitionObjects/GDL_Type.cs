@@ -17,6 +17,7 @@ namespace marpa_impl.GrammarDefenitionObjects
 
         ATTRIBUTE,
         ATTRIBUTES,
+        USAGE,
         EXPRESSION,
         EXPRESSIONS,
 

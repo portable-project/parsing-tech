@@ -31,7 +31,7 @@ namespace marpa_impl.GrammarDefenitionObjects
                         break; 
                     }
                 case GDL_Type.ATTRIBUTE: {
-                        GDL_ComplexProcessor.GetAttributeItems(input);
+                        children.AddRange(GDL_ComplexProcessor.GetAttributeItems(input));
                         break; 
                     }
                 default: {
