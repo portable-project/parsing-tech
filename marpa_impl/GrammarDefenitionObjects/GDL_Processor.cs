@@ -90,39 +90,61 @@ namespace marpa_impl.GrammarDefenitionObjects
             List<GDL_Node> children = new List<GDL_Node>();
 
             GDL_Item languageItem = GrammarDefenitionLanguage.GetLanguageItemByType(type);
-            
-            if(languageItem.GetItemType() == GDL_Type.DEFAULT)
+            if (languageItem.GetItemType() != GDL_Type.DEFAULT)
+            {
+                children.AddRange(GetListOfElements(input, languageItem));
+            } 
+            else
             {
                 languageItem = GrammarDefenitionLanguage.GetRepeatedLanguageItemByType(type);
-                GDL_Type tokenType = languageItem.GetTokenList()[0];
-                MatchCollection matches = GetMultipleTokens(input, languageItem.GetRegex());
-                if (matches.Count > 0)
+                if (languageItem.GetItemType() != GDL_Type.DEFAULT)
                 {
-                    foreach (Match match in matches)
-                        children.Add(GetOuterDefenitionStructure(match.Value, tokenType));
-
+                    children.AddRange(GetListOfRepeatedElements(input, languageItem));
                 }
-            } else if (languageItem.GetRegex() != null)
-            {
-                GroupCollection x = GetTokenValue(input, languageItem.GetRegex());
-                if (languageItem.GetTokenList() != null)
+                else
                 {
-                    languageItem.GetTokenList().ForEach(token =>
-                    {
-                        string tokenRep = token.ToString();
-                        string inputPart = x[tokenRep].Value;
-                        if (inputPart.Length > 0)
-                        {
-                            children.Add(GetOuterDefenitionStructure(inputPart, token));
-                        }
-                    });
+                    Console.WriteLine("No regexp for this type: " + type);
                 }
             }
 
             return children;
         }
 
-        private GroupCollection GetTokenValue(string str, string pattern)
+        private List<GDL_Node> GetListOfRepeatedElements(string input, GDL_Item languageItem)
+        {
+            List<GDL_Node> children = new List<GDL_Node>();
+            GDL_Type tokenType = languageItem.GetTokenList()[0];
+            MatchCollection matches = GetMultipleTokens(input, languageItem.GetRegex());
+            if (matches.Count > 0)
+            {
+                foreach (Match match in matches)
+                    children.Add(GetOuterDefenitionStructure(match.Value, tokenType));
+
+            }
+            return children;
+
+        }
+
+        private List<GDL_Node> GetListOfElements(string input, GDL_Item languageItem)
+        {
+            List<GDL_Node> children = new List<GDL_Node>();
+            GroupCollection x = GetToken(input, languageItem.GetRegex());
+            if (languageItem.GetTokenList() != null)
+            {
+                languageItem.GetTokenList().ForEach(token =>
+                {
+                    string tokenRep = token.ToString();
+                    string inputPart = x[tokenRep].Value;
+                    if (inputPart.Length > 0)
+                    {
+                        children.Add(GetOuterDefenitionStructure(inputPart, token));
+                    }
+                });
+            }
+            return children;
+        }
+
+        private GroupCollection GetToken(string str, string pattern)
         {
             Regex rgx = new Regex(pattern);
             Match match = rgx.Match(str);
