@@ -35,7 +35,7 @@ namespace marpa_impl.GrammarDefenitionObjects
             new GDL_Item(GDL_Type.GROUP, "'('<expr>')'", new List<GDL_Type>() { GDL_Type.EXPRESSION }),
             new GDL_Item(GDL_Type.NAME, "[a-zA-Z_][a-zA-Z_0-9]*", null),
             new GDL_Item(GDL_Type.ALIAS, @"(?<NAME>(\w)*)(\s)*=",  new List<GDL_Type>() { GDL_Type.NAME }),
-            new GDL_Item(GDL_Type.USAGE, @"(?<COMPLEX_NAME>(\w|\.)+)(\(?<USAGE_ARG_LIST>(.)*\)$)",  new List<GDL_Type>() { GDL_Type.COMPLEX_NAME, GDL_Type.USAGE_ARG_LIST }),
+            new GDL_Item(GDL_Type.USAGE, @"(?<COMPLEX_NAME>[^(]+)(?<USAGE_ARG_LIST>\((\w|\W)+\)$)",  new List<GDL_Type>() { GDL_Type.COMPLEX_NAME, GDL_Type.USAGE_ARG_LIST }),
    
             new GDL_Item(
                 GDL_Type.RULE_SET_IMPORT,

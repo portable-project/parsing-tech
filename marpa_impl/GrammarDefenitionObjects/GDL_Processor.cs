@@ -36,7 +36,7 @@ namespace marpa_impl.GrammarDefenitionObjects
                     }
                 case GDL_Type.USAGE_ARG_LIST:
                     {
-                        children.AddRange(GDL_ComplexProcessor.GetAttributeItems(input));
+                        children.AddRange(GDL_ComplexProcessor.GetUsageArgsListItems(input));
                         break;
                     }
                 default: {

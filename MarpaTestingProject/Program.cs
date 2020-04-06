@@ -10,7 +10,7 @@ namespace MarpaTestingProject
     {
         static void Main(string[] args)
         {
-            string file1 = "[root(definition, hey), root.second(more)]\n" +
+            string file1 = "[root(# definition <3, 'd', 5>, # name.complex {'.', '4'}), root.second(more)]\n" +
                 "[attr2]\n" +
                 "name.namespace.fill { " +
                 "[attr(moo,ree)] hey = very.complex.import; " +
@@ -39,7 +39,7 @@ namespace MarpaTestingProject
                 "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
             string simple = "[root(definition, hey)] name{  chars: \"'[^']*'\"; rule: '[' more ']'; }";
             GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ simple });
+            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
 
             /*
             Grammar grammar = new Grammar();
