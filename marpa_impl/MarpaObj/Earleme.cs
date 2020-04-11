@@ -46,7 +46,7 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return Rule.ToString() + " - in " + RulePosition + " - from " + ParentPosition;
+            return Rule.ToString() + "\t RP: " + RulePosition + "\t PP: " + ParentPosition;
         }
     }
 }

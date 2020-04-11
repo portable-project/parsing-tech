@@ -23,11 +23,7 @@ namespace marpa_impl.GrammarDefenitionObjects
             switch (type)
             {
                 case GDL_Type.RULES: {
-                        List<string> allRules = GDL_ComplexProcessor.GetRulesItems(input);
-                        allRules.ForEach(rule =>
-                        {
-                            children.Add(GDL_ComplexProcessor.GetRuleOrRulesetStructure(rule));
-                        });
+                        children.AddRange(GDL_ComplexProcessor.GetRulesItems(input));
                         break; 
                     }
                 case GDL_Type.ATTRIBUTE: {

@@ -9,6 +9,7 @@ namespace marpa_impl
         private Symbol EmptySymbol = new Symbol("empty");
         private readonly Grammar Grammar;
         private List<EarlemeSet> Sets;
+        private List<EarlemeSet> ReorganisedSets;
        
 
         public Recogniser(Grammar grammar)
@@ -20,6 +21,7 @@ namespace marpa_impl
             }
             Grammar = grammar;
             Sets = new List<EarlemeSet>();
+            ReorganisedSets = new List<EarlemeSet>();
         }
 
         public void Parse(String input)
@@ -27,7 +29,9 @@ namespace marpa_impl
             if (Grammar == null) return;
             InitBeforeParse(input);
             RunMarpa(input);
-            PrintSets();
+            PrintSets(Sets, false);
+            Reorganize();
+            PrintSets(ReorganisedSets, true);
         }
 
         private void RunMarpa(String input)
@@ -59,21 +63,41 @@ namespace marpa_impl
             }
         }
 
-        private void PrintSets()
+        private void Reorganize()
         {
+            for (int i = 0; i < Sets.Count; i++) {
+                ReorganisedSets.Add(new EarlemeSet());
+            }
+
             for (int i = 0; i < Sets.Count; i++)
             {
-                Console.WriteLine("\nSet size " + i);
                 EarlemeSet earlemeSet = Sets[i];
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
                     Earleme e = earlemeSet.GetEarleme(k);
                     if (e.IsCompleted())
                     {
-                        Console.WriteLine("\t" + e.ToString());
+                        Earleme ne = new Earleme(e.GetRule(), i, e.GetRulePosition());
+                        ReorganisedSets[e.GetParentPosition()].AddEarleme(ne);
+                    }
+                }
+            }
+        }
+        private void PrintSets(List<EarlemeSet> setsToPrint, bool all)
+        {
+            for (int i = 0; i < setsToPrint.Count; i++)
+            {
+                Console.WriteLine("\n\tSet num " + i);
+                EarlemeSet earlemeSet = setsToPrint[i];
+                for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
+                {
+                    Earleme e = earlemeSet.GetEarleme(k);
+                    if (!all)
+                    {
+                        if (e.IsCompleted()) Console.WriteLine("\t" + e.ToString());
                     } else
                     {
-                        Console.WriteLine( e.ToString());
+                        Console.WriteLine((e.IsCompleted() ? "\t" : "") + e.ToString());
                     }
                 }
             }
@@ -140,7 +164,7 @@ namespace marpa_impl
                 List<Symbol> symList = r.GetRightHandSideOfRule();
                 if (symList.Count == 1 && Grammar.CheckIsSymbolANullingSymbol(symList[0]))
                 {
-                    AddToSet(new Earleme(current.GetRule(), current.GetParentPosition(), current.GetRulePosition() + 1), setNumber);
+                    AddToSet(new Earleme(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber);
                 }
                 else AddToSet(new Earleme(r, setNumber), setNumber);
             });

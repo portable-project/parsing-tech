@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using marpa_impl;
-using marpa_impl.GrammarDefenitionObjects;
 
 namespace MarpaTestingProject
 {
@@ -10,38 +7,37 @@ namespace MarpaTestingProject
     {
         static void Main(string[] args)
         {
-            string file1 = "[root(# definition <3, 'd', 5>, # name.complex {'.', '4'}), root.second(more)]\n" +
-                "[attr2]\n" +
-                "name.namespace.fill { " +
-                "[attr(moo,ree)] hey = very.complex.import; " +
-                "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
-                "justimport; " +
-                "attr rule: {fv2}cdd; rule2: {fv}cdd; }";
-            string file2 = "[root(definition)]" +
-                "[skip(commentsAndSpaces)]" +
-                "pdsl { definition {ruleSet:body;}" +
-                "ruleSet: attrs complexName '{' imports body '}' {" +
-                " body: item *;" +
-                "item: rule | ruleSet; }; " +
-                "        imports: ruleSetImport *;" +
-                "        ruleSetImport: attrs alias complexName ';' { " +
-                "            alias: (name '=')?; }; " +
-                "        rule: attrs complexName args ':' body ';' {" +
-                "            args: ('<'(name(',' name) *) ? '>') ?; " +
-                "            body:                 { " +
-                "            | simple: expr('{' imports rule * '}') ?; " +
-                "            | cases: '{' imports literal*entry * rule * '}' {" +
-                "                    literal: '|' name;" +
-                "                    entry: priority ? '|' rule;" +
-                "                    priority: num | name;" +
-                "                    };" +
-                "                };            };" +
-                "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
-            string simple = "[root(definition, hey)] name{  chars: \"'[^']*'\"; rule: '[' more ']'; }";
-            GDL_Processor gDL_Processor = new GDL_Processor();
-            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
+            //        string file1 = "[root(# definition <3, 'd', 5>, # name.complex {'.', '4'}), root.second(more)]\n" +
+            //              "[attr2]\n" +
+            //          "name.namespace.fill { " +
+            //           "[attr(moo,ree)] hey = very.complex.import; " +
+            //           "[attr(moo,ree)] [attr(moo,ree)] very.complex.import; " +
+            //           "justimport; " +
+            //            "attr rule: {fv2}cdd; rule2: {fv}cdd; }";
+            //           string file2 = "[root(definition)]" +
+            //           "[skip(commentsAndSpaces)]" +
+            //            "pdsl { definition {ruleSet:body;}" +
+            //               "ruleSet: attrs complexName '{' imports body '}' {" +
+            //            " body: item *;" +
+            //           "item: rule | ruleSet; }; " +
+            //          "        imports: ruleSetImport *;" +
+            //            "        ruleSetImport: attrs alias complexName ';' { " +
+            //            "            alias: (name '=')?; }; " +
+            //            "        rule: attrs complexName args ':' body ';' {" +
+            //            "            args: ('<'(name(',' name) *) ? '>') ?; " +
+            //            "            body:                 { " +
+            //            "            | simple: expr('{' imports rule * '}') ?; " +
+            //            "            | cases: '{' imports literal*entry * rule * '}' {" +
+            //            "                    literal: '|' name;" +
+            //            "                    entry: priority ? '|' rule;" +
+            //            "                    priority: num | name;" +
+            //            "                    };" +
+            //            "                };            };" +
+            //            "        commentsAndSpaces: \"([\\s]*)(/\\*(?>(?:(?>[^*]+)|\\*(?!/))*)\\*/[\\s]*)*\"; }";
+            //            string simple = "[root(definition, hey)] name{  chars: \"'[^']*'\"; ruleset: { rule: insideruleset; } quantor: '*' | '+' | '?' | ('{' qnumbers '}'); }";
+            //            GDL_Processor gDL_Processor = new GDL_Processor();
+            //            gDL_Processor.TryProcessGrammarDefenition(new List<string>(){ file1 });
 
-            /*
             Grammar grammar = new Grammar();
             Symbol s = new Symbol("S");
             Symbol m = new Symbol("M");
@@ -68,8 +64,7 @@ namespace MarpaTestingProject
             grammar.SetNullingSymbol(nulling);
 
             Recogniser recogniser = new Recogniser(grammar);
-            recogniser.Parse("1+4*3+3");
-            */
+            recogniser.Parse("1+4*3");
         }
     }
 }
