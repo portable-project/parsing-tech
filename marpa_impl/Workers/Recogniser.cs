@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace marpa_impl
 {
     public class Recogniser
     {
-        private Symbol EmptySymbol = new Symbol("empty");
-        private readonly Grammar Grammar;
-        private List<EarlemeSet> Sets;
-       
+        private readonly Grammar Grammar = null;
+        private readonly List<EarlemeSet> Sets;
 
         public Recogniser(Grammar grammar)
         {
-            if (!grammar.IsGrammarValid())
+            if (grammar == null || !grammar.IsGrammarValid())
             {
                 ErrorHandler.PrintErrorCode(ErrorCode.INCOMPLETE_GRAMMAR);
                 return;
@@ -25,10 +22,24 @@ namespace marpa_impl
         internal List<EarlemeSet> Recognise(String input)
         {
             if (Grammar == null) return null;
+
             InitBeforeParse(input);
             RunMarpa(input);
-            PrintSets(Sets, false);
+
             return Sets;
+        }
+
+        private void InitBeforeParse(String input)
+        {
+            for (int i = 0; i <= input.Length; i++)
+            {
+                Sets.Add(new EarlemeSet());
+            }
+
+            Grammar.GetRulesWithSpecificStartSymbol(Grammar.GetStartSymbol()).ForEach(r =>
+            {
+                Sets[0].AddEarleme(new Earleme(r, 0));
+            });
         }
 
         private void RunMarpa(String input)
@@ -58,39 +69,6 @@ namespace marpa_impl
                     }
                 }
             }
-        }
-
-        
-        private void PrintSets(List<EarlemeSet> setsToPrint, bool all)
-        {
-            for (int i = 0; i < setsToPrint.Count; i++)
-            {
-                Console.WriteLine("\n\tSet num " + i);
-                EarlemeSet earlemeSet = setsToPrint[i];
-                for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
-                {
-                    Earleme e = earlemeSet.GetEarleme(k);
-                    if (!all)
-                    {
-                        if (e.IsCompleted()) Console.WriteLine("\t" + e.ToString());
-                    } else
-                    {
-                        Console.WriteLine((e.IsCompleted() ? "\t" : "") + e.ToString());
-                    }
-                }
-            }
-        }
-        private void InitBeforeParse(String input)
-        {
-            for (int i = 0; i <= input.Length; i++)
-            {
-                Sets.Add(new EarlemeSet());
-            }
-
-            Grammar.GetRulesWithSpecificStartSymbol(Grammar.GetStartSymbol()).ForEach(r =>
-            {
-                Sets[0].AddEarleme(new Earleme(r, 0));
-            });
         }
 
         private void Completer(Earleme current, int setNumber)
