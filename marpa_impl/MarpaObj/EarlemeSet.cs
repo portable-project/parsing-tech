@@ -18,13 +18,19 @@ namespace marpa_impl
             if(
                 Earlemes.Find(erl => 
                     erl.GetRule().Equals(earleme.GetRule()) 
-                    && erl.GetRulePosition() == earleme.GetRulePosition() 
+                    && erl.GetRulePosition() == earleme.GetRulePosition()
+                    && erl.GetParentPosition() == earleme.GetParentPosition()
                     ) == null
                 )
             {
                 Earlemes.Add(earleme);
             }
             
+        }
+
+        internal void RemoveEarleme(Earleme earleme)
+        {
+           Earlemes.Remove(earleme);
         }
 
         internal void CompleteSet()

@@ -63,8 +63,8 @@ namespace MarpaTestingProject
             grammar.SetStartSym(s);
             grammar.SetNullingSymbol(nulling);
 
-            Recogniser recogniser = new Recogniser(grammar);
-            recogniser.Parse("1+4*3");
+            Parser parser = new Parser(grammar);
+            parser.Parse("1+4*3");
         }
     }
 }

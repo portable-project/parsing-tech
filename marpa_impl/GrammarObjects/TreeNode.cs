@@ -7,13 +7,21 @@ namespace marpa_impl
     internal class TreeNode
     {
         private List<TreeNode> Children;
-        private Earleme Earleme;
-        public TreeNode(Earleme e)
+        private Rule rule;
+        private int startPosition;
+        private int endPosition;
+        public TreeNode(Earleme e, int setNumber)
         {
-            Earleme = e;
+            rule = e.GetRule();
+            startPosition = setNumber;
+            endPosition = e.GetParentPosition();
             Children = new List<TreeNode>();
         }
 
+        public int GetEndPosition()
+        {
+            return endPosition;
+        }
         public void AddChildren(TreeNode node)
         {
             Children.Add(node);
