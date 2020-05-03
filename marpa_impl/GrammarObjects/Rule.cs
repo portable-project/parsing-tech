@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
@@ -33,9 +34,9 @@ namespace marpa_impl
         {
             String rhs = "";
             RHS.ForEach((Symbol s) => {
-                rhs += s.GetSymbolName();
+                rhs += s;
             });
-            return LHS.GetSymbolName() + " -> " + rhs;
+            return LHS + " -> " + rhs;
         }
         public override bool Equals(object obj)
         {
@@ -47,13 +48,12 @@ namespace marpa_impl
             bool isRHSEqual = compareList.Count == thisList.Count;
             if (!isRHSEqual) return false;
 
-            bool isLHSEqual = compare.GetLeftHandSideOfRule().GetSymbolName() 
-                == this.GetLeftHandSideOfRule().GetSymbolName();
+            bool isLHSEqual = compare.GetLeftHandSideOfRule().Equals(this.GetLeftHandSideOfRule());
             if (!isLHSEqual) return false;
 
             for (int i =0; i< thisList.Count; i++)
             {
-                isRHSEqual &= thisList[i].GetSymbolName() == compareList[i].GetSymbolName();
+                isRHSEqual &= thisList[i].Equals(compareList[i]);
             }
 
             return isLHSEqual && isRHSEqual;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using marpa_impl;
+using Symbol = System.String;
 
 namespace MarpaTestingProject
 {
@@ -8,32 +9,28 @@ namespace MarpaTestingProject
         static void Main(string[] args)
         {
             Grammar grammar = new Grammar();
-            Symbol s = new Symbol("S");
-            Symbol m = new Symbol("M");
-            Symbol t = new Symbol("T");
-            Symbol d1 = new Symbol("1");
-            Symbol d2 = new Symbol("2");
-            Symbol d3 = new Symbol("3");
-            Symbol d4 = new Symbol("4");
-            Symbol o1 = new Symbol("+");
-            Symbol o2 = new Symbol("*");
-            Symbol nulling = new Symbol("e");
 
-            grammar.AddSymbol(new List<Symbol>() { s, m, t, d1, d2, d3, d4, o1, o2 });
-            grammar.AddRule(s, new List<Symbol>() { s, o1, m });
-            grammar.AddRule(s, new List<Symbol>() { m });
-            grammar.AddRule(m, new List<Symbol>() { t, o2, m });
-            grammar.AddRule(m, new List<Symbol>() { t });
-            grammar.AddRule(m, new List<Symbol>() { nulling });
-            grammar.AddRule(t, new List<Symbol>() { d1 });
-            grammar.AddRule(t, new List<Symbol>() { d2 });
-            grammar.AddRule(t, new List<Symbol>() { d3 });
-            grammar.AddRule(t, new List<Symbol>() { d4 });
-            grammar.SetStartSym(s);
-            grammar.SetNullingSymbol(nulling);
+            Rule startRule1 = new Rule("S", new List<Symbol>() { "S", "+", "M" });
+            Rule startRule2 = new Rule("S", new List<Symbol>() { "M" });
+            grammar.AddRule(startRule1);
+            grammar.AddRule(startRule2);
 
-            Parser parser = new Parser(grammar);
-            parser.Parse("1+4*3");
+            grammar.AddRule("M", new List<Symbol>() { "T", "*", "M" });
+            grammar.AddRule("M", new List<Symbol>() { });
+            grammar.AddRule("M", new List<Symbol>() { "e", "T" });
+            grammar.AddRule("T", new List<Symbol>() { "1" });
+            grammar.AddRule("T", new List<Symbol>() { "2" });
+            grammar.AddRule("T", new List<Symbol>() { "3" });
+            grammar.AddRule("T", new List<Symbol>() { "4" });
+            grammar.SetStartSym("K");
+            grammar.SetNullStringSymbol("e");
+
+            ErrorReport er = grammar.PrecomputeGrammar();
+            if (er.isSuccessfull)
+            {
+                Recogniser recogniser = new Recogniser(grammar);
+                bool result = recogniser.CheckStringBelongsToGrammar("1+4*3");
+            }
         }
     }
 }

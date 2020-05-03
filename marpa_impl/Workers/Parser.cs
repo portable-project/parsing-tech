@@ -25,7 +25,7 @@ namespace marpa_impl
             Console.WriteLine(input);
             Utils.PrintSeparator(3);
 
-            _recogniserSets = recogniser.Recognise(input);
+            _recogniserSets = recogniser.RecogniseString(input);
             Utils.PrintSets(_recogniserSets, true);
             // Utils.PrintSeparator(4);
 

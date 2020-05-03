@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
@@ -10,16 +11,25 @@ namespace marpa_impl
 
         public Recogniser(Grammar grammar)
         {
-            if (grammar == null || !grammar.IsGrammarValid())
+            if (grammar == null) return; // TODO: add error handle
+            else if (!grammar.IsGrammarValid())
             {
-                ErrorHandler.PrintErrorCode(ErrorCode.INCOMPLETE_GRAMMAR);
-                return;
+                ErrorReport er = grammar.PrecomputeGrammar();
+                if(!er.isSuccessfull) return; // TODO: add error handle
             }
+
             Grammar = grammar;
             Sets = new List<EarlemeSet>();
         }
 
-        internal List<EarlemeSet> Recognise(String input)
+        public bool CheckStringBelongsToGrammar(String input)
+        {
+            RecogniseString(input);
+            Utils.PrintSets(Sets, true);
+            return true;
+        }
+
+        internal List<EarlemeSet> RecogniseString(String input)
         {
             if (Grammar == null) return null;
 
@@ -98,7 +108,7 @@ namespace marpa_impl
         private void Scanner(Earleme current, int setNumber, Char inputSymbol)
         {
             Symbol nextSymbol = current.GetCurrentNextSymbol();
-            if (nextSymbol != null && nextSymbol.GetSymbolName().Equals(inputSymbol.ToString()))
+            if (nextSymbol != null && nextSymbol.Equals(inputSymbol.ToString()))
             {
                 AddToSet(
                     new Earleme(
@@ -118,7 +128,7 @@ namespace marpa_impl
             filteredRules.ForEach((Rule r) =>
             {
                 List<Symbol> symList = r.GetRightHandSideOfRule();
-                if (symList.Count == 1 && Grammar.CheckIsSymbolANullingSymbol(symList[0]))
+                if (symList.Count == 1 && Grammar.CheckIsSymbolANullStringSymbol(symList[0]))
                 {
                     AddToSet(new Earleme(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber);
                 }

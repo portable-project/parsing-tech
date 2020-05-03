@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
