@@ -10,15 +10,15 @@ namespace marpa_impl
         {
             for (int i = 0; i < size; i++) Console.WriteLine();
         }
-        internal static void PrintSets(List<EarlemeSet> setsToPrint, bool all)
+        internal static void PrintSets(List<EarleySet> setsToPrint, bool all)
         {
             for (int i = 0; i < setsToPrint.Count; i++)
             {
                 Console.WriteLine("\n\tSet num " + i);
-                EarlemeSet earlemeSet = setsToPrint[i];
+                EarleySet earlemeSet = setsToPrint[i];
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
-                    Earleme e = earlemeSet.GetEarleme(k);
+                    EarleyItem e = earlemeSet.GetEarleme(k);
                     if (!all)
                     {
                         if (e.IsCompleted()) Console.WriteLine("\t\t" + e.ToString());

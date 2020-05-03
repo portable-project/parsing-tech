@@ -16,13 +16,13 @@ namespace MarpaTestingProject
             grammar.AddRule(startRule2);
 
             grammar.AddRule("M", new List<Symbol>() { "T", "*", "M" });
-            grammar.AddRule("M", new List<Symbol>() { });
-            grammar.AddRule("M", new List<Symbol>() { "e", "T" });
+            grammar.AddRule("M", new List<Symbol>() { "T" });
+            grammar.AddRule("M", new List<Symbol>() { "e" });
             grammar.AddRule("T", new List<Symbol>() { "1" });
             grammar.AddRule("T", new List<Symbol>() { "2" });
             grammar.AddRule("T", new List<Symbol>() { "3" });
             grammar.AddRule("T", new List<Symbol>() { "4" });
-            grammar.SetStartSym("K");
+            grammar.SetStartSym("S");
             grammar.SetNullStringSymbol("e");
 
             ErrorReport er = grammar.PrecomputeGrammar();

@@ -10,11 +10,11 @@ namespace marpa_impl
         private Rule rule;
         private int startPosition;
         private int endPosition;
-        public TreeNode(Earleme e, int setNumber)
+        public TreeNode(EarleyItem e, int setNumber)
         {
             rule = e.GetRule();
             startPosition = setNumber;
-            endPosition = e.GetParentPosition();
+            endPosition = e.GetOrignPosition();
             Children = new List<TreeNode>();
         }
 

@@ -6,8 +6,8 @@ namespace marpa_impl
 {
     public class Parser
     {
-        private List<EarlemeSet> _recogniserSets;
-        private List<EarlemeSet> _sets;
+        private List<EarleySet> _recogniserSets;
+        private List<EarleySet> _sets;
         private Grammar _grammar;
         private Recogniser recogniser;
         private String _input;
@@ -16,7 +16,7 @@ namespace marpa_impl
         {
             recogniser = new Recogniser(grammar);
             _grammar = grammar;
-            _sets = new List<EarlemeSet>();
+            _sets = new List<EarleySet>();
         }
 
         public void Parse(String input)
@@ -36,19 +36,19 @@ namespace marpa_impl
         {
             for (int i = 0; i < _recogniserSets.Count; i++)
             {
-                _sets.Add(new EarlemeSet());
+                _sets.Add(new EarleySet());
             }
 
             for (int i = 0; i < _recogniserSets.Count; i++)
             {
-                EarlemeSet earlemeSet = _recogniserSets[i];
+                EarleySet earlemeSet = _recogniserSets[i];
                 for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
                 {
-                    Earleme e = earlemeSet.GetEarleme(k);
+                    EarleyItem e = earlemeSet.GetEarleme(k);
                     if (e.IsCompleted())
                     {
-                        Earleme ne = new Earleme(e.GetRule(), i, e.GetRulePosition());
-                        _sets[e.GetParentPosition()].AddEarleme(ne);
+                        EarleyItem ne = new EarleyItem(e.GetRule(), i, e.GetRulePosition());
+                        _sets[e.GetOrignPosition()].AddEarleyItem(ne);
                     }
                 }
             }
