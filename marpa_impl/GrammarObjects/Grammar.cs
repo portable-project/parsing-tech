@@ -7,42 +7,21 @@ namespace marpa_impl
     {
         private Symbol StartSymbol;
         private Symbol NullingSymbol;
-        private readonly List<Symbol> SymbolList;
+        private readonly List<Symbol> TerminalsList;
+        private readonly List<Symbol> NonTerminalsList;
         private readonly List<Rule> RuleList;
-
-        private bool DoesBelongToGrammarSymbolsList(Symbol Symbol)
-        {
-            return SymbolList.Contains(Symbol);
-        }
-        private bool IsRuleCorrect(Rule Rule)
-        {
-            Symbol lhs = Rule.GetLeftHandSideOfRule();
-            if (!DoesBelongToGrammarSymbolsList(lhs))
-            {
-                return false;
-            }
-
-            List<Symbol> rhs = Rule.GetRightHandSideOfRule();
-            if(rhs.Count == 1 && CheckIsSymbolANullingSymbol(rhs[0]))
-            {
-                return true;
-            }
-
-            for(int i=0;i<rhs.Count; i++)
-            {
-                if (!DoesBelongToGrammarSymbolsList(rhs[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         public Grammar()
         {
             RuleList = new List<Rule>();
-            SymbolList = new List<Symbol>();
+            TerminalsList = new List<Symbol>();
+            NonTerminalsList = new List<Symbol>();
+        }
+        public Grammar(List<Rule> ruleList)
+        {
+            RuleList = ruleList;
+            TerminalsList = new List<Symbol>();
+            NonTerminalsList = new List<Symbol>();
         }
         public bool IsGrammarValid()
         {
@@ -67,10 +46,39 @@ namespace marpa_impl
                     ErrorHandler.PrintErrorCode(ErrorCode.INCORRECT_RULE_SYMBOLS, r);
                 }
             });
-
-            result &= SymbolList.Count > 0 && GetStartSymbol() != null && RuleList.Count > 0;
+            // FIX
+            // result &= SymbolList.Count > 0 && GetStartSymbol() != null && RuleList.Count > 0;
 
             return result;
+        }
+
+        private bool DoesBelongToGrammarSymbolsList(Symbol Symbol)
+        {
+            return SymbolList.Contains(Symbol);
+        }
+        private bool IsRuleCorrect(Rule Rule)
+        {
+            Symbol lhs = Rule.GetLeftHandSideOfRule();
+            if (!DoesBelongToGrammarSymbolsList(lhs))
+            {
+                return false;
+            }
+
+            List<Symbol> rhs = Rule.GetRightHandSideOfRule();
+            if (rhs.Count == 1 && CheckIsSymbolANullingSymbol(rhs[0]))
+            {
+                return true;
+            }
+
+            for (int i = 0; i < rhs.Count; i++)
+            {
+                if (!DoesBelongToGrammarSymbolsList(rhs[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         internal bool DoesBelongToTerminals(Symbol Symbol)
@@ -105,17 +113,12 @@ namespace marpa_impl
         }
         internal bool CheckIsSymbolAStartSymbol(Symbol Symbol)
         {
-            return StartSymbol.GetSymbolId() == Symbol.GetSymbolId();
+            return StartSymbol.GetSymbolName() == Symbol.GetSymbolName();
         }
 
         // SYMBOLS
-        public int GetSymbolsListSize()
-        {
-            return SymbolList.Count;
-        }
         public void AddSymbol(Symbol Symbol)
         {
-            Symbol.SetSymbolId(GetSymbolsListSize());
             SymbolList.Add(Symbol);
         }
         public void AddSymbol(List<Symbol> Symbols)
@@ -139,7 +142,6 @@ namespace marpa_impl
         }
         public void AddRule(Rule Rule)
         {
-            Rule.SetRuleId(GetRulesListSize());
             RuleList.Add(Rule);
         }
         public void AddRule(Symbol lhs, List<Symbol> rhs)

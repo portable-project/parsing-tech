@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace marpa_impl
 {
     public class Symbol
     {
-        private int SymbolId;
         private String SymbolName;
-
         public Symbol(String name)
         {
             SymbolName = name;
@@ -17,13 +13,14 @@ namespace marpa_impl
         {
             return SymbolName;
         }
-        internal int GetSymbolId()
+        public override string ToString()
         {
-            return SymbolId;
+            return SymbolName;
         }
-        internal void SetSymbolId(int Id)
+        public override bool Equals(object obj)
         {
-            SymbolId = Id;
+            Symbol compare = obj as Symbol;
+            return SymbolName.Equals(compare.GetSymbolName());
         }
     }
 }

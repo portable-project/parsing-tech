@@ -21,11 +21,11 @@ namespace marpa_impl
                     Earleme e = earlemeSet.GetEarleme(k);
                     if (!all)
                     {
-                        if (e.IsCompleted()) Console.WriteLine("\t" + e.ToString());
+                        if (e.IsCompleted()) Console.WriteLine("\t\t" + e.ToString());
                     }
                     else
                     {
-                        Console.WriteLine((e.IsCompleted() ? "\t" : "") + e.ToString());
+                        Console.WriteLine((e.IsCompleted() ? "\t\t" : "\t") + e.ToString());
                     }
                 }
             }

@@ -26,11 +26,11 @@ namespace marpa_impl
             Utils.PrintSeparator(3);
 
             _recogniserSets = recogniser.Recognise(input);
-            // Utils.PrintSets(_recogniserSets, false);
+            Utils.PrintSets(_recogniserSets, true);
             // Utils.PrintSeparator(4);
 
-            Reorganize();
-            Utils.PrintSets(_sets, false);
+            // Reorganize();
+            // Utils.PrintSets(_sets, false);
         }
         private void Reorganize()
         {
