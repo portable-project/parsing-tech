@@ -61,8 +61,8 @@ namespace marpa_impl
                 {
                     EarleyItem current = earlemeSet.GetEarleme(j);
 
-                    if (!current.IsCompleted())
-                    {
+                    if (current.IsCompleted()) Completer(current, i);
+                    else {
                         bool condition = Grammar.DoesBelongToTerminals(current.GetCurrentNextSymbol());
                         if (!condition)
                         {
@@ -73,29 +73,40 @@ namespace marpa_impl
                             Scanner(current, i, input[i]);
                         }
                     }
-                    else
-                    {
-                        Completer(current, i);
-                    }
                 }
             }
         }
 
-        private void LeoReducer()
-        {
-
-        }
         private void Completer(EarleyItem current, int setNumber)
         {
             Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             int position = current.GetOrignPosition();
-            EarleySet earlemeSet = Sets[position];
+            EarleySet set = Sets[position];
+            LeoItem transitiveItem = set.FindLeoItemBySymbol(lhs);
 
-            for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
+            if (transitiveItem != null) LeoReducer(transitiveItem, setNumber);
+            else EarleyReducer(set, lhs, setNumber);
+        }
+
+        private void LeoReducer(LeoItem leoItem, int setNumber)
+        {
+            AddToSet(
+              new EarleyItem(
+                 leoItem.GetRule(),
+                 leoItem.GetOrignPosition(),
+                 leoItem.GetRule().GetRightHandSideOfRule().Count
+              ),
+              setNumber
+            );
+        }
+
+        private void EarleyReducer(EarleySet set, Symbol currentNonTerminal, int setNumber)
+        {
+            for (int j = 0; j < set.GetEarlemeSetSize(); j++)
             {
-                EarleyItem currentEarleme = earlemeSet.GetEarleme(j);
+                EarleyItem currentEarleme = set.GetEarleme(j);
                 Symbol next = currentEarleme.GetCurrentNextSymbol();
-                if (next != null && next.Equals(lhs))
+                if (next != null && next.Equals(currentNonTerminal))
                 {
                     AddToSet(
                         new EarleyItem(
@@ -108,7 +119,6 @@ namespace marpa_impl
                 }
             }
         }
-
         private void Scanner(EarleyItem current, int setNumber, Char inputSymbol)
         {
             Symbol nextSymbol = current.GetCurrentNextSymbol();

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
@@ -29,6 +28,10 @@ namespace marpa_impl
             
         }
 
+        internal LeoItem FindLeoItemBySymbol(Symbol symbol)
+        {
+            return null;
+        }
         internal void RemoveEarleme(EarleyItem earleme)
         {
            _earleyItemList.Remove(earleme);
