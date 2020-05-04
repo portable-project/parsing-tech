@@ -56,10 +56,11 @@ namespace marpa_impl
         {
             for (int i = 0; i <= input.Length; i++)
             {
-                EarleySet earlemeSet = Sets[i];
-                for (int j = 0; j < earlemeSet.GetEarlemeSetSize(); j++)
+                EarleySet set = Sets[i];
+                List<EarleyItem> items = set.GetEarleyItemList();
+                for (int j = 0; j < items.Count; j++)
                 {
-                    EarleyItem current = earlemeSet.GetEarleme(j);
+                    EarleyItem current = items[j];
 
                     if (current.IsCompleted()) Completer(current, i);
                     else {
@@ -100,9 +101,10 @@ namespace marpa_impl
         }
         private void EarleyReducer(EarleySet set, Symbol currentNonTerminal, int setNumber)
         {
-            for (int j = 0; j < set.GetEarlemeSetSize(); j++)
+            List<EarleyItem> items = set.GetEarleyItemList();
+            for (int j = 0; j < items.Count; j++)
             {
-                EarleyItem currentEarleme = set.GetEarleme(j);
+                EarleyItem currentEarleme = items[j];
                 Symbol next = currentEarleme.GetCurrentNextSymbol();
                 if (next != null && next.Equals(currentNonTerminal))
                 {
@@ -207,13 +209,14 @@ namespace marpa_impl
         }
         private bool IsItemPenultUnique(EarleyItem selectedEarleyItem, int setNumber)
         {
-            int itemsCount = Sets[setNumber].GetEarlemeSetSize();
+            EarleySet set = Sets[setNumber];
+            List<EarleyItem> items = set.GetEarleyItemList();
             Symbol penult = selectedEarleyItem.GetItemPenult();
             if (penult == null) return false;
 
-            for (int i=0; i< itemsCount; i++)
+            for (int i=0; i< items.Count; i++)
             {
-                EarleyItem item = Sets[setNumber].GetEarleme(i);
+                EarleyItem item = items[i];
                 if (penult.Equals(item.GetItemPenult()) && !item.GetRule().Equals(selectedEarleyItem.GetRule())) return false;
             }
             return true;

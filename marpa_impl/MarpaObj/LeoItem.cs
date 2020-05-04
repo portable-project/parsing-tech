@@ -1,4 +1,5 @@
 ﻿using Symbol = System.String;
+using System;
 
 namespace marpa_impl
 {
@@ -35,6 +36,10 @@ namespace marpa_impl
         public int GetOrignPosition()
         {
             return _orignPosition;
+        }
+        public override String ToString()
+        {
+            return "LI | " + GetDottedRule().GetRule().ToString() + "\t RP: " + GetDottedRule().GetPosition() + "\t PP: " + _orignPosition;
         }
     }
 }

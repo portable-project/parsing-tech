@@ -14,11 +14,13 @@ namespace marpa_impl
         {
             for (int i = 0; i < setsToPrint.Count; i++)
             {
-                Console.WriteLine("\n\tSet num " + i);
-                EarleySet earlemeSet = setsToPrint[i];
-                for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
+                Console.WriteLine("\n <=============================SET===================================> " + i);
+                EarleySet set = setsToPrint[i];
+
+                List<EarleyItem> items = set.GetEarleyItemList();
+                for (int k = 0; k < items.Count; k++)
                 {
-                    EarleyItem e = earlemeSet.GetEarleme(k);
+                    EarleyItem e = items[k];
                     if (!all)
                     {
                         if (e.IsCompleted()) Console.WriteLine("\t\t" + e.ToString());
@@ -28,6 +30,15 @@ namespace marpa_impl
                         Console.WriteLine((e.IsCompleted() ? "\t\t" : "\t") + e.ToString());
                     }
                 }
+
+                Console.WriteLine("\n <--------> ");
+                List<LeoItem> transitiveItems = set.GetLeoItemList();
+                for (int k = 0; k < transitiveItems.Count; k++)
+                {
+                    LeoItem e = transitiveItems[k];
+                    Console.WriteLine(e.ToString());
+                }
+                Console.WriteLine("\n <=====================================================================> " + i);
             }
         }
     }

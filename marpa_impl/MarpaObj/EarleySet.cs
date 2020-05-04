@@ -35,18 +35,13 @@ namespace marpa_impl
         {
             return null;
         }
-        internal void RemoveEarleme(EarleyItem earleme)
+        internal List<EarleyItem> GetEarleyItemList()
         {
-           _earleyItemList.Remove(earleme);
+            return _earleyItemList;
         }
-
-        internal int GetEarlemeSetSize()
+        internal List<LeoItem> GetLeoItemList()
         {
-            return _earleyItemList.Count;
-        }
-        internal EarleyItem GetEarleme(int index)
-        {
-            return _earleyItemList[index];
+            return _leoItemList;
         }
     }
 }

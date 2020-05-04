@@ -41,10 +41,11 @@ namespace marpa_impl
 
             for (int i = 0; i < _recogniserSets.Count; i++)
             {
-                EarleySet earlemeSet = _recogniserSets[i];
-                for (int k = 0; k < earlemeSet.GetEarlemeSetSize(); k++)
+                EarleySet set = _recogniserSets[i];
+                List<EarleyItem> items = set.GetEarleyItemList();
+                for (int k = 0; k < items.Count; k++)
                 {
-                    EarleyItem e = earlemeSet.GetEarleme(k);
+                    EarleyItem e = items[k];
                     if (e.IsCompleted())
                     {
                         EarleyItem ne = new EarleyItem(e.GetRule(), i, e.GetRulePosition());

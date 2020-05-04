@@ -72,7 +72,7 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return GetRule().ToString() + "\t RP: " + GetRulePosition() + "\t PP: " + _orignPosition;
+            return "EI | " + GetRule().ToString() + "\t RP: " + GetRulePosition() + "\t PP: " + _orignPosition;
         }
     }
 }
