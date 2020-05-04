@@ -4,7 +4,7 @@ using System.Text;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    class GDL_Node
+    internal class GDL_Node
     {
         private GDL_Type _type;
         private string _value;

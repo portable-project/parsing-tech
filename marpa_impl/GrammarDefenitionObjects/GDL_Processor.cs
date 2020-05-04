@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    public class GDL_Processor
+    internal class GDL_Processor
     {
         public void TryProcessGrammarDefenition(List<string> files)
         {

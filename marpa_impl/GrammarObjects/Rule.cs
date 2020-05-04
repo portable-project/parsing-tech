@@ -30,6 +30,11 @@ namespace marpa_impl
         {
             return LHS != null && RHS != null && RHS.Count > 0;
         }
+        internal bool IsRuleRightRecursive()
+        {
+            List<Symbol> rhs = GetRightHandSideOfRule();
+            return GetLeftHandSideOfRule().Equals(rhs[rhs.Count - 1]);
+        }
         public override string ToString()
         {
             String rhs = "";

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    class GDL_ComplexProcessor
+    internal class GDL_ComplexProcessor
     {
         internal static List<GDL_Node> GetUsageArgsListItems(string input)
         {

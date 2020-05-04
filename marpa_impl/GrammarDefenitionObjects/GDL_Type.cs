@@ -4,7 +4,7 @@ using System.Text;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    public enum GDL_Type
+    internal enum GDL_Type
     {
         DEFAULT,
         DEFENITION,

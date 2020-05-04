@@ -3,19 +3,17 @@ using System.Collections.Generic;
 
 namespace marpa_impl
 {
-    public class ErrorHandler
+    internal class ErrorHandler
     {
         private List<ErrorDescription> Reports = new List<ErrorDescription>();
-        public void AddNewError(ErrorCode errorCode, Object obj)
+        internal void AddNewError(ErrorCode errorCode, Object obj)
         {
             Reports.Add(new ErrorDescription(errorCode, obj));
         }
-
-        public List<ErrorDescription> GetErrorDescriptionList()
+        internal List<ErrorDescription> GetErrorDescriptionList()
         {
             return Reports;
         }
-
         internal static String GetErrorMessageByCode(ErrorCode errorCode)
         {
             switch (errorCode)

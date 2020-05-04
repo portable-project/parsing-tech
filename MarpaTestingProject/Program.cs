@@ -28,8 +28,8 @@ namespace MarpaTestingProject
             GrammarReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
-                Recogniser recogniser = new Recogniser(grammar);
-                RecogniserReport result = recogniser.CheckStringBelongsToGrammar("1+4*3");
+                MarpaParser recogniser = new MarpaParser(grammar);
+                RecogniserReport result = recogniser.CheckString("1+2*4*3");
             }
         }
     }

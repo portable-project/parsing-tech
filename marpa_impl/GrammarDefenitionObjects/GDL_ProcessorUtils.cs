@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace marpa_impl.GrammarDefenitionObjects
 {
-    class GDL_ProcessorUtils
+    internal class GDL_ProcessorUtils
     {
         internal static List<GDL_Node> GetInnerItems(string input, GDL_Type type)
         {

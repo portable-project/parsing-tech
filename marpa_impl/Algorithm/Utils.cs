@@ -16,7 +16,7 @@ namespace marpa_impl
 
             for (int i = 0; i < setsToPrint.Count; i++)
             {
-                Console.WriteLine("\n <=============================SET===================================> " + i);
+                Console.WriteLine("\n <=============================SET=================================> " + i);
                 EarleySet set = setsToPrint[i];
 
                 List<EarleyItem> items = set.GetEarleyItemList();

@@ -22,5 +22,16 @@ namespace marpa_impl
         {
             return _position;
         }
+
+        public override bool Equals(object obj)
+        {
+            DottedRule dottedRule = obj as DottedRule;
+            return GetPosition() == dottedRule.GetPosition() && GetRule().Equals(dottedRule.GetRule());
+        }
+
+        public override string ToString()
+        {
+            return GetRule().ToString() + "\t RP: " + GetPosition();
+        }
     }
 }

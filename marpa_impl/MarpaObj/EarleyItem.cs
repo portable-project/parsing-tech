@@ -70,9 +70,15 @@ namespace marpa_impl
                 return nextSymbol;
             else return null;
         }
+
+        public override bool Equals(object obj)
+        {
+            EarleyItem earleyItem = obj as EarleyItem;
+            return GetDottedRule().Equals(earleyItem.GetDottedRule()) && GetOrignPosition() == earleyItem.GetOrignPosition();
+        }
         public override String ToString()
         {
-            return "EI | " + GetRule().ToString() + "\t RP: " + GetRulePosition() + "\t PP: " + _orignPosition;
+            return "EI | " + GetDottedRule().ToString() + "\t PP: " + _orignPosition;
         }
     }
 }

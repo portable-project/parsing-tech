@@ -4,40 +4,22 @@ using Symbol = System.String;
 
 namespace marpa_impl
 {
-    public class Recogniser
+    internal class Recogniser
     {
         private readonly Grammar Grammar = null;
         private readonly List<EarleySet> Sets;
         private ErrorHandler errorHandler;
-
-        public Recogniser(Grammar grammar)
+        internal Recogniser(Grammar grammar, ErrorHandler _errorHandler)
         {
-            errorHandler = new ErrorHandler();
-
-            if (grammar == null)
-            {
-                errorHandler.AddNewError(ErrorCode.NO_GRAMMAR, grammar);
-                return;
-            }
-            else if (!grammar.IsGrammarValid())
-            {
-                GrammarReport er = grammar.PrecomputeGrammar();
-                if (!er.isSuccessfull)
-                {
-                    errorHandler.AddNewError(ErrorCode.INCORRECT_GRAMMAR, grammar);
-                    return;
-                }
-            }
-
-            Grammar = grammar;
             Sets = new List<EarleySet>();
+            errorHandler = _errorHandler;
+            Grammar = grammar;
         }
-
-        public RecogniserReport CheckStringBelongsToGrammar(String input)
+        internal bool Recognise(String input)
         {
             RecogniseString(input);
             Utils.PrintSets(Sets, true);
-            return new RecogniserReport(true, errorHandler.GetErrorDescriptionList());
+            return true;
         }
 
         internal List<EarleySet> RecogniseString(String input)
@@ -110,6 +92,7 @@ namespace marpa_impl
               setNumber
             );
         }
+
         private void EarleyReducer(EarleySet set, Symbol currentNonTerminal, int setNumber)
         {
             List<EarleyItem> items = set.GetEarleyItemList();
@@ -170,7 +153,7 @@ namespace marpa_impl
 
         private void LeoMemoization(EarleyItem earleyItem, int setNumber)
         {
-            if (!IsItemLeoEligible(earleyItem, setNumber)) return;
+            if (!Sets[setNumber].IsItemLeoEligible(earleyItem)) return;
 
             Symbol penult = earleyItem.GetItemPenult();
             LeoItem predecessorLeoItem = FindLeoItemPredecessor(earleyItem);
@@ -197,40 +180,6 @@ namespace marpa_impl
         {
             EarleySet predecessorSet = Sets[earleyItem.GetOrignPosition()];
             return predecessorSet.FindLeoItemBySymbol(earleyItem.GetRule().GetLeftHandSideOfRule());
-        }
-
-        private bool IsItemLeoEligible(EarleyItem earleyItem, int setNumber)
-        {
-            bool isRightRecursive = IsRuleRightRecursive(earleyItem.GetRule());
-            bool isLeoUnique = IsItemLeoUnique(earleyItem, setNumber);
-            if( isRightRecursive && isLeoUnique)
-            {
-                Console.WriteLine();
-            }
-            return isRightRecursive && isLeoUnique;
-        }
-        private bool IsRuleRightRecursive(Rule rule)
-        {
-            List<Symbol> rhs = rule.GetRightHandSideOfRule();
-            return rule.GetLeftHandSideOfRule().Equals(rhs[rhs.Count - 1]);
-        }
-        private bool IsItemLeoUnique(EarleyItem earleyItem, int setNumber)
-        {
-            return earleyItem.GetItemPenult() != null && IsItemPenultUnique(earleyItem, setNumber);
-        }
-        private bool IsItemPenultUnique(EarleyItem selectedEarleyItem, int setNumber)
-        {
-            EarleySet set = Sets[setNumber];
-            List<EarleyItem> items = set.GetEarleyItemList();
-            Symbol penult = selectedEarleyItem.GetItemPenult();
-            if (penult == null) return false;
-
-            for (int i=0; i< items.Count; i++)
-            {
-                EarleyItem item = items[i];
-                if (penult.Equals(item.GetItemPenult()) && !item.GetRule().Equals(selectedEarleyItem.GetRule())) return false;
-            }
-            return true;
         }
 
         private void AddToSet(EarleyItem earleme, int setIndex)
