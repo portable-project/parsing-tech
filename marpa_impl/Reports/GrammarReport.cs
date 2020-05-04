@@ -10,7 +10,7 @@ namespace marpa_impl
         public bool isSuccessfull;
         public int totalErrorCount;
 
-        public GrammarReport(List<ErrorDescription> _errorDescriptions)
+        internal GrammarReport(List<ErrorDescription> _errorDescriptions)
         {
             errorDescriptions = _errorDescriptions;
             isSuccessfull = errorDescriptions == null || errorDescriptions.Count == 0;

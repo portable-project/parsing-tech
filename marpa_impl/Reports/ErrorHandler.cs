@@ -32,6 +32,8 @@ namespace marpa_impl
                     return "Grammar is not valid. Try to precompute it for more detailed information";
                 case ErrorCode.NO_GRAMMAR:
                     return "No grammar object was provided";
+                case ErrorCode.NO_ERROR:
+                    return "No error was found!";
                 default: return "Unrecognised Error";
             }
         }

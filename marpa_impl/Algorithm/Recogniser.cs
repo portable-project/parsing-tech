@@ -32,6 +32,14 @@ namespace marpa_impl
             return Sets;
         }
 
+        internal ParseReport GetLastParseInformation(int symbolPosition)
+        {
+            if(Sets.Count < symbolPosition)
+            {
+                return new ParseReport(new ErrorDescription(ErrorCode.SYMBOL_POSITION_OUT_OF_RANGE));
+            }
+            return new ParseReport(Sets[symbolPosition]);
+        }
         private void InitBeforeParse(String input)
         {
             for (int i = 0; i <= input.Length; i++)

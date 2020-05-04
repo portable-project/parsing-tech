@@ -7,8 +7,7 @@ namespace marpa_impl
         public List<ErrorDescription> errorDescriptions;
         public bool isRecognised;
         public bool isSuccessfull;
-
-        public RecogniserReport(bool _isRecognised, List<ErrorDescription> _errorDescriptions)
+        internal RecogniserReport(bool _isRecognised, List<ErrorDescription> _errorDescriptions)
         {
             errorDescriptions = _errorDescriptions;
             isSuccessfull = _errorDescriptions.Count == 0;

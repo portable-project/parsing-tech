@@ -14,5 +14,11 @@ namespace marpa_impl
             description = ErrorHandler.GetErrorMessageByCode(_code);
             item = _item;
         }
+        public ErrorDescription(ErrorCode _code)
+        {
+            errorCode = _code;
+            description = ErrorHandler.GetErrorMessageByCode(_code);
+            item = null;
+        }
     }
 }

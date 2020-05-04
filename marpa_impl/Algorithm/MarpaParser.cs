@@ -34,6 +34,14 @@ namespace marpa_impl
             return new RecogniserReport(result, _errorHandler.GetErrorDescriptionList());
         }
 
+        public ParseReport GetLastParseInformationOnSymbolPosition(int symbolPosition)
+        {
+            if (_recogniser != null)
+            {
+                return _recogniser.GetLastParseInformation(symbolPosition);
+            } else return new ParseReport(new ErrorDescription(ErrorCode.NO_GRAMMAR));
+        }
+
         public void ParseString()
         {
             // TODO
