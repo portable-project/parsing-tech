@@ -25,11 +25,11 @@ namespace MarpaTestingProject
             grammar.SetStartSym("S");
             grammar.SetNullStringSymbol("e");
 
-            ErrorReport er = grammar.PrecomputeGrammar();
+            GrammarReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
                 Recogniser recogniser = new Recogniser(grammar);
-                bool result = recogniser.CheckStringBelongsToGrammar("1+4*3");
+                RecogniserReport result = recogniser.CheckStringBelongsToGrammar("1+4*3");
             }
         }
     }

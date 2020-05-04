@@ -57,32 +57,33 @@ namespace marpa_impl
         }
 
 
-        public ErrorReport PrecomputeGrammar()
+        public GrammarReport PrecomputeGrammar()
         {
-            if (StartSymbol == null) ErrorHandler.AddNewError(ErrorCode.NO_START_SYMBOL_DETECTED, this);
+            ErrorHandler eh = new ErrorHandler();
+            if (StartSymbol == null) eh.AddNewError(ErrorCode.NO_START_SYMBOL_DETECTED, this);
 
             for (int i=0; i<RuleList.Count; i++) { 
                 Symbol lhs = RuleList[i].GetLeftHandSideOfRule();
-                if (CheckIsSymbolANullStringSymbol(lhs)) ErrorHandler.AddNewError(ErrorCode.NULL_STRING_SYMBOL_ON_LHS, RuleList[i]);
+                if (CheckIsSymbolANullStringSymbol(lhs)) eh.AddNewError(ErrorCode.NULL_STRING_SYMBOL_ON_LHS, RuleList[i]);
                 if (!NonTerminalsList.Contains(lhs)) NonTerminalsList.Add(lhs);
             };
 
-            if (!NonTerminalsList.Contains(StartSymbol)) ErrorHandler.AddNewError(ErrorCode.NO_START_SYMBOL_IN_LHS_OF_RULES, this);
+            if (!NonTerminalsList.Contains(StartSymbol)) eh.AddNewError(ErrorCode.NO_START_SYMBOL_IN_LHS_OF_RULES, this);
 
             for (int i = 0; i < RuleList.Count; i++)
             {
                 List<Symbol> rhs = RuleList[i].GetRightHandSideOfRule();
-                if(rhs.Count < 1) ErrorHandler.AddNewError(ErrorCode.RHS_HAS_NO_SYMBOLS, RuleList[i]);
+                if(rhs.Count < 1) eh.AddNewError(ErrorCode.RHS_HAS_NO_SYMBOLS, RuleList[i]);
 
                 for (int j = 0; j < rhs.Count; j++)
                 {
                     Symbol symbol = rhs[j];
-                    if (CheckIsSymbolANullStringSymbol(symbol) && rhs.Count>1) ErrorHandler.AddNewError(ErrorCode.NULL_STRING_SYMBOL_NOT_ALONE_ON_RHS, RuleList[i]);
+                    if (CheckIsSymbolANullStringSymbol(symbol) && rhs.Count>1) eh.AddNewError(ErrorCode.NULL_STRING_SYMBOL_NOT_ALONE_ON_RHS, RuleList[i]);
                     if (!NonTerminalsList.Contains(symbol) && !TerminalsList.Contains(symbol)) TerminalsList.Add(symbol);
                 }
             };
 
-            ErrorReport report = ErrorHandler.GetErrorReport();
+            GrammarReport report = new GrammarReport(eh.GetErrorDescriptionList());
             _IsGrammarValid = report.isSuccessfull;
             return report;
         }

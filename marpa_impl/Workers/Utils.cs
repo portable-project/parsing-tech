@@ -12,6 +12,8 @@ namespace marpa_impl
         }
         internal static void PrintSets(List<EarleySet> setsToPrint, bool all)
         {
+            if (setsToPrint == null) return;
+
             for (int i = 0; i < setsToPrint.Count; i++)
             {
                 Console.WriteLine("\n <=============================SET===================================> " + i);

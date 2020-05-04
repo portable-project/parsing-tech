@@ -8,25 +8,36 @@ namespace marpa_impl
     {
         private readonly Grammar Grammar = null;
         private readonly List<EarleySet> Sets;
+        private ErrorHandler errorHandler;
 
         public Recogniser(Grammar grammar)
         {
-            if (grammar == null) return; // TODO: add error handle
+            errorHandler = new ErrorHandler();
+
+            if (grammar == null)
+            {
+                errorHandler.AddNewError(ErrorCode.NO_GRAMMAR, grammar);
+                return;
+            }
             else if (!grammar.IsGrammarValid())
             {
-                ErrorReport er = grammar.PrecomputeGrammar();
-                if(!er.isSuccessfull) return; // TODO: add error handle
+                GrammarReport er = grammar.PrecomputeGrammar();
+                if (!er.isSuccessfull)
+                {
+                    errorHandler.AddNewError(ErrorCode.INCORRECT_GRAMMAR, grammar);
+                    return;
+                }
             }
 
             Grammar = grammar;
             Sets = new List<EarleySet>();
         }
 
-        public bool CheckStringBelongsToGrammar(String input)
+        public RecogniserReport CheckStringBelongsToGrammar(String input)
         {
             RecogniseString(input);
             Utils.PrintSets(Sets, true);
-            return true;
+            return new RecogniserReport(true, errorHandler.GetErrorDescriptionList());
         }
 
         internal List<EarleySet> RecogniseString(String input)
