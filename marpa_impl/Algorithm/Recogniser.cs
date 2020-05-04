@@ -6,6 +6,7 @@ namespace marpa_impl
 {
     internal class Recogniser
     {
+        private readonly Rule finalItemRule = new Rule("alpha", new List<Symbol>() { "S" });
         private readonly Grammar Grammar = null;
         private List<EarleySet> Sets;
         private ErrorHandler errorHandler;
@@ -24,7 +25,7 @@ namespace marpa_impl
             RunMarpa(input, 0);
 
             Utils.PrintSets(Sets, true);
-            return true;
+            return FindFinalItem() != null;
         }
 
         internal bool UpdateRecognise(String newInput)
@@ -39,6 +40,16 @@ namespace marpa_impl
             return true;
         }
 
+        private EarleyItem FindFinalItem()
+        {
+            List<EarleyItem> items = Sets[Sets.Count - 1].GetEarleyItemList();
+            for(int i=0; i < items.Count; i++)
+            {
+                if (items[i].GetRule().Equals(finalItemRule) && items[i].GetOrignPosition() == 0 && items[i].GetRulePosition() == 1)
+                    return items[i];
+            }
+            return null;
+        }
         private void InitBeforeParse(String input)
         {
             Sets = new List<EarleySet>();
@@ -48,10 +59,7 @@ namespace marpa_impl
                 Sets.Add(new EarleySet());
             }
 
-            Grammar.GetRulesWithSpecificStartSymbol(Grammar.GetStartSymbol()).ForEach(r =>
-            {
-                Sets[0].AddEarleyItem(new EarleyItem(r, 0));
-            });
+            Sets[0].AddEarleyItem(new EarleyItem(finalItemRule, 0));
         }
 
         private int GetInputsDiffPosition(String input)
