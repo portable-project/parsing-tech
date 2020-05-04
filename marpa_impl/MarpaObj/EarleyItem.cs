@@ -6,53 +6,61 @@ namespace marpa_impl
 {
     internal class EarleyItem
     {
-        private Rule _rule;
-        private int _rulePosition; 
+        private DottedRule _dottedRule;
         private int _orignPosition;
 
         internal EarleyItem(Rule rule, int parentPosition)
         {
-            _rule = rule;
             _orignPosition = parentPosition;
-            _rulePosition = 0;
+            _dottedRule = new DottedRule(rule, 0);
         }
-
         internal EarleyItem(Rule rule, int parentPosition, int rulePosition)
         {
-            _rule = rule;
             _orignPosition = parentPosition;
-            _rulePosition = rulePosition;
+            _dottedRule = new DottedRule(rule, rulePosition);
         }
-
-        internal Symbol GetCurrentNextSymbol()
+        internal EarleyItem(DottedRule dottedRule, int parentPosition)
         {
-            return IsCompleted() ? null : _rule.GetRightHandSideOfRule(_rulePosition);
-        }
-        internal List<Symbol> GetCurrentPostSymbolList()
-        {
-            List<Symbol> rhs = _rule.GetRightHandSideOfRule();
-            return IsCompleted() 
-                ? null 
-                : (rhs.Count - _rulePosition) == 1 
-                    ? new List<Symbol>() 
-                    : rhs.GetRange(_rulePosition + 1, rhs.Count - _rulePosition - 2);
+            _dottedRule = dottedRule;
+            _orignPosition = parentPosition;
         }
         internal int GetRulePosition()
         {
-            return _rulePosition;
+            return _dottedRule.GetPosition();
         }
         internal int GetOrignPosition()
         {
             return _orignPosition;
         }
-        internal bool IsCompleted()
+        internal DottedRule GetDottedRule()
         {
-            return GetRulePosition() == _rule.GetRightHandSideOfRule().Count;
+            return _dottedRule;
         }
         internal Rule GetRule()
         {
-           return _rule;
+            return _dottedRule.GetRule();
         }
+
+
+        internal Symbol GetCurrentNextSymbol()
+        {
+            return IsCompleted() ? null : GetRule().GetRightHandSideOfRule(GetRulePosition());
+        }
+        internal List<Symbol> GetCurrentPostSymbolList()
+        {
+            List<Symbol> rhs = GetRule().GetRightHandSideOfRule();
+            return IsCompleted() 
+                ? null 
+                : (rhs.Count - GetRulePosition()) == 1 
+                    ? new List<Symbol>() 
+                    : rhs.GetRange(GetRulePosition() + 1, rhs.Count - GetRulePosition() - 2);
+        }
+        
+        internal bool IsCompleted()
+        {
+            return GetRulePosition() == GetRule().GetRightHandSideOfRule().Count;
+        }
+        
         internal Symbol GetItemPenult()
         {
             List<Symbol> rhs = GetCurrentPostSymbolList();
@@ -64,7 +72,7 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return _rule.ToString() + "\t RP: " + _rulePosition + "\t PP: " + _orignPosition;
+            return GetRule().ToString() + "\t RP: " + GetRulePosition() + "\t PP: " + _orignPosition;
         }
     }
 }

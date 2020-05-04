@@ -92,9 +92,8 @@ namespace marpa_impl
         {
             AddToSet(
               new EarleyItem(
-                 leoItem.GetRule(),
-                 leoItem.GetOrignPosition(),
-                 leoItem.GetRule().GetRightHandSideOfRule().Count
+                 leoItem.GetDottedRule(),
+                 leoItem.GetOrignPosition()
               ),
               setNumber
             );
@@ -166,7 +165,7 @@ namespace marpa_impl
             {
                 Sets[predecessorLeoItem.GetOrignPosition()]
                     .AddLeoItem(new LeoItem(
-                        predecessorLeoItem.GetRule(),
+                        predecessorLeoItem.GetDottedRule(),
                         predecessorLeoItem.GetOrignPosition(),
                         penult
                     ));
@@ -174,7 +173,7 @@ namespace marpa_impl
             else {
                 Sets[earleyItem.GetOrignPosition()]
                     .AddLeoItem(new LeoItem(
-                        predecessorLeoItem.GetRule(),
+                        new DottedRule(earleyItem.GetRule(), earleyItem.GetRulePosition() + 1),
                         earleyItem.GetOrignPosition(),
                         penult
                     ));

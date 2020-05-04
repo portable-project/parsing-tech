@@ -2,29 +2,29 @@
 
 namespace marpa_impl
 {
-    class LeoItem
+    internal class LeoItem
     {
-        private Rule _rule;
+        private DottedRule _dotteRule;
         private Symbol _symbol;
         private int _orignPosition;
 
         public LeoItem(EarleyItem ei, Symbol symbol)
         {
             _symbol = symbol;
-            _rule = ei.GetRule();
+            _dotteRule = ei.GetDottedRule();
             _orignPosition = ei.GetOrignPosition();
         }
 
-        public LeoItem(Rule rule, int position, Symbol symbol)
+        public LeoItem(DottedRule dottedRule, int position, Symbol symbol)
         {
             _symbol = symbol;
-            _rule = rule;
+            _dotteRule = dottedRule;
             _orignPosition = position;
         }
 
-        public Rule GetRule()
+        public DottedRule GetDottedRule()
         {
-            return _rule;
+            return _dotteRule;
         }
 
         public Symbol GetSymbol()
