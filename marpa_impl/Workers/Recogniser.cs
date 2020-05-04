@@ -99,7 +99,6 @@ namespace marpa_impl
               setNumber
             );
         }
-
         private void EarleyReducer(EarleySet set, Symbol currentNonTerminal, int setNumber)
         {
             for (int j = 0; j < set.GetEarlemeSetSize(); j++)
@@ -119,6 +118,7 @@ namespace marpa_impl
                 }
             }
         }
+
         private void Scanner(EarleyItem current, int setNumber, Char inputSymbol)
         {
             Symbol nextSymbol = current.GetCurrentNextSymbol();
@@ -146,9 +146,78 @@ namespace marpa_impl
                 {
                     AddToSet(new EarleyItem(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber);
                 }
-                else AddToSet(new EarleyItem(r, setNumber), setNumber);
+                else
+                {
+                    EarleyItem ei = new EarleyItem(r, setNumber);
+                    AddToSet(ei, setNumber);
+                    LeoMemoization(ei, setNumber);
+                }
             });
 
+        }
+
+        private void LeoMemoization(EarleyItem earleyItem, int setNumber)
+        {
+            if (!IsItemLeoEligible(earleyItem, setNumber)) return;
+
+            Symbol penult = earleyItem.GetItemPenult();
+            LeoItem predecessorLeoItem = FindLeoItemPredecessor(earleyItem);
+            if(predecessorLeoItem != null)
+            {
+                Sets[predecessorLeoItem.GetOrignPosition()]
+                    .AddLeoItem(new LeoItem(
+                        predecessorLeoItem.GetRule(),
+                        predecessorLeoItem.GetOrignPosition(),
+                        penult
+                    ));
+            }
+            else {
+                Sets[earleyItem.GetOrignPosition()]
+                    .AddLeoItem(new LeoItem(
+                        predecessorLeoItem.GetRule(),
+                        earleyItem.GetOrignPosition(),
+                        penult
+                    ));
+            }
+        }
+
+        private LeoItem FindLeoItemPredecessor(EarleyItem earleyItem)
+        {
+            EarleySet predecessorSet = Sets[earleyItem.GetOrignPosition()];
+            return predecessorSet.FindLeoItemBySymbol(earleyItem.GetRule().GetLeftHandSideOfRule());
+        }
+
+        private bool IsItemLeoEligible(EarleyItem earleyItem, int setNumber)
+        {
+            bool isRightRecursive = IsRuleRightRecursive(earleyItem.GetRule());
+            bool isLeoUnique = IsItemLeoUnique(earleyItem, setNumber);
+            if( isRightRecursive && isLeoUnique)
+            {
+                Console.WriteLine();
+            }
+            return isRightRecursive && isLeoUnique;
+        }
+        private bool IsRuleRightRecursive(Rule rule)
+        {
+            List<Symbol> rhs = rule.GetRightHandSideOfRule();
+            return rule.GetLeftHandSideOfRule().Equals(rhs[rhs.Count - 1]);
+        }
+        private bool IsItemLeoUnique(EarleyItem earleyItem, int setNumber)
+        {
+            return earleyItem.GetItemPenult() != null && IsItemPenultUnique(earleyItem, setNumber);
+        }
+        private bool IsItemPenultUnique(EarleyItem selectedEarleyItem, int setNumber)
+        {
+            int itemsCount = Sets[setNumber].GetEarlemeSetSize();
+            Symbol penult = selectedEarleyItem.GetItemPenult();
+            if (penult == null) return false;
+
+            for (int i=0; i< itemsCount; i++)
+            {
+                EarleyItem item = Sets[setNumber].GetEarleme(i);
+                if (penult.Equals(item.GetItemPenult()) && !item.GetRule().Equals(selectedEarleyItem.GetRule())) return false;
+            }
+            return true;
         }
 
         private void AddToSet(EarleyItem earleme, int setIndex)

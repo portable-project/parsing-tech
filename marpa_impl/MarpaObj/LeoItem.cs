@@ -15,6 +15,13 @@ namespace marpa_impl
             _orignPosition = ei.GetOrignPosition();
         }
 
+        public LeoItem(Rule rule, int position, Symbol symbol)
+        {
+            _symbol = symbol;
+            _rule = rule;
+            _orignPosition = position;
+        }
+
         public Rule GetRule()
         {
             return _rule;

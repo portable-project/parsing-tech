@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Symbol = System.String;
 
 namespace marpa_impl
@@ -27,6 +28,15 @@ namespace marpa_impl
         {
             return IsCompleted() ? null : _rule.GetRightHandSideOfRule(_rulePosition);
         }
+        internal List<Symbol> GetCurrentPostSymbolList()
+        {
+            List<Symbol> rhs = _rule.GetRightHandSideOfRule();
+            return IsCompleted() 
+                ? null 
+                : (rhs.Count - _rulePosition) == 1 
+                    ? new List<Symbol>() 
+                    : rhs.GetRange(_rulePosition + 1, rhs.Count - _rulePosition - 2);
+        }
         internal int GetRulePosition()
         {
             return _rulePosition;
@@ -42,6 +52,15 @@ namespace marpa_impl
         internal Rule GetRule()
         {
            return _rule;
+        }
+        internal Symbol GetItemPenult()
+        {
+            List<Symbol> rhs = GetCurrentPostSymbolList();
+            Symbol nextSymbol = GetCurrentNextSymbol();
+
+            if (nextSymbol != null && rhs != null && rhs.Count == 0)
+                return nextSymbol;
+            else return null;
         }
         public override String ToString()
         {

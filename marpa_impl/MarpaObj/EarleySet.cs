@@ -27,7 +27,10 @@ namespace marpa_impl
             }
             
         }
-
+        internal void AddLeoItem(LeoItem leoItem)
+        {
+            _leoItemList.Add(leoItem);
+        }
         internal LeoItem FindLeoItemBySymbol(Symbol symbol)
         {
             return null;
