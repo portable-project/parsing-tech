@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace marpa_impl
 {
-    public struct ParseReport
+    public struct ParseInfoReport
     {
         public List<String> _earleyItemsList;
         public List<String> _leoItemsList;
         public bool _isParserReportValid;
         public ErrorDescription _errorDescription;
 
-        internal ParseReport(EarleySet earleySet)
+        internal ParseInfoReport(EarleySet earleySet)
         {
             _earleyItemsList = new List<string>();
             _leoItemsList = new List<string>();
@@ -32,7 +32,7 @@ namespace marpa_impl
             _errorDescription = new ErrorDescription(ErrorCode.NO_ERROR);
         }
 
-        internal ParseReport(ErrorDescription errorDescription)
+        internal ParseInfoReport(ErrorDescription errorDescription)
         {
             _earleyItemsList = null;
             _leoItemsList = null;

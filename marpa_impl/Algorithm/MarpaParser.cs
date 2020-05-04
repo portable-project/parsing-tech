@@ -4,7 +4,14 @@ using System.Text;
 
 namespace marpa_impl
 {
-    public class MarpaParser
+    public interface IMarpaParser
+    {
+        RecogniserReport CheckString(String input);
+        ParserReport ParseString(String input);
+        ParseInfoReport GetLastParseInformationOnSymbolPosition(int symbolPosition);
+    }
+
+    public class MarpaParser: IMarpaParser
     {
         private Grammar _grammar;
         private ErrorHandler _errorHandler;
@@ -34,17 +41,29 @@ namespace marpa_impl
             return new RecogniserReport(result, _errorHandler.GetErrorDescriptionList());
         }
 
-        public ParseReport GetLastParseInformationOnSymbolPosition(int symbolPosition)
+        public RecogniserReport CheckUpdatedString(String updatedInput)
+        {
+            bool result = false;
+            if (_recogniser != null)
+            {
+                result = _recogniser.UpdateRecognise(updatedInput);
+            }
+            return new RecogniserReport(result, _errorHandler.GetErrorDescriptionList());
+        }
+
+        public ParseInfoReport GetLastParseInformationOnSymbolPosition(int symbolPosition)
         {
             if (_recogniser != null)
             {
                 return _recogniser.GetLastParseInformation(symbolPosition);
-            } else return new ParseReport(new ErrorDescription(ErrorCode.NO_GRAMMAR));
+            }
+            else return new ParseInfoReport(new ErrorDescription(ErrorCode.NO_GRAMMAR));
         }
 
-        public void ParseString()
+        public ParserReport ParseString(String input)
         {
             // TODO
+            return new ParserReport();
         }
 
         private void CheckGrammar(Grammar grammar)

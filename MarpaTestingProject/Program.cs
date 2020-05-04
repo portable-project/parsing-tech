@@ -30,7 +30,8 @@ namespace MarpaTestingProject
             {
                 MarpaParser recogniser = new MarpaParser(grammar);
                 RecogniserReport result = recogniser.CheckString("1+2*4*3");
-                ParseReport parseReport = recogniser.GetLastParseInformationOnSymbolPosition(2);
+                RecogniserReport updatedStringResult = recogniser.CheckString("1-2*3");
+                ParseInfoReport parseReport = recogniser.GetLastParseInformationOnSymbolPosition(2);
             }
         }
     }
