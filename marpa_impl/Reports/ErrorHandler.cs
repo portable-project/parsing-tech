@@ -10,6 +10,10 @@ namespace marpa_impl
         {
             Reports.Add(new ErrorDescription(errorCode, obj));
         }
+        internal void AddNewError(ErrorCode errorCode, Object obj, int position)
+        {
+            Reports.Add(new ErrorDescription(errorCode, obj, position));
+        }
         internal List<ErrorDescription> GetErrorDescriptionList()
         {
             return Reports;
@@ -34,6 +38,8 @@ namespace marpa_impl
                     return "No grammar object was provided";
                 case ErrorCode.NO_ERROR:
                     return "No error was found!";
+                case ErrorCode.UNRECOGNISED_SYMBOL:
+                    return "Found symbol that does not belong to provided grammar";
                 default: return "Unrecognised Error";
             }
         }

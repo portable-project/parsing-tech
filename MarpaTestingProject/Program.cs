@@ -29,9 +29,9 @@ namespace MarpaTestingProject
             if (er.isSuccessfull)
             {
                 MarpaParser recogniser = new MarpaParser(grammar);
-                RecogniserReport result = recogniser.CheckString("1+-1*4*4");
-                // RecogniserReport updatedStringResult = recogniser.CheckString("1-2*3");
-                // ParseInfoReport parseReport = recogniser.GetLastParseInformationOnSymbolPosition(2);
+                RecogniserReport result = recogniser.CheckString("1+1*4*4");
+                RecogniserReport updatedStringResult = recogniser.CheckUpdatedString("1+1*3*4");
+                ParseInfoReport parseReport = recogniser.GetLastParseInformationOnSymbolPosition(4);
             }
         }
     }

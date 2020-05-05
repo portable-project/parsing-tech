@@ -7,11 +7,14 @@ namespace marpa_impl
     public interface IMarpaParser
     {
         RecogniserReport CheckString(String input);
+        RecogniserReport CheckUpdatedString(String updatedInput);
         ParserReport ParseString(String input);
+        ParserReport ParseUpdatedString(String updatedInput);
         ParseInfoReport GetLastParseInformationOnSymbolPosition(int symbolPosition);
+        ParseInfoReport GetLastParseInformationOnError();
     }
 
-    public class MarpaParser: IMarpaParser
+    public class MarpaParser : IMarpaParser
     {
         private Grammar _grammar;
         private ErrorHandler _errorHandler;
@@ -66,6 +69,17 @@ namespace marpa_impl
             return new ParserReport();
         }
 
+        public ParserReport ParseUpdatedString(String updatedInput)
+        {
+            // TODO
+            return new ParserReport();
+        }
+
+        public ParseInfoReport GetLastParseInformationOnError()
+        {
+            // TODO
+            return new ParseInfoReport();
+        }
         private void CheckGrammar(Grammar grammar)
         {
             if (grammar == null)

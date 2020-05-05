@@ -78,7 +78,7 @@ namespace marpa_impl
         }
         public override String ToString()
         {
-            return "EI | " + GetDottedRule().ToString() + "\t PP: " + _orignPosition;
+            return GetDottedRule().ToString() + " PP: " + _orignPosition;
         }
     }
 }

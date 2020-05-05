@@ -36,7 +36,7 @@ namespace marpa_impl
                     if (e.IsCompleted())
                     {
                         EarleyItem ne = new EarleyItem(e.GetRule(), i, e.GetRulePosition());
-                        _sets[e.GetOrignPosition()].AddEarleyItem(ne);
+                        _sets[e.GetOrignPosition()].AddEarleyItem(ne, "Reorganize");
                     }
                 }
             }

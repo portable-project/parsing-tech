@@ -16,6 +16,7 @@ namespace marpa_impl
 
         INCORRECT_GRAMMAR,
         NO_GRAMMAR,
-        SYMBOL_POSITION_OUT_OF_RANGE
+        SYMBOL_POSITION_OUT_OF_RANGE,
+        UNRECOGNISED_SYMBOL
     }
 }

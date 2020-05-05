@@ -31,7 +31,7 @@ namespace marpa_impl
 
         public override string ToString()
         {
-            return GetRule().ToString() + "\t RP: " + GetPosition();
+            return GetRule().ToString() + " RP: " + GetPosition();
         }
     }
 }

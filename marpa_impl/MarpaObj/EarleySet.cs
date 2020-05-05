@@ -7,14 +7,16 @@ namespace marpa_impl
     internal class EarleySet
     {
         private List<EarleyItem> _earleyItemList;
+        private List<EarleyItemReport> _earleyItemReportList;
         private List<LeoItem> _leoItemList;
 
         internal EarleySet()
         {
             _earleyItemList = new List<EarleyItem>();
             _leoItemList = new List<LeoItem>();
+            _earleyItemReportList = new List<EarleyItemReport>();
         }
-        internal void AddEarleyItem(EarleyItem earleyItem)
+        internal void AddEarleyItem(EarleyItem earleyItem, String operationType)
         {
             if(
                 _earleyItemList.Find(erl => 
@@ -25,6 +27,7 @@ namespace marpa_impl
                 )
             {
                 _earleyItemList.Add(earleyItem);
+                _earleyItemReportList.Add(new EarleyItemReport(earleyItem, operationType));
             }
             
         }
@@ -39,6 +42,10 @@ namespace marpa_impl
         internal List<EarleyItem> GetEarleyItemList()
         {
             return _earleyItemList;
+        }
+        internal List<EarleyItemReport> GetEarleyItemReportList()
+        {
+            return _earleyItemReportList;
         }
         internal List<LeoItem> GetLeoItemList()
         {

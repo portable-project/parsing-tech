@@ -32,7 +32,7 @@ namespace marpa_impl
         {
             if (Sets == null) return false;
 
-            int from = GetInputsDiffPosition(newInput);
+            int from = GetInputsDiffPosition(newInput) - 1;
             UpdateSetsBeforeReparse(newInput, from);
             RunMarpa(newInput, from);
 
@@ -59,7 +59,7 @@ namespace marpa_impl
                 Sets.Add(new EarleySet());
             }
 
-            Sets[0].AddEarleyItem(new EarleyItem(finalItemRule, 0));
+            Sets[0].AddEarleyItem(new EarleyItem(finalItemRule, 0), "Init");
         }
 
         private int GetInputsDiffPosition(String input)
@@ -119,6 +119,13 @@ namespace marpa_impl
                         }
                     }
                 }
+
+
+                if (i+1 < Sets.Count && Sets[i+1].GetEarleyItemList().Count == 0)
+                {
+                    errorHandler.AddNewError(ErrorCode.UNRECOGNISED_SYMBOL, input[i], i);
+                    return;
+                }
             }
         }
 
@@ -140,7 +147,8 @@ namespace marpa_impl
                  leoItem.GetDottedRule(),
                  leoItem.GetOrignPosition()
               ),
-              setNumber
+              setNumber,
+              "LeoReducer"
             );
         }
 
@@ -159,7 +167,9 @@ namespace marpa_impl
                         currentEarleme.GetOrignPosition(),
                         currentEarleme.GetRulePosition() + 1
                             ),
-                        setNumber);
+                        setNumber,
+                        "EarleyReducer"
+                        );
 
                 }
             }
@@ -176,7 +186,8 @@ namespace marpa_impl
                         current.GetOrignPosition(),
                         current.GetRulePosition() + 1
                         ),
-                    setNumber + 1);
+                    setNumber + 1,
+                    "Scanner");
             }
 
         }
@@ -190,12 +201,12 @@ namespace marpa_impl
                 List<Symbol> symList = r.GetRightHandSideOfRule();
                 if (symList.Count == 1 && Grammar.CheckIsSymbolANullStringSymbol(symList[0]))
                 {
-                    AddToSet(new EarleyItem(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber);
+                    AddToSet(new EarleyItem(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber, "Predictor");
                 }
                 else
                 {
                     EarleyItem ei = new EarleyItem(r, setNumber);
-                    AddToSet(ei, setNumber);
+                    AddToSet(ei, setNumber, "Predictor");
                     LeoMemoization(ei, setNumber);
                 }
             });
@@ -233,9 +244,9 @@ namespace marpa_impl
             return predecessorSet.FindLeoItemBySymbol(earleyItem.GetRule().GetLeftHandSideOfRule());
         }
 
-        private void AddToSet(EarleyItem earleme, int setIndex)
+        private void AddToSet(EarleyItem earleme, int setIndex, String operationType)
         {
-            Sets[setIndex].AddEarleyItem(earleme);
+            Sets[setIndex].AddEarleyItem(earleme, operationType);
         }
 
         internal ParseInfoReport GetLastParseInformation(int symbolPosition)
