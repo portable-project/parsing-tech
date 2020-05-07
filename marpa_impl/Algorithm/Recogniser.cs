@@ -163,9 +163,8 @@ namespace marpa_impl
                 {
                     AddToSet(
                         new EarleyItem(
-                        currentEarleme.GetRule(),
-                        currentEarleme.GetOrignPosition(),
-                        currentEarleme.GetRulePosition() + 1
+                            new DottedRule(currentEarleme.GetRule(),currentEarleme.GetRulePosition() + 1),
+                            currentEarleme.GetOrignPosition()
                             ),
                         setNumber,
                         "EarleyReducer"
@@ -182,9 +181,8 @@ namespace marpa_impl
             {
                 AddToSet(
                     new EarleyItem(
-                        current.GetRule(),
-                        current.GetOrignPosition(),
-                        current.GetRulePosition() + 1
+                        new DottedRule(current.GetRule(),current.GetRulePosition() + 1),
+                        current.GetOrignPosition()
                         ),
                     setNumber + 1,
                     "Scanner");
@@ -201,7 +199,7 @@ namespace marpa_impl
                 List<Symbol> symList = r.GetRightHandSideOfRule();
                 if (symList.Count == 1 && Grammar.CheckIsSymbolANullStringSymbol(symList[0]))
                 {
-                    AddToSet(new EarleyItem(current.GetRule(), setNumber, current.GetRulePosition() + 1), setNumber, "Predictor");
+                    AddToSet(new EarleyItem(new DottedRule(current.GetRule(), current.GetRulePosition() + 1), setNumber), setNumber, "Predictor");
                 }
                 else
                 {

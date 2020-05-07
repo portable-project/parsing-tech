@@ -25,6 +25,10 @@ namespace marpa_impl
             NonTerminalsList = new List<Symbol>();
         }
 
+        public List<Rule> GetRules()
+        {
+            return RuleList;
+        }
         public void SetNullStringSymbol(Symbol _nullString)
         {
             NullString = _nullString;

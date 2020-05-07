@@ -14,11 +14,6 @@ namespace marpa_impl
             _orignPosition = parentPosition;
             _dottedRule = new DottedRule(rule, 0);
         }
-        internal EarleyItem(Rule rule, int parentPosition, int rulePosition)
-        {
-            _orignPosition = parentPosition;
-            _dottedRule = new DottedRule(rule, rulePosition);
-        }
         internal EarleyItem(DottedRule dottedRule, int parentPosition)
         {
             _dottedRule = dottedRule;
