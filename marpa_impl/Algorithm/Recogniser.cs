@@ -29,7 +29,7 @@ namespace marpa_impl
             RunMarpa(input, 0);
 
             Utils.PrintSets(Sets, true);
-            return FindFinalItem() != null;
+            return FindFinalItems().Count > 0;
         }
 
         internal bool UpdateRecognise(String newInput)
@@ -44,15 +44,16 @@ namespace marpa_impl
             return true;
         }
 
-        private EarleyItem FindFinalItem()
+        internal List<EarleyItem> FindFinalItems()
         {
+            List<EarleyItem> finals = new List<EarleyItem>();
             List<EarleyItem> items = Sets[Sets.Count - 1].GetEarleyItemList();
             for(int i=0; i < items.Count; i++)
             {
                 if (items[i].GetRule().Equals(finalItemRule) && items[i].GetOrignPosition() == 0 && items[i].GetRulePosition() == 1)
-                    return items[i];
+                    finals.Add(items[i]);
             }
-            return null;
+            return finals;
         }
         private void InitBeforeParse(String input)
         {

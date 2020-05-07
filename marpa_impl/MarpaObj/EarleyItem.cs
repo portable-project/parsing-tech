@@ -19,8 +19,8 @@ namespace marpa_impl
     {
         private DottedRule _dottedRule;
         private int _orignPosition;
-        private ItemLink _predecessorLink;
-        private ItemLink _redusorLink;
+        private ItemLink? _predecessorLink = null;
+        private ItemLink? _reducorLink = null;
 
         internal EarleyItem(Rule rule, int parentPosition)
         {
@@ -32,13 +32,17 @@ namespace marpa_impl
             _dottedRule = dottedRule;
             _orignPosition = parentPosition;
         }
+        internal bool DoesItemHaveLinks()
+        {
+            return _predecessorLink != null || _reducorLink != null;
+        }
         internal void SetPredecessorLink(EarleyItem link, int label)
         {
             _predecessorLink = new ItemLink(link, label);
         }
         internal void SetReducerLink(EarleyItem link, int label)
         {
-            _redusorLink = new ItemLink(link, label);
+            _reducorLink = new ItemLink(link, label);
         }
         internal int GetRulePosition()
         {
@@ -98,7 +102,7 @@ namespace marpa_impl
             EarleyItem earleyItem = obj as EarleyItem;
             return GetDottedRule().Equals(earleyItem.GetDottedRule()) && GetOrignPosition() == earleyItem.GetOrignPosition();
         }
-        public override String ToString()
+        public override Symbol ToString()
         {
             return GetDottedRule().ToString() + " PP: " + _orignPosition;
         }
