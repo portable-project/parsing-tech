@@ -65,7 +65,10 @@ namespace marpa_impl
 
         public ParserReport ParseString(String input)
         {
-            // TODO
+            if (_parser != null)
+            {
+                _parser.Parse(_recogniser.GetResultSetList());
+            }
             return new ParserReport();
         }
 

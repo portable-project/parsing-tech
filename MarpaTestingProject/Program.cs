@@ -28,9 +28,8 @@ namespace MarpaTestingProject
             GrammarReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
-                MarpaParser recogniser = new MarpaParser(grammar);
-                RecogniserReport result = recogniser.CheckString("1+1*4*4");
-                ParseInfoReport parseReport = recogniser.GetLastParseInformationOnSymbolPosition(4);
+                MarpaParser parser = new MarpaParser(grammar);
+                ParserReport result = parser.ParseString("1+1*4*4");
             }
         }
     }

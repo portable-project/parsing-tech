@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
@@ -14,7 +15,7 @@ namespace marpa_impl
         }
         internal void Parse(List<EarleySet> recogniserSets)
         {
-
+            TreeNode root = new TreeNode();
         }
     }
 }

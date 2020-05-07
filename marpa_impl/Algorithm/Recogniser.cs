@@ -17,6 +17,10 @@ namespace marpa_impl
             errorHandler = _errorHandler;
             Grammar = grammar;
         }
+        internal List<EarleySet> GetResultSetList()
+        {
+            return Sets;
+        }
         internal bool Recognise(String input)
         {
             lastInputString = input;
@@ -135,19 +139,27 @@ namespace marpa_impl
                 EarleyReducer(current, setNumber);
         }
 
-        private bool LeoReducer(EarleyItem current, int setNumber)
+        private bool LeoReducer(EarleyItem completed, int setNumber)
         {
-            int position = current.GetOrignPosition();
-            Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
+            int position = completed.GetOrignPosition();
+            Symbol lhs = completed.GetRule().GetLeftHandSideOfRule();
             EarleySet set = Sets[position];
             LeoItem transitiveItem = set.FindLeoItemBySymbol(lhs);
             if (transitiveItem == null) return false;
 
-            AddToSet(
-              new EarleyItem(
+            EarleyItem newEarleyItem = new EarleyItem(
                  transitiveItem.GetDottedRule(),
                  transitiveItem.GetOrignPosition()
-              ),
+              );
+
+            // TODO:
+            // if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
+            //    newEarleyItem.SetPredecessorLink(current, position);
+
+            newEarleyItem.SetReducerLink(completed, position);
+
+            AddToSet(
+              newEarleyItem,
               setNumber,
               "LeoReducer"
             );
