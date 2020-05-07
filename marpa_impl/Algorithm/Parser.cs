@@ -11,7 +11,6 @@ namespace marpa_impl
         {
             _grammar = grammar;
             _errorHandler = errorHandler;
-            _sets = new List<EarleySet>();
         }
         internal void Parse(List<EarleySet> recogniserSets)
         {

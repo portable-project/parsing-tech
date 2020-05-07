@@ -131,45 +131,50 @@ namespace marpa_impl
 
         private void Completer(EarleyItem current, int setNumber)
         {
-            Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
-            int position = current.GetOrignPosition();
-            EarleySet set = Sets[position];
-            LeoItem transitiveItem = set.FindLeoItemBySymbol(lhs);
-
-            if (transitiveItem != null) LeoReducer(transitiveItem, setNumber);
-            else EarleyReducer(set, lhs, setNumber);
+            if (!LeoReducer(current, setNumber))
+                EarleyReducer(current, setNumber);
         }
 
-        private void LeoReducer(LeoItem leoItem, int setNumber)
+        private bool LeoReducer(EarleyItem current, int setNumber)
         {
+            int position = current.GetOrignPosition();
+            Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
+            EarleySet set = Sets[position];
+            LeoItem transitiveItem = set.FindLeoItemBySymbol(lhs);
+            if (transitiveItem == null) return false;
+
             AddToSet(
               new EarleyItem(
-                 leoItem.GetDottedRule(),
-                 leoItem.GetOrignPosition()
+                 transitiveItem.GetDottedRule(),
+                 transitiveItem.GetOrignPosition()
               ),
               setNumber,
               "LeoReducer"
             );
+            return true;
         }
 
-        private void EarleyReducer(EarleySet set, Symbol currentNonTerminal, int setNumber)
+        private void EarleyReducer(EarleyItem completed, int setNumber)
         {
+            int position = completed.GetOrignPosition();
+            EarleySet set = Sets[position];
             List<EarleyItem> items = set.GetEarleyItemList();
             for (int j = 0; j < items.Count; j++)
             {
-                EarleyItem currentEarleme = items[j];
-                Symbol next = currentEarleme.GetCurrentNextSymbol();
-                if (next != null && next.Equals(currentNonTerminal))
+                EarleyItem current = items[j];
+                Symbol next = current.GetCurrentNextSymbol();
+                if (next != null && next.Equals(completed.GetRule().GetLeftHandSideOfRule()))
                 {
-                    AddToSet(
-                        new EarleyItem(
-                            new DottedRule(currentEarleme.GetRule(),currentEarleme.GetRulePosition() + 1),
-                            currentEarleme.GetOrignPosition()
-                            ),
-                        setNumber,
-                        "EarleyReducer"
-                        );
+                    EarleyItem newEarleyItem = new EarleyItem(
+                            new DottedRule(current.GetRule(), current.GetRulePosition() + 1),
+                            current.GetOrignPosition()
+                            );
 
+                    if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
+                        newEarleyItem.SetPredecessorLink(current, position);
+
+                    newEarleyItem.SetReducerLink(completed, position);
+                    AddToSet( newEarleyItem, setNumber, "EarleyReducer" );
                 }
             }
         }
@@ -179,13 +184,14 @@ namespace marpa_impl
             Symbol nextSymbol = current.GetCurrentNextSymbol();
             if (nextSymbol != null && nextSymbol.Equals(inputSymbol.ToString()))
             {
-                AddToSet(
-                    new EarleyItem(
-                        new DottedRule(current.GetRule(),current.GetRulePosition() + 1),
+                EarleyItem newEarleyItem = new EarleyItem(
+                        new DottedRule(current.GetRule(), current.GetRulePosition() + 1),
                         current.GetOrignPosition()
-                        ),
-                    setNumber + 1,
-                    "Scanner");
+                        );
+                if(newEarleyItem.GetCurrentPrevSymbolList() != null && newEarleyItem.GetCurrentPrevSymbolList().Count > 0) 
+                    newEarleyItem.SetPredecessorLink(current, setNumber);
+
+                AddToSet(newEarleyItem, setNumber + 1, "Scanner");
             }
 
         }

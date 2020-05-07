@@ -4,10 +4,23 @@ using Symbol = System.String;
 
 namespace marpa_impl
 {
+    internal struct ItemLink
+    {
+        internal EarleyItem _link;
+        internal int _label;
+
+        internal ItemLink(EarleyItem link, int label)
+        {
+            _label = label;
+            _link = link;
+        }
+    }
     internal class EarleyItem
     {
         private DottedRule _dottedRule;
         private int _orignPosition;
+        private ItemLink _predecessorLink;
+        private ItemLink _redusorLink;
 
         internal EarleyItem(Rule rule, int parentPosition)
         {
@@ -18,6 +31,14 @@ namespace marpa_impl
         {
             _dottedRule = dottedRule;
             _orignPosition = parentPosition;
+        }
+        internal void SetPredecessorLink(EarleyItem link, int label)
+        {
+            _predecessorLink = new ItemLink(link, label);
+        }
+        internal void SetReducerLink(EarleyItem link, int label)
+        {
+            _redusorLink = new ItemLink(link, label);
         }
         internal int GetRulePosition()
         {
@@ -50,7 +71,13 @@ namespace marpa_impl
                     ? new List<Symbol>() 
                     : rhs.GetRange(GetRulePosition() + 1, rhs.Count - GetRulePosition() - 2);
         }
-        
+        internal List<Symbol> GetCurrentPrevSymbolList()
+        {
+            List<Symbol> rhs = GetRule().GetRightHandSideOfRule();
+            return GetRulePosition() == 0
+                    ? new List<Symbol>()
+                    : rhs.GetRange(0, GetRulePosition() - 1);
+        }
         internal bool IsCompleted()
         {
             return GetRulePosition() == GetRule().GetRightHandSideOfRule().Count;
