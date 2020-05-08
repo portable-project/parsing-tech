@@ -16,18 +16,21 @@ namespace marpa_impl
         internal void Parse(List<EarleySet> recogniserSets, List<EarleyItem> finalItems)
         {
             TreeNode root = new TreeNode("alpha", 0, recogniserSets.Count - 1);
-            finalItems.ForEach(final => BuildTree(root, final, recogniserSets.Count - 1));
+            finalItems.ForEach(final => BuildTree(root, final));
         }
 
-        private void BuildTree(TreeNode parent, EarleyItem current, int setNumber)
+        private void BuildTree(TreeNode parent, EarleyItem current)
         {
+            current.SetItemIsProcessed();
+
             Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             List<Symbol> prev = current.GetCurrentPrevSymbolList();
             Symbol symBeforeDot = prev[prev.Count - 1];
+            int setNumber = current.GetSetNumber();
 
             if (IsEmptyRule(current)) {
                 
-                if(!parent.DoesChildExists(lhs, setNumber, setNumber))
+                if(!parent.DoesChildExists(new TreeNode (lhs, setNumber, setNumber)))
                 {
                     parent.AddChild(new TreeNode(_grammar.GetNullStringSymbol(), setNumber, setNumber));
                 }
@@ -35,27 +38,34 @@ namespace marpa_impl
             } 
             else if (prev.Count == 1 && IsLastSymbolBeforeDotTerminal(prev)) {
                 
-                if (!parent.DoesChildExists(symBeforeDot, setNumber, setNumber))
+                if (!parent.DoesChildExists(new TreeNode(symBeforeDot, setNumber, setNumber)))
                 {
                     parent.AddChild(new TreeNode(symBeforeDot, setNumber-1, setNumber));
                 }
 
             } 
             else if (prev.Count == 1 && IsLastSymbolBeforeDotNonTerminal(prev)) {
-                
-                if (!parent.DoesChildExists(symBeforeDot, current.GetOrignPosition(), setNumber))
+
+                TreeNode newNode = new TreeNode(symBeforeDot, current.GetOrignPosition(), setNumber);
+                if (!parent.DoesChildExists(newNode))
                 {
-                    parent.AddChild(new TreeNode(symBeforeDot, current.GetOrignPosition(), setNumber));
-                    
-                    // more
+                    parent.AddChild(newNode);
+                    current.GetReducerLinks().ForEach(el =>
+                    {
+                        if(el._label == current.GetOrignPosition() && !el._link.IsItemProcessed())
+                        {
+                            BuildTree(newNode, el._link);
+                        }
+                    });
                 }
 
             } 
             else if (IsLastSymbolBeforeDotTerminal(prev)) {
-                
-                if (!parent.DoesChildExists(symBeforeDot, setNumber - 1, setNumber))
+
+                TreeNode newNode = new TreeNode(symBeforeDot, setNumber - 1, setNumber);
+                if (!parent.DoesChildExists(newNode))
                 {
-                    parent.AddChild(new TreeNode(symBeforeDot, setNumber - 1, setNumber));
+                    parent.AddChild(newNode);
 
                     // more
                 }

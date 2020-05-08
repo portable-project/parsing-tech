@@ -64,7 +64,7 @@ namespace marpa_impl
                 Sets.Add(new EarleySet());
             }
 
-            Sets[0].AddEarleyItem(new EarleyItem(finalItemRule, 0), "Init");
+            Sets[0].AddEarleyItem(new EarleyItem(0, finalItemRule, 0), "Init");
         }
 
         private int GetInputsDiffPosition(String input)
@@ -149,6 +149,7 @@ namespace marpa_impl
             if (transitiveItem == null) return false;
 
             EarleyItem newEarleyItem = new EarleyItem(
+                 setNumber,
                  transitiveItem.GetDottedRule(),
                  transitiveItem.GetOrignPosition()
               );
@@ -157,7 +158,7 @@ namespace marpa_impl
             // if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
             //    newEarleyItem.SetPredecessorLink(current, position);
 
-            newEarleyItem.SetReducerLink(completed, position);
+            newEarleyItem.AddReducerLink(completed, position);
 
             AddToSet(
               newEarleyItem,
@@ -179,14 +180,15 @@ namespace marpa_impl
                 if (next != null && next.Equals(completed.GetRule().GetLeftHandSideOfRule()))
                 {
                     EarleyItem newEarleyItem = new EarleyItem(
+                            setNumber,
                             new DottedRule(current.GetRule(), current.GetRulePosition() + 1),
                             current.GetOrignPosition()
                             );
 
                     if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
-                        newEarleyItem.SetPredecessorLink(current, position);
+                        newEarleyItem.AddPredecessorLink(current, position);
 
-                    newEarleyItem.SetReducerLink(completed, position);
+                    newEarleyItem.AddReducerLink(completed, position);
                     AddToSet( newEarleyItem, setNumber, "EarleyReducer" );
                 }
             }
@@ -198,11 +200,12 @@ namespace marpa_impl
             if (nextSymbol != null && nextSymbol.Equals(inputSymbol.ToString()))
             {
                 EarleyItem newEarleyItem = new EarleyItem(
-                        new DottedRule(current.GetRule(), current.GetRulePosition() + 1),
-                        current.GetOrignPosition()
-                        );
-                if(newEarleyItem.GetCurrentPrevSymbolList() != null && newEarleyItem.GetCurrentPrevSymbolList().Count > 0) 
-                    newEarleyItem.SetPredecessorLink(current, setNumber);
+                    setNumber + 1,
+                    new DottedRule(current.GetRule(), current.GetRulePosition() + 1),
+                    current.GetOrignPosition()
+                );
+                if (newEarleyItem.GetCurrentPrevSymbolList() != null && newEarleyItem.GetCurrentPrevSymbolList().Count > 0) 
+                    newEarleyItem.AddPredecessorLink(current, setNumber);
 
                 AddToSet(newEarleyItem, setNumber + 1, "Scanner");
             }
@@ -218,11 +221,11 @@ namespace marpa_impl
                 List<Symbol> symList = r.GetRightHandSideOfRule();
                 if (symList.Count == 1 && Grammar.CheckIsSymbolANullStringSymbol(symList[0]))
                 {
-                    AddToSet(new EarleyItem(new DottedRule(current.GetRule(), current.GetRulePosition() + 1), setNumber), setNumber, "Predictor");
+                    AddToSet(new EarleyItem(setNumber, new DottedRule(current.GetRule(), current.GetRulePosition() + 1), setNumber), setNumber, "Predictor");
                 }
                 else
                 {
-                    EarleyItem ei = new EarleyItem(r, setNumber);
+                    EarleyItem ei = new EarleyItem(setNumber, r, setNumber);
                     AddToSet(ei, setNumber, "Predictor");
                     LeoMemoization(ei, setNumber);
                 }

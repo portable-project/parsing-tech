@@ -19,30 +19,41 @@ namespace marpa_impl
     {
         private DottedRule _dottedRule;
         private int _orignPosition;
-        private ItemLink? _predecessorLink = null;
-        private ItemLink? _reducorLink = null;
-
-        internal EarleyItem(Rule rule, int parentPosition)
+        private List<ItemLink> _predecessorLinkList;
+        private List<ItemLink> _reducorLinkList;
+        private bool isProcessed = false;
+        private int _setNumber;
+        internal EarleyItem(int setNumber, Rule rule, int parentPosition)
         {
             _orignPosition = parentPosition;
             _dottedRule = new DottedRule(rule, 0);
+            _predecessorLinkList = new List<ItemLink>();
+            _reducorLinkList = new List<ItemLink>();
+            _setNumber = setNumber;
         }
-        internal EarleyItem(DottedRule dottedRule, int parentPosition)
+        internal EarleyItem(int setNumber, DottedRule dottedRule, int parentPosition)
         {
             _dottedRule = dottedRule;
             _orignPosition = parentPosition;
+            _predecessorLinkList = new List<ItemLink>();
+            _reducorLinkList = new List<ItemLink>();
+            _setNumber = setNumber;
+        }
+        internal int GetSetNumber()
+        {
+            return _setNumber;
         }
         internal bool DoesItemHaveLinks()
         {
-            return _predecessorLink != null || _reducorLink != null;
+            return _predecessorLinkList.Count > 0 || _reducorLinkList.Count > 0;
         }
-        internal void SetPredecessorLink(EarleyItem link, int label)
+        internal void AddPredecessorLink(EarleyItem link, int label)
         {
-            _predecessorLink = new ItemLink(link, label);
+            _predecessorLinkList.Add(new ItemLink(link, label));
         }
-        internal void SetReducerLink(EarleyItem link, int label)
+        internal void AddReducerLink(EarleyItem link, int label)
         {
-            _reducorLink = new ItemLink(link, label);
+            _reducorLinkList.Add(new ItemLink(link, label));
         }
         internal int GetRulePosition()
         {
@@ -61,7 +72,22 @@ namespace marpa_impl
             return _dottedRule.GetRule();
         }
 
-
+        internal bool IsItemProcessed()
+        {
+            return isProcessed;
+        }
+        internal void SetItemIsProcessed()
+        {
+            isProcessed = true;
+        }
+        internal List<ItemLink> GetPredecessorLinks()
+        {
+            return _predecessorLinkList;
+        }
+        internal List<ItemLink> GetReducerLinks()
+        {
+            return _reducorLinkList;
+        }
         internal Symbol GetCurrentNextSymbol()
         {
             return IsCompleted() ? null : GetRule().GetRightHandSideOfRule(GetRulePosition());
