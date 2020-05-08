@@ -10,26 +10,17 @@ namespace MarpaTestingProject
         {
             Grammar grammar = new Grammar();
 
-            Rule startRule1 = new Rule("S", new List<Symbol>() { "S", "+", "M" });
-            Rule startRule2 = new Rule("S", new List<Symbol>() { "M" });
+            Rule startRule1 = new Rule("S", new List<Symbol>() { "S", "S" });
+            Rule startRule2 = new Rule("S", new List<Symbol>() { "b" });
             grammar.AddRule(startRule1);
             grammar.AddRule(startRule2);
-
-            grammar.AddRule("M", new List<Symbol>() { "T", "*", "M" });
-            grammar.AddRule("M", new List<Symbol>() { "T" });
-            grammar.AddRule("M", new List<Symbol>() { "e" });
-            grammar.AddRule("T", new List<Symbol>() { "1" });
-            grammar.AddRule("T", new List<Symbol>() { "2" });
-            grammar.AddRule("T", new List<Symbol>() { "3" });
-            grammar.AddRule("T", new List<Symbol>() { "4" });
             grammar.SetStartSym("S");
-            grammar.SetNullStringSymbol("e");
-
+            
             GrammarReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
                 MarpaParser parser = new MarpaParser(grammar);
-                ParserReport result = parser.ParseString("1+1*4*4");
+                ParserReport result = parser.ParseString("bbb");
             }
         }
     }

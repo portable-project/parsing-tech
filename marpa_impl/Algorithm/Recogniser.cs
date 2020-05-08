@@ -154,9 +154,11 @@ namespace marpa_impl
                  transitiveItem.GetOrignPosition()
               );
 
-            // TODO:
-            // if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
-            //    newEarleyItem.SetPredecessorLink(current, position);
+            EarleyItem current = Sets[transitiveItem.GetOrignPosition()].GetEarleyItemList()
+                .Find(el => el.GetDottedRule().Equals(transitiveItem.GetDottedRule()) && el.GetOrignPosition() == transitiveItem.GetOrignPosition());
+            
+            if (current.GetCurrentPrevSymbolList() != null && current.GetCurrentPrevSymbolList().Count > 0)
+                newEarleyItem.AddPredecessorLink(current, position);
 
             newEarleyItem.AddReducerLink(completed, position);
 
