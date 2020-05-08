@@ -32,5 +32,23 @@ namespace marpa_impl
         {
             _children.Add(node);
         }
+
+        internal bool DoesChildExists(Symbol symbol, int left, int right)
+        {
+            if (_children.Count == 0) return false;
+
+            TreeNode node = new TreeNode(symbol, left, right);
+            for(int i = 0; i < _children.Count; i++)
+            {
+                if (_children[i].Equals(node)) return true;
+            }
+            return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            TreeNode node = obj as TreeNode;
+            return _leftBorder == node._leftBorder && _rightBorder == node._rightBorder && _simpleNode == node._simpleNode && _complexNode.Equals(node._complexNode);
+        }
     }
 }

@@ -78,9 +78,10 @@ namespace marpa_impl
         internal List<Symbol> GetCurrentPrevSymbolList()
         {
             List<Symbol> rhs = GetRule().GetRightHandSideOfRule();
-            return GetRulePosition() == 0
+            int currentRulePosition = GetRulePosition();
+            return currentRulePosition == 0
                     ? new List<Symbol>()
-                    : rhs.GetRange(0, GetRulePosition() - 1);
+                    : rhs.GetRange(0, currentRulePosition);
         }
         internal bool IsCompleted()
         {

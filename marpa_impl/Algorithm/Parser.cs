@@ -16,25 +16,71 @@ namespace marpa_impl
         internal void Parse(List<EarleySet> recogniserSets, List<EarleyItem> finalItems)
         {
             TreeNode root = new TreeNode("alpha", 0, recogniserSets.Count - 1);
-            finalItems.ForEach(final => BuildTree(root, final));
+            finalItems.ForEach(final => BuildTree(root, final, recogniserSets.Count - 1));
         }
 
-        private void BuildTree(TreeNode parent, EarleyItem current)
+        private void BuildTree(TreeNode parent, EarleyItem current, int setNumber)
         {
+            Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             List<Symbol> prev = current.GetCurrentPrevSymbolList();
-            List<Symbol> post = current.GetCurrentPostSymbolList();
+            Symbol symBeforeDot = prev[prev.Count - 1];
 
-            if (current.GetRule().GetRightHandSideOfRule()[0].Equals(_grammar.GetStartSymbol())) {
+            if (IsEmptyRule(current)) {
+                
+                if(!parent.DoesChildExists(lhs, setNumber, setNumber))
+                {
+                    parent.AddChild(new TreeNode(_grammar.GetNullStringSymbol(), setNumber, setNumber));
+                }
 
-            } else if (prev.Count == 1 && _grammar.DoesBelongToTerminals(prev[0])) {
+            } 
+            else if (prev.Count == 1 && IsLastSymbolBeforeDotTerminal(prev)) {
+                
+                if (!parent.DoesChildExists(symBeforeDot, setNumber, setNumber))
+                {
+                    parent.AddChild(new TreeNode(symBeforeDot, setNumber-1, setNumber));
+                }
 
-            } else if (prev.Count == 1 && !_grammar.DoesBelongToTerminals(prev[0])) {
+            } 
+            else if (prev.Count == 1 && IsLastSymbolBeforeDotNonTerminal(prev)) {
+                
+                if (!parent.DoesChildExists(symBeforeDot, current.GetOrignPosition(), setNumber))
+                {
+                    parent.AddChild(new TreeNode(symBeforeDot, current.GetOrignPosition(), setNumber));
+                    
+                    // more
+                }
 
-            } else if (_grammar.DoesBelongToTerminals(prev[prev.Count - 1])) {
+            } 
+            else if (IsLastSymbolBeforeDotTerminal(prev)) {
+                
+                if (!parent.DoesChildExists(symBeforeDot, setNumber - 1, setNumber))
+                {
+                    parent.AddChild(new TreeNode(symBeforeDot, setNumber - 1, setNumber));
 
-            } else if (!_grammar.DoesBelongToTerminals(prev[prev.Count - 1])) {
+                    // more
+                }
+
+            } 
+            else if (IsLastSymbolBeforeDotNonTerminal(prev)) {
 
             }
+        }
+
+        private bool IsEmptyRule(EarleyItem current)
+        {
+            return current.GetRule().GetRightHandSideOfRule()[0].Equals(_grammar.GetNullStringSymbol());
+        }
+
+        private bool IsLastSymbolBeforeDotTerminal(List<Symbol> prev)
+        {
+            Symbol symBeforeDot = prev[prev.Count - 1];
+            return _grammar.DoesBelongToTerminals(symBeforeDot);
+        }
+
+        private bool IsLastSymbolBeforeDotNonTerminal(List<Symbol> prev)
+        {
+            Symbol symBeforeDot = prev[prev.Count - 1];
+            return !_grammar.DoesBelongToTerminals(symBeforeDot);
         }
     }
 }
