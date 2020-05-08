@@ -13,11 +13,21 @@ namespace marpa_impl
             _grammar = grammar;
             _errorHandler = errorHandler;
         }
-        internal TreeNode Parse(List<EarleySet> recogniserSets, List<EarleyItem> finalItems)
+        internal List<TreeNode> Parse(List<EarleySet> recogniserSets)
         {
-            TreeNode root = new TreeNode("alpha", 0, recogniserSets.Count);
-            finalItems.ForEach(final => BuildTree(root, final));
-            return root;
+            Symbol startSymbol = _grammar.GetStartSymbol();
+            List<TreeNode> forest = new List<TreeNode>();
+
+            recogniserSets[recogniserSets.Count - 1].GetEarleyItemList().ForEach(item => {
+                if (item.GetRule().GetLeftHandSideOfRule().Equals(startSymbol) && item.IsCompleted() && item.GetOrignPosition() == 0)
+                {
+                    TreeNode root = new TreeNode(startSymbol, 0, recogniserSets.Count);
+                    BuildTree(root, item);
+                    forest.Add(root);
+                }
+            });
+
+            return forest;
         }
 
         private void BuildTree(TreeNode parent, EarleyItem current)
@@ -26,7 +36,6 @@ namespace marpa_impl
 
             Symbol lhs = current.GetRule().GetLeftHandSideOfRule();
             List<Symbol> prev = current.GetCurrentPrevSymbolList();
-            Symbol symBeforeDot = prev[prev.Count - 1];
             int setNumber = current.GetSetNumber();
 
             if (IsEmptyRule(current))
@@ -40,6 +49,7 @@ namespace marpa_impl
             }
             else if (prev.Count == 1 && IsLastSymbolBeforeDotTerminal(prev))
             {
+                Symbol symBeforeDot = prev[prev.Count - 1];
 
                 if (!parent.DoesChildExists(new TreeNode(symBeforeDot, setNumber, setNumber)))
                 {
@@ -49,6 +59,7 @@ namespace marpa_impl
             }
             else if (prev.Count == 1 && IsLastSymbolBeforeDotNonTerminal(prev))
             {
+                Symbol symBeforeDot = prev[prev.Count - 1];
 
                 TreeNode newNode = new TreeNode(symBeforeDot, current.GetOrignPosition(), setNumber);
                 if (!parent.DoesChildExists(newNode)) parent.AddChild(newNode);
@@ -64,6 +75,7 @@ namespace marpa_impl
             }
             else if (IsLastSymbolBeforeDotTerminal(prev))
             {
+                Symbol symBeforeDot = prev[prev.Count - 1];
 
                 TreeNode newNode = new TreeNode(symBeforeDot, setNumber - 1, setNumber);
                 if (!parent.DoesChildExists(newNode)) parent.AddChild(newNode);
@@ -85,6 +97,8 @@ namespace marpa_impl
             }
             else if (IsLastSymbolBeforeDotNonTerminal(prev))
             {
+                Symbol symBeforeDot = prev[prev.Count - 1];
+
                 current.GetReducerLinks().ForEach(item =>
                 {
                     TreeNode newNode = new TreeNode(symBeforeDot, item._label, setNumber);
@@ -112,12 +126,14 @@ namespace marpa_impl
 
         private bool IsLastSymbolBeforeDotTerminal(List<Symbol> prev)
         {
+            if (prev.Count == 0) return false;
             Symbol symBeforeDot = prev[prev.Count - 1];
             return _grammar.DoesBelongToTerminals(symBeforeDot);
         }
 
         private bool IsLastSymbolBeforeDotNonTerminal(List<Symbol> prev)
         {
+            if (prev.Count == 0) return false;
             Symbol symBeforeDot = prev[prev.Count - 1];
             return !_grammar.DoesBelongToTerminals(symBeforeDot);
         }

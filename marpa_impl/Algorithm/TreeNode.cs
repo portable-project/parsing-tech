@@ -47,7 +47,9 @@ namespace marpa_impl
         public override bool Equals(object obj)
         {
             TreeNode node = obj as TreeNode;
-            return _leftBorder == node._leftBorder && _rightBorder == node._rightBorder && _simpleNode == node._simpleNode && _complexNode.Equals(node._complexNode);
+            bool isComplexNodeEqual = _complexNode == null && node._complexNode == null 
+                || _complexNode != null && node._complexNode != null && _complexNode.Equals(node._complexNode);
+            return _leftBorder == node._leftBorder && _rightBorder == node._rightBorder && _simpleNode == node._simpleNode && isComplexNodeEqual;
         }
     }
 }

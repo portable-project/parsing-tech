@@ -66,10 +66,10 @@ namespace marpa_impl
         public ParserReport ParseString(String input)
         {
             RecogniserReport report = CheckString(input);
-            TreeNode root;
+            List<TreeNode> forest;
             if (_parser != null && report.isSuccessfull && report.isRecognised)
             {
-                root = _parser.Parse(_recogniser.GetResultSetList(), _recogniser.FindFinalItems());
+                forest = _parser.Parse(_recogniser.GetResultSetList());
             }
             return new ParserReport();
         }
