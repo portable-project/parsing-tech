@@ -6,16 +6,36 @@ using Symbol = System.String;
 
 namespace MarpaTesting
 {
+    
     [TestClass]
     public class GrammarStructureTest
     {
         private Grammar grammar;
         private GrammarReport grammarReport;
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
 
-        [TestInitialize]
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+               "E://GrammarsData.xml",
+               "Row",
+                DataAccessMethod.Sequential)]
         public void Setup()
         {
             grammar = new Grammar();
+            object list = TestContext.DataRow["A1"];
+            // List<Object> list = (List<Object>)TestContext.DataRow["Rules"];
+
             Rule startRule1 = new Rule("S", new List<Symbol>() { "(", ")" });
             Rule startRule2 = new Rule("S", new List<Symbol>() { "(", "S", ")" });
             Rule startRule3 = new Rule("S", new List<Symbol>() { "S", "S" });
