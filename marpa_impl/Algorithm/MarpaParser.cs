@@ -70,6 +70,11 @@ namespace marpa_impl
             if (_parser != null && report.isSuccessfull && report.isRecognised)
             {
                 forest = _parser.Parse(_recogniser.GetResultSetList());
+                Utils.PrintSeparator(5);
+                Console.WriteLine("tree");
+                Utils.PrintTree(forest[0], 1);
+                Utils.PrintSeparator(5);
+                Utils.PrintTreeForDraw(forest[0]);
             }
             return new ParserReport();
         }

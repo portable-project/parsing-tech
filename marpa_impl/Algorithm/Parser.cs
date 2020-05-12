@@ -21,7 +21,7 @@ namespace marpa_impl
             recogniserSets[recogniserSets.Count - 1].GetEarleyItemList().ForEach(item => {
                 if (item.GetRule().GetLeftHandSideOfRule().Equals(startSymbol) && item.IsCompleted() && item.GetOrignPosition() == 0)
                 {
-                    TreeNode root = new TreeNode(startSymbol, 0, recogniserSets.Count);
+                    TreeNode root = new TreeNode(startSymbol, 0, recogniserSets.Count - 1);
                     BuildTree(root, item);
                     forest.Add(root);
                 }

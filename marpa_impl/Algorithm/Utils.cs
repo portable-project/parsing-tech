@@ -43,5 +43,30 @@ namespace marpa_impl
                 Console.WriteLine("\n <=====================================================================> " + i);
             }
         }
+
+        internal static void PrintTree(TreeNode root, int space)
+        {
+            Console.WriteLine(root.ToString());
+            root.GetTreeChildrenNodes().ForEach(node => {
+                for (int i = 0; i < space-1; i++) Console.Write("\t");
+                Console.WriteLine("\t|");
+                
+                for (int i =0; i< space; i++) Console.Write("\t");
+                Console.Write("|-----");
+                
+                PrintTree(node, space+1);
+
+            });
+        }
+
+        internal static void PrintTreeForDraw(TreeNode root)
+        {
+            List<TreeNode> children = root.GetTreeChildrenNodes();
+            for(int i = children.Count; i> 0; i--){
+                TreeNode node = children[i - 1];
+                Console.WriteLine('[' + root.ToString() + "]->["+node.ToString()+']');
+                PrintTreeForDraw(node);
+            };
+        }
     }
 }

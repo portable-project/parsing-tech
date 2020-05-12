@@ -60,8 +60,17 @@ namespace marpa_impl
             RuleList.Add(new Rule(_lhs, _rhs));
         }
 
+        public List<Symbol> GetGrammarNonTerminals()
+        {
+            return NonTerminalsList;
+        }
 
-        public GrammarReport PrecomputeGrammar()
+        public List<Symbol> GetGrammarTerminals()
+        {
+            return TerminalsList;
+        }
+
+            public GrammarReport PrecomputeGrammar()
         {
             ErrorHandler eh = new ErrorHandler();
             if (StartSymbol == null) eh.AddNewError(ErrorCode.NO_START_SYMBOL_DETECTED, this);

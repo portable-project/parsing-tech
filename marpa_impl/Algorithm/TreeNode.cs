@@ -33,6 +33,10 @@ namespace marpa_impl
             _children.Add(node);
         }
 
+        internal List<TreeNode> GetTreeChildrenNodes()
+        {
+            return _children;
+        }
         internal bool DoesChildExists(TreeNode node)
         {
             if (_children.Count == 0) return false;
@@ -50,6 +54,12 @@ namespace marpa_impl
             bool isComplexNodeEqual = _complexNode == null && node._complexNode == null 
                 || _complexNode != null && node._complexNode != null && _complexNode.Equals(node._complexNode);
             return _leftBorder == node._leftBorder && _rightBorder == node._rightBorder && _simpleNode == node._simpleNode && isComplexNodeEqual;
+        }
+
+        public override string ToString()
+        {
+            String label = _complexNode != null ? _complexNode.GetRule().ToString() : _simpleNode;
+            return "(" + label + ", " + _leftBorder + ", " + _rightBorder +")";
         }
     }
 }
