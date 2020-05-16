@@ -7,8 +7,9 @@ namespace marpa_impl
 {
     class Class1
     {
+        private String fileName = "results.csv";
 
-        internal int GetTimeOfRecognise(Grammar grammar, List<String> inputList)
+        internal void CalculateTimeOfRecognise(Grammar grammar, List<String> inputList)
         {
             ErrorHandler errorHandler = new ErrorHandler();
             if (grammar.IsGrammarValid())
@@ -21,16 +22,10 @@ namespace marpa_impl
                     timePerParse.Stop();
                     long mstime = timePerParse.ElapsedMilliseconds;
 
-                    if (result)
-                    {
-                        // write to file
-                        Console.WriteLine(input + ' ' + mstime);
-                    }
+                    if (result) FileWorker.WriteToCSV(fileName, input, mstime);
                 });
             }
-            return 0;
         }
-
         private static void DisplayTimerProperties()
         {
             // Display the timer frequency and resolution.
