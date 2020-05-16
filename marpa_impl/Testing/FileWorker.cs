@@ -1,15 +1,30 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace marpa_impl
 {
     internal static class FileWorker
     {
-        internal static Grammar GetGrammarFromXMLFile(String filename)
+        internal static List<string> GetLinesFromXMLFile(String filename)
         {
-            return new Grammar();
+            List<string> lines = new List<string>();
+            try
+            {
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null) lines.Add(line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+
+            return lines;
         }
-        
         internal static void CleanFile(String filePath)
         {
             using (var w = new StreamWriter(filePath))

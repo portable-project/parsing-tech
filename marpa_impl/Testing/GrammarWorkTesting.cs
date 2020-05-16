@@ -2,11 +2,32 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using Symbol = System.String;
 
 namespace marpa_impl
 {
     public class GrammarWorkTesting
     {
+        public Grammar GetGrammarFromFile(string filePath)
+        {
+            Grammar grammar = new Grammar();
+            List<string> fileLines = FileWorker.GetLinesFromXMLFile(filePath);
+            fileLines.ForEach(line =>
+            {
+                if (line.Contains("->")) grammar.AddRule(GetRuleFromTextLine(line));
+                if (line.Contains("start:")) grammar.SetStartSym(line.Replace("start:", "").Trim());
+                if (line.Contains("null:")) grammar.SetNullStringSymbol(line.Replace("null:", "").Trim());
+            });
+            return grammar;
+        }
+        private static Rule GetRuleFromTextLine(string line)
+        {
+            string[] parts = line.Replace("->", ">").Split('>');
+            List<Symbol> rhs = new List<Symbol>() { };
+            char[] rhsSymbols = parts[1].Trim().ToCharArray();
+            for(int i = 0; i < rhsSymbols.Length; i++) rhs.Add(rhsSymbols[i].ToString());
+            return new Rule(parts[0].Trim(), rhs);
+        }
         public void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
         {
             ErrorHandler errorHandler = new ErrorHandler();
