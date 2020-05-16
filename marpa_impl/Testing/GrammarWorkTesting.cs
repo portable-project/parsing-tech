@@ -5,16 +5,16 @@ using System.Diagnostics;
 
 namespace marpa_impl
 {
-    class Class1
+    public class GrammarWorkTesting
     {
-        private String fileName = "results.csv";
-
-        internal void CalculateTimeOfRecognise(Grammar grammar, List<String> inputList)
+        public void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
         {
             ErrorHandler errorHandler = new ErrorHandler();
             if (grammar.IsGrammarValid())
             {
                 Recogniser recogniser = new Recogniser(grammar, errorHandler);
+                FileWorker.CleanFile(filePath);
+
                 inputList.ForEach(input =>
                 {
                     Stopwatch timePerParse = Stopwatch.StartNew();
@@ -22,7 +22,7 @@ namespace marpa_impl
                     timePerParse.Stop();
                     long mstime = timePerParse.ElapsedMilliseconds;
 
-                    if (result) FileWorker.WriteToCSV(fileName, input, mstime);
+                    if (result) FileWorker.WriteToCSVFile(filePath, input, mstime);
                 });
             }
         }

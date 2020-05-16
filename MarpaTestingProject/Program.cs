@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using marpa_impl;
 using Symbol = System.String;
+using System;
 
 namespace MarpaTestingProject
 {
     class Program
-    {
+    { 
         static void Main(string[] args)
         {
+            string filePath = "E://parsing-tech/marpa_impl/Testing/results.csv";
             Grammar grammar = new Grammar();
 
             Rule startRule1 = new Rule("S", new List<Symbol>() { "(", ")" });
@@ -21,23 +23,8 @@ namespace MarpaTestingProject
             GrammarReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
-                MarpaParser parser = new MarpaParser(grammar);
-                string str = "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))" +
-                    "(()())()((()))()(())((((()))))(()())()((()))()(())((((()))))";
-
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                RecogniserReport result = parser.CheckString(str);
-                watch.Stop();
-                var elapsedMs = watch.ElapsedMilliseconds;
-                var count = str.Length;
-
-                // ParserReport result = parser.ParseString("bbb");
+                GrammarWorkTesting grammarWorkTesting = new GrammarWorkTesting();
+                grammarWorkTesting.CalculateTimeOfRecognise(filePath, grammar, new List<string>() { "(()(()))", "(()(()))" , "()()((()()))((()())())"} );
             }
         }
     }

@@ -1,19 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace marpa_impl
 {
-    internal class FileWorker
+    internal static class FileWorker
     {
-        internal Grammar GetGrammarFromFile(String filename)
+        internal static Grammar GetGrammarFromXMLFile(String filename)
         {
             return new Grammar();
         }
-        internal void WriteToCSV(String input, long mstime)
+        
+        internal static void CleanFile(String filePath)
         {
-            // write to file
-            Console.WriteLine(input + ' ' + mstime);
+            using (var w = new StreamWriter(filePath))
+            {
+                w.WriteLine();
+                w.Flush();
+            }
+        }
+        internal static void WriteToCSVFile(String filePath, String input, long mstime)
+        {
+            using (var w = new StreamWriter(filePath, true))
+            {
+                var line = string.Format("{0};{1};{2}", input, input.Length, mstime);
+                w.WriteLine(line);
+                w.Flush();
+            }
         }
     }
 }
