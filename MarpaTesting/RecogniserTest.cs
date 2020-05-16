@@ -6,10 +6,16 @@ using Symbol = System.String;
 
 namespace MarpaTesting
 {
-    
     [TestClass]
-    public class GrammarStructureTest
+    class RecogniserTest
     {
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get { return testContextInstance; }
+            set { testContextInstance = value; }
+        }
+
         private Grammar grammar;
         private GrammarReport grammarReport;
 
@@ -29,22 +35,13 @@ namespace MarpaTesting
         }
 
         [TestMethod]
-        public void CheckGrammarCorrect()
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+               "E://parsing-tech/MarpaTestingProject/GrammarOneData.xml",
+               "Row",
+                DataAccessMethod.Sequential)]
+        public void AlgorithmSpeedCheck()
         {
-            Assert.IsTrue(grammarReport.isSuccessfull);
-        }
-
-        [TestMethod]
-        public void CheckSymbolCount()
-        {
-            Assert.AreEqual(3, 
-                grammar.GetGrammarNonTerminals().Count + grammar.GetGrammarTerminals().Count);
-        }
-
-        [TestMethod]
-        public void CheckRuleCount()
-        {
-            Assert.AreEqual(3, grammar.GetRules().Count);
+            int x = Convert.ToInt32(TestContext.DataRow["Count"]);
         }
     }
 }
