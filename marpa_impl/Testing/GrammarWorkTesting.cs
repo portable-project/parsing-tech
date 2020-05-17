@@ -6,9 +6,35 @@ using Symbol = System.String;
 
 namespace marpa_impl
 {
-    public class GrammarWorkTesting
+    public static class GrammarWorkTesting
     {
-        public Grammar GetGrammarFromFile(string filePath)
+        private static string _dirPrefix = "E://parsing-tech/marpa_impl/Testing/examples/";
+        private static string _grammarPrefix = "G";
+        private static string _inputsPrefix = "I";
+        private static string _filePostfix = ".txt";
+        private static string filePath = "E://parsing-tech/marpa_impl/Testing/results.csv";
+        
+        public static void RunGrammarTests(int numberOfGrammars)
+        {
+            FileWorker.CleanFile(filePath);
+
+            for (int i = 1; i<=numberOfGrammars; i++)
+                RunRecongniserForGrammar(i);
+        }
+        internal static void RunRecongniserForGrammar(int grammarNumber) {
+            string grammarFilePath = _dirPrefix + _grammarPrefix + grammarNumber.ToString() + _filePostfix;
+            string inputsFilePath = _dirPrefix + _inputsPrefix + grammarNumber.ToString() + _filePostfix;
+            Grammar grammar = GetGrammarFromFile(grammarFilePath);
+            List<string> inputs = GetListOfInputs(inputsFilePath);
+
+            GrammarReport er = grammar.PrecomputeGrammar();
+            if (er.isSuccessfull)
+            {
+                CalculateTimeOfRecognise(filePath, grammar, inputs);
+            }
+        }
+
+        internal static Grammar GetGrammarFromFile(string filePath)
         {
             Grammar grammar = new Grammar();
             List<string> fileLines = FileWorker.GetLinesFromXMLFile(filePath);
@@ -20,6 +46,12 @@ namespace marpa_impl
             });
             return grammar;
         }
+
+        internal static List<String> GetListOfInputs(string filePath)
+        {
+           return FileWorker.GetLinesFromXMLFile(filePath);
+        }
+
         private static Rule GetRuleFromTextLine(string line)
         {
             string[] parts = line.Replace("->", ">").Split('>');
@@ -28,13 +60,12 @@ namespace marpa_impl
             for(int i = 0; i < rhsSymbols.Length; i++) rhs.Add(rhsSymbols[i].ToString());
             return new Rule(parts[0].Trim(), rhs);
         }
-        public void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
+        internal static void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
         {
             ErrorHandler errorHandler = new ErrorHandler();
             if (grammar.IsGrammarValid())
             {
                 Recogniser recogniser = new Recogniser(grammar, errorHandler);
-                FileWorker.CleanFile(filePath);
 
                 inputList.ForEach(input =>
                 {

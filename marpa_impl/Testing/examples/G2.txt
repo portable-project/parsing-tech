@@ -1,0 +1,4 @@
+start: S
+null: e
+S -> SaSb
+S -> e
