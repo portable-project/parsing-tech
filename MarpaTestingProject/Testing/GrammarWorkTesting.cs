@@ -9,11 +9,11 @@ namespace MarpaTestingProject
 {
     public static class GrammarWorkTesting
     {
-        private static string _dirPrefix = "E://parsing-tech/marpa_impl/Testing/examples/";
+        private static string _dirPrefix = "E://parsing-tech/MarpaTestingProject/Testing/examples/";
         private static string _grammarPrefix = "G";
         private static string _inputsPrefix = "I";
         private static string _filePostfix = ".txt";
-        private static string filePath = "E://parsing-tech/marpa_impl/Testing/results.csv";
+        private static string filePath = "E://parsing-tech/MarpaTestingProject/Testing/results.csv";
         
         public static void RunGrammarTests(int numberOfGrammars)
         {

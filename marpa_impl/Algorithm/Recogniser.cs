@@ -28,7 +28,6 @@ namespace marpa_impl
             InitBeforeParse(input);
             RunMarpa(input, 0);
 
-            Utils.PrintSets(Sets, true);
             return FindFinalItem() != null;
         }
 
@@ -40,7 +39,6 @@ namespace marpa_impl
             UpdateSetsBeforeReparse(newInput, from);
             RunMarpa(newInput, from);
 
-            Utils.PrintSets(Sets, true);
             return true;
         }
 

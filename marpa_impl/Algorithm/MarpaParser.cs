@@ -74,7 +74,7 @@ namespace marpa_impl
                 Console.WriteLine("tree");
                 Utils.PrintTree(forest[0], 1);
                 Utils.PrintSeparator(5);
-                Utils.PrintTreeForDraw(forest[0]);
+                Utils.FormTreeDesctiptionForDraw(forest[0]);
             }
             return new ParserReport();
         }

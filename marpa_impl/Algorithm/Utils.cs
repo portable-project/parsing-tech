@@ -10,6 +10,7 @@ namespace marpa_impl
         {
             for (int i = 0; i < size; i++) Console.WriteLine();
         }
+
         internal static void PrintSets(List<EarleySet> setsToPrint, bool all)
         {
             if (setsToPrint == null) return;
@@ -59,13 +60,13 @@ namespace marpa_impl
             });
         }
 
-        internal static void PrintTreeForDraw(TreeNode root)
+        internal static void FormTreeDesctiptionForDraw(TreeNode root)
         {
             List<TreeNode> children = root.GetTreeChildrenNodes();
             for(int i = children.Count; i> 0; i--){
                 TreeNode node = children[i - 1];
                 Console.WriteLine('[' + root.ToString() + "]->["+node.ToString()+']');
-                PrintTreeForDraw(node);
+                FormTreeDesctiptionForDraw(node);
             };
         }
     }

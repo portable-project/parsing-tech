@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using marpa_impl;
-
-namespace MarpaTestingProject
+﻿namespace MarpaTestingProject
 {
     class Program
     { 
