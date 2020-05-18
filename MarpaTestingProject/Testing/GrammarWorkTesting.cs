@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using Symbol = System.String;
+using marpa_impl;
 
-namespace marpa_impl
+namespace MarpaTestingProject
 {
     public static class GrammarWorkTesting
     {
@@ -62,21 +63,17 @@ namespace marpa_impl
         }
         internal static void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
         {
-            ErrorHandler errorHandler = new ErrorHandler();
-            if (grammar.IsGrammarValid())
+            MarpaParser recogniser = new MarpaParser(grammar);
+
+            inputList.ForEach(input =>
             {
-                Recogniser recogniser = new Recogniser(grammar, errorHandler);
+                Stopwatch timePerParse = Stopwatch.StartNew();
+                RecogniserReport result = recogniser.CheckString(input);
+                timePerParse.Stop();
+                long mstime = timePerParse.ElapsedMilliseconds;
 
-                inputList.ForEach(input =>
-                {
-                    Stopwatch timePerParse = Stopwatch.StartNew();
-                    bool result = recogniser.Recognise(input);
-                    timePerParse.Stop();
-                    long mstime = timePerParse.ElapsedMilliseconds;
-
-                    if (result) FileWorker.WriteToCSVFile(filePath, input, mstime);
-                });
-            }
+                if (result.isSuccessfull && result.isRecognised) FileWorker.WriteToCSVFile(filePath, input, mstime);
+            });
         }
         private static void DisplayTimerProperties()
         {
