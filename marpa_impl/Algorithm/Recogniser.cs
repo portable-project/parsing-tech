@@ -269,13 +269,13 @@ namespace marpa_impl
             Sets[setIndex].AddEarleyItem(earleme, operationType);
         }
 
-        internal ParseInfoReport GetLastParseInformation(int symbolPosition)
+        internal ProcessDetailsReport GetLastParseInformation(int symbolPosition)
         {
             if (Sets.Count < symbolPosition)
             {
-                return new ParseInfoReport(new ErrorDescription(ErrorCode.SYMBOL_POSITION_OUT_OF_RANGE));
+                return new ProcessDetailsReport(new ErrorDescription(ErrorCode.SYMBOL_POSITION_OUT_OF_RANGE));
             }
-            return new ParseInfoReport(Sets[symbolPosition]);
+            return new ProcessDetailsReport(Sets[symbolPosition]);
         }
     }
 }

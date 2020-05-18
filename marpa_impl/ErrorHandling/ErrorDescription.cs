@@ -9,21 +9,21 @@ namespace marpa_impl
         Object item;
         int atPosition;
 
-        public ErrorDescription(ErrorCode _code, Object _item)
+        internal ErrorDescription(ErrorCode _code, Object _item)
         {
             errorCode = _code;
             description = ErrorHandler.GetErrorMessageByCode(_code);
             item = _item;
             atPosition = -1;
         }
-        public ErrorDescription(ErrorCode _code)
+        internal ErrorDescription(ErrorCode _code)
         {
             errorCode = _code;
             description = ErrorHandler.GetErrorMessageByCode(_code);
             item = null;
             atPosition = -1;
         }
-        public ErrorDescription(ErrorCode _code, Object _item, int _position)
+        internal ErrorDescription(ErrorCode _code, Object _item, int _position)
         {
             errorCode = _code;
             description = ErrorHandler.GetErrorMessageByCode(_code);

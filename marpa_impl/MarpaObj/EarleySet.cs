@@ -7,14 +7,14 @@ namespace marpa_impl
     internal class EarleySet
     {
         private List<EarleyItem> _earleyItemList;
-        private List<EarleyItemReport> _earleyItemReportList;
+        private List<EarleyItemRepresentaion> _earleyItemReportList;
         private List<LeoItem> _leoItemList;
 
         internal EarleySet()
         {
             _earleyItemList = new List<EarleyItem>();
             _leoItemList = new List<LeoItem>();
-            _earleyItemReportList = new List<EarleyItemReport>();
+            _earleyItemReportList = new List<EarleyItemRepresentaion>();
         }
         internal void AddEarleyItem(EarleyItem earleyItem, String operationType)
         {
@@ -27,7 +27,7 @@ namespace marpa_impl
                 )
             {
                 _earleyItemList.Add(earleyItem);
-                _earleyItemReportList.Add(new EarleyItemReport(earleyItem, operationType));
+                _earleyItemReportList.Add(new EarleyItemRepresentaion(earleyItem, operationType));
             }
             
         }
@@ -43,7 +43,7 @@ namespace marpa_impl
         {
             return _earleyItemList;
         }
-        internal List<EarleyItemReport> GetEarleyItemReportList()
+        internal List<EarleyItemRepresentaion> GetEarleyItemReportList()
         {
             return _earleyItemReportList;
         }
@@ -78,7 +78,7 @@ namespace marpa_impl
             bool isLeoUnique = IsItemLeoUnique(earleyItem);
             if (isRightRecursive && isLeoUnique)
             {
-                Console.WriteLine();
+                // TODO
             }
             return isRightRecursive && isLeoUnique;
         }

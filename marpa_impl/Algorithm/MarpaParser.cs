@@ -6,12 +6,10 @@ namespace marpa_impl
 {
     public interface IMarpaParser
     {
-        RecogniserReport CheckString(String input);
-        RecogniserReport CheckUpdatedString(String updatedInput);
-        ParserReport ParseString(String input);
-        ParserReport ParseUpdatedString(String updatedInput);
-        ParseInfoReport GetLastParseInformationOnSymbolPosition(int symbolPosition);
-        ParseInfoReport GetLastParseInformationOnError();
+        RecogniseReport CheckString(String input);
+        RecogniseReport CheckUpdatedString(String updatedInput);
+        AnalyseReport BuildParseTree(String input);
+        ProcessDetailsReport GetLastParseInformationOnSymbolPosition(int symbolPosition);
     }
 
     public class MarpaParser : IMarpaParser
@@ -34,62 +32,46 @@ namespace marpa_impl
 
         }
 
-        public RecogniserReport CheckString(String input)
+        public RecogniseReport CheckString(String input)
         {
             bool result = false;
             if (_recogniser != null)
             {
                 result = _recogniser.Recognise(input);
             }
-            return new RecogniserReport(result, _errorHandler.GetErrorDescriptionList());
+            return new RecogniseReport(result, _errorHandler.GetErrorDescriptionList());
         }
 
-        public RecogniserReport CheckUpdatedString(String updatedInput)
+        public RecogniseReport CheckUpdatedString(String updatedInput)
         {
             bool result = false;
             if (_recogniser != null)
             {
                 result = _recogniser.UpdateRecognise(updatedInput);
             }
-            return new RecogniserReport(result, _errorHandler.GetErrorDescriptionList());
+            return new RecogniseReport(result, _errorHandler.GetErrorDescriptionList());
         }
 
-        public ParseInfoReport GetLastParseInformationOnSymbolPosition(int symbolPosition)
+        public ProcessDetailsReport GetLastParseInformationOnSymbolPosition(int symbolPosition)
         {
             if (_recogniser != null)
             {
                 return _recogniser.GetLastParseInformation(symbolPosition);
             }
-            else return new ParseInfoReport(new ErrorDescription(ErrorCode.NO_GRAMMAR));
+            else return new ProcessDetailsReport(new ErrorDescription(ErrorCode.NO_GRAMMAR));
         }
 
-        public ParserReport ParseString(String input)
+        public AnalyseReport BuildParseTree(String input)
         {
-            RecogniserReport report = CheckString(input);
-            List<TreeNode> forest;
+            RecogniseReport report = CheckString(input);
+            List<TreeNode> forest = null;
             if (_parser != null && report.isSuccessfull && report.isRecognised)
             {
                 forest = _parser.Parse(_recogniser.GetResultSetList());
-                Utils.PrintSeparator(5);
-                Console.WriteLine("tree");
-                Utils.PrintTree(forest[0], 1);
-                Utils.PrintSeparator(5);
-                Utils.FormTreeDesctiptionForDraw(forest[0]);
             }
-            return new ParserReport();
+            return new AnalyseReport(forest, report.isRecognised);
         }
 
-        public ParserReport ParseUpdatedString(String updatedInput)
-        {
-            // TODO
-            return new ParserReport();
-        }
-
-        public ParseInfoReport GetLastParseInformationOnError()
-        {
-            // TODO
-            return new ParseInfoReport();
-        }
         private void CheckGrammar(Grammar grammar)
         {
             if (grammar == null)

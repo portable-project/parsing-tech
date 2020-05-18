@@ -68,7 +68,7 @@ namespace MarpaTestingProject
             inputList.ForEach(input =>
             {
                 Stopwatch timePerParse = Stopwatch.StartNew();
-                RecogniserReport result = recogniser.CheckString(input);
+                RecogniseReport result = recogniser.CheckString(input);
                 timePerParse.Stop();
                 long mstime = timePerParse.ElapsedMilliseconds;
 

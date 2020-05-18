@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace marpa_impl
 {
-    public struct ParseInfoReport
+    public struct ProcessDetailsReport
     {
-        public List<EarleyItemReport> _earleyItemsList;
+        public List<EarleyItemRepresentaion> _earleyItemsList;
         public List<String> _leoItemsList;
         public bool _isParserReportValid;
         public ErrorDescription _errorDescription;
 
-        internal ParseInfoReport(EarleySet earleySet)
+        internal ProcessDetailsReport(EarleySet earleySet)
         {
             _leoItemsList = new List<string>();
             List<LeoItem> setLeoItems = earleySet.GetLeoItemList();
@@ -24,7 +24,7 @@ namespace marpa_impl
             _errorDescription = new ErrorDescription(ErrorCode.NO_ERROR);
         }
 
-        internal ParseInfoReport(ErrorDescription errorDescription)
+        internal ProcessDetailsReport(ErrorDescription errorDescription)
         {
             _earleyItemsList = null;
             _leoItemsList = null;

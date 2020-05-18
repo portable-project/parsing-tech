@@ -2,12 +2,12 @@
 
 namespace marpa_impl
 {
-    public struct RecogniserReport
+    public struct RecogniseReport
     {
         public List<ErrorDescription> errorDescriptions;
         public bool isRecognised;
         public bool isSuccessfull;
-        internal RecogniserReport(bool _isRecognised, List<ErrorDescription> _errorDescriptions)
+        internal RecogniseReport(bool _isRecognised, List<ErrorDescription> _errorDescriptions)
         {
             errorDescriptions = _errorDescriptions;
             isSuccessfull = _errorDescriptions.Count == 0;
