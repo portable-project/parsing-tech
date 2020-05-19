@@ -6,7 +6,7 @@ namespace marpa_impl
 {
     internal class Recogniser
     {
-        private readonly Rule finalItemRule = new Rule("alpha", new List<Symbol>() { "S" });
+        private readonly Rule finalItemRule;
         private readonly Grammar Grammar = null;
         private List<EarleySet> Sets;
         private ErrorHandler errorHandler;
@@ -14,6 +14,7 @@ namespace marpa_impl
 
         internal Recogniser(Grammar grammar, ErrorHandler _errorHandler)
         {
+            finalItemRule = new Rule("alpha", new List<Symbol>() { grammar.GetStartSymbol() });
             errorHandler = _errorHandler;
             Grammar = grammar;
         }
@@ -27,6 +28,7 @@ namespace marpa_impl
 
             InitBeforeParse(input);
             RunMarpa(input, 0);
+            // Utils.PrintSets(Sets, true);
 
             return FindFinalItem() != null;
         }

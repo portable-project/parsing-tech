@@ -28,7 +28,7 @@ namespace MarpaTestingProject
             Grammar grammar = GetGrammarFromFile(grammarFilePath);
             List<string> inputs = GetListOfInputs(inputsFilePath);
 
-            GrammarReport er = grammar.PrecomputeGrammar();
+            GrammarValidationReport er = grammar.PrecomputeGrammar();
             if (er.isSuccessfull)
             {
                 CalculateTimeOfRecognise(filePath, grammar, inputs);
@@ -63,6 +63,7 @@ namespace MarpaTestingProject
         }
         internal static void CalculateTimeOfRecognise(string filePath, Grammar grammar, List<String> inputList)
         {
+            List<Result> results = new List<Result>();
             MarpaParser recogniser = new MarpaParser(grammar);
 
             inputList.ForEach(input =>
@@ -70,29 +71,15 @@ namespace MarpaTestingProject
                 Stopwatch timePerParse = Stopwatch.StartNew();
                 RecogniseReport result = recogniser.CheckString(input);
                 timePerParse.Stop();
-                long mstime = timePerParse.ElapsedMilliseconds;
+                long mstime = timePerParse.ElapsedTicks;
 
-                if (result.isSuccessfull && result.isRecognised) FileWorker.WriteToCSVFile(filePath, input, mstime);
+                if (result.isSuccessfull && result.isRecognised)
+                {
+                    results.Add(new Result(input, mstime));
+                }
             });
-        }
-        private static void DisplayTimerProperties()
-        {
-            // Display the timer frequency and resolution.
-            if (Stopwatch.IsHighResolution)
-            {
-                Console.WriteLine("Operations timed using the system's high-resolution performance counter.");
-            }
-            else
-            {
-                Console.WriteLine("Operations timed using the DateTime class.");
-            }
 
-            long frequency = Stopwatch.Frequency;
-            Console.WriteLine("  Timer frequency in ticks per second = {0}",
-                frequency);
-            long nanosecPerTick = (1000L * 1000L * 1000L) / frequency;
-            Console.WriteLine("  Timer is accurate within {0} nanoseconds",
-                nanosecPerTick);
+            FileWorker.WriteMultipleDataToCSVFile(filePath, results);
         }
     }
 }

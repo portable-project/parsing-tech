@@ -1,0 +1,4 @@
+start: X
+X -> X+X
+X -> X*X
+X -> a

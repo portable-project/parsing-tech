@@ -81,7 +81,7 @@ namespace marpa_impl
             }
             else if (!grammar.IsGrammarValid())
             {
-                GrammarReport er = grammar.PrecomputeGrammar();
+                GrammarValidationReport er = grammar.PrecomputeGrammar();
                 if (!er.isSuccessfull)
                 {
                     _errorHandler.AddNewError(ErrorCode.INCORRECT_GRAMMAR, grammar);

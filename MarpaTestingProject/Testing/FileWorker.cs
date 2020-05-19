@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace marpa_impl
+namespace MarpaTestingProject
 {
     internal static class FileWorker
     {
@@ -40,6 +40,21 @@ namespace marpa_impl
                 var line = string.Format("{0};{1};{2}", input, input.Length, mstime);
                 w.WriteLine(line);
                 w.Flush();
+            }
+        }
+        
+        internal static void WriteMultipleDataToCSVFile(String filePath, List<Result> results)
+        {
+            using (var w = new StreamWriter(filePath, true))
+            {
+                results.ForEach(result =>
+                {
+                    var line = string.Format("{0};{1};{2}", result.input, result.input.Length, result.mstime);
+                    w.WriteLine(line);
+                    w.Flush();
+                });
+                w.WriteLine();
+                w.WriteLine();
             }
         }
     }

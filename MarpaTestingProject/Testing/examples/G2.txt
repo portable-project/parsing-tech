@@ -1,4 +1,5 @@
 start: S
-null: e
-S -> SaSb
-S -> e
+S -> AB  
+A -> Aa
+A -> a  
+B -> b 

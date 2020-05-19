@@ -4,13 +4,13 @@ using System.Text;
 
 namespace marpa_impl
 {
-    public struct GrammarReport
+    public struct GrammarValidationReport
     {
         public List<ErrorDescription> errorDescriptions;
         public bool isSuccessfull;
         public int totalErrorCount;
 
-        internal GrammarReport(List<ErrorDescription> _errorDescriptions)
+        internal GrammarValidationReport(List<ErrorDescription> _errorDescriptions)
         {
             errorDescriptions = _errorDescriptions;
             isSuccessfull = errorDescriptions == null || errorDescriptions.Count == 0;

@@ -70,7 +70,7 @@ namespace marpa_impl
             return TerminalsList;
         }
 
-            public GrammarReport PrecomputeGrammar()
+            public GrammarValidationReport PrecomputeGrammar()
         {
             ErrorHandler eh = new ErrorHandler();
             if (StartSymbol == null) eh.AddNewError(ErrorCode.NO_START_SYMBOL_DETECTED, this);
@@ -96,7 +96,7 @@ namespace marpa_impl
                 }
             };
 
-            GrammarReport report = new GrammarReport(eh.GetErrorDescriptionList());
+            GrammarValidationReport report = new GrammarValidationReport(eh.GetErrorDescriptionList());
             _IsGrammarValid = report.isSuccessfull;
             return report;
         }
