@@ -4,53 +4,7 @@ This is a repository for Marpa algorithm implementation in C#
 
 # api
 
-`soon` here will be full explanation of api for this lib
-
->**Main Objects**
-
-  this objects you can use for describing your grammar
-
-* Symbol
-
-  _public String GetSymbolName()_
-
-* Rule
-
-  _public Symbol GetLeftHandSideOfRule()_
-  
-  _public List<Symbol> GetRightHandSideOfRule()_
-  
-  _public Symbol GetRightHandSideOfRule(int position)_
-  
-  _public Symbol GetRightHandSideOfRule(int position)_
-  
-  _public void AddToRightHandSideOfRule(List<Symbol> symbols)_
-  
-* Grammar
-  
-  _public void SetStartSym(Symbol StartSym)_
-  
-  _public Symbol GetStartSymbol()_
-
-  _public int GetSymbolsListSize()_
-
-  _public void AddSymbol(Symbol Symbol)_
-  
-  _public void AddSymbol(List<Symbol> Symbols)_
-  
-  _public int GetRulesListSize()_
-  
-  _public void AddRule(Rule Rule)_
-  
-  _public void AddRule(Symbol lhs, List<Symbol> rhs)_
-  
-
->**Parser Objects**
-* Recogniser
-
-  _public Recogniser(Grammar grammar)_
-  
-  _public void Parse(String input)_
+Look for info on [API wiki page](https://github.com/portable-project/parsing-tech/wiki/API)
 
 # extra
 
